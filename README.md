@@ -29,15 +29,7 @@ El sistema administra un espacio de trabajo compartido (Coworking), permitiendo:
 
 ---
 
-## Arquitectura Tecnica
-
-```text
-├── Plataforma / Lenguaje: C# (.NET Framework 4.7.2) / Windows Forms
-├── Base de Datos: MySQL / MariaDB 10.4+ en XAMPP (Motor InnoDB con claves foraneas)
-├── Acceso a Datos: MySql.Data con conexion centralizada (Conexion.cs) + Stored Procedures
-├── Logica de Negocio: POO (Clase abstracta Recurso, Interfaces, Clases Gestoras con LINQ)
-└── Manejo de Errores: Validacion transaccional con SIGNAL SQLSTATE '45000' + Try/Catch
-```
+## Arquitectura del Sistema
 
 ```mermaid
 graph TD
