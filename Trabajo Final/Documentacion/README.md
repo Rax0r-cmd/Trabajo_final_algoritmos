@@ -1,8 +1,13 @@
 # Documentacion del Trabajo Practico - Algoritmos II
 
-Sistema de Gestion de Coworking y Reservas
-Carrera: Analista de Sistemas de Informacion
-Profesor: Lic. Adrian Aroca
+Sistema de Gestion de Coworking y Reservas  
+Carrera: Analista de Sistemas  
+Profesor: Lic. Adrian Aroca  
+
+Integrantes:
+- Jonathan Lester Tullo
+- David Samuel Ortega
+- Maximiliano Scollo
 
 1. De que trata el proyecto
 El proyecto consiste en armar un sistema de escritorio para administrar un espacio de coworking. La idea principal es poder registrar clientes, los espacios que se alquilan (salas de reunion, oficinas privadas y puestos de trabajo) y las reservas que hacen los clientes por fecha y hora. Ademas, si un espacio ya esta ocupado en ese horario, el sistema no tiene que permitir la reserva.
