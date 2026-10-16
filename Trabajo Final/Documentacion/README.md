@@ -1,70 +1,48 @@
-# Documentación del Proyecto - Coworking y Reservas
+# Documentacion del Trabajo Practico - Algoritmos II
 
-Este documento es para ir anotando todo lo que vamos haciendo en el Trabajo Práctico de **Algoritmos II**, explicado de forma sencilla para tenerlo a mano cuando tengamos que defender el proyecto o armar el informe final.
+Sistema de Gestion de Coworking y Reservas
+Carrera: Analista de Sistemas de Informacion
+Profesor: Lic. Adrian Aroca
 
----
+1. De que trata el proyecto
+El proyecto consiste en armar un sistema de escritorio para administrar un espacio de coworking. La idea principal es poder registrar clientes, los espacios que se alquilan (salas de reunion, oficinas privadas y puestos de trabajo) y las reservas que hacen los clientes por fecha y hora. Ademas, si un espacio ya esta ocupado en ese horario, el sistema no tiene que permitir la reserva.
 
-## 📌 ¿De qué trata el sistema?
-Es una aplicación para administrar un espacio de **Coworking** (oficinas compartidas). 
-Básicamente permite:
-- Registrar clientes.
-- Cargar espacios que se alquilan (salas de reunión, oficinas privadas y puestos de escritorio) con su precio por hora.
-- Hacer reservas para que un cliente use una sala en un día y horario específico.
-- Cancelar reservas si el cliente no puede venir.
+2. Base de datos (MySQL)
+La base de datos se llama tp_final_db y el archivo con todo el codigo para crearla es DB_TPFinal.sql dentro de la carpeta DB.
 
----
+Tablas:
+- tipo_recursos: guarda los tipos de espacios (sala de reuniones, oficina privada, puesto de trabajo).
+- recursos: los espacios fisicos con su descripcion, ubicacion, precio por hora y el tipo de recurso.
+- clientes: datos de las personas que alquilan (nombre, apellido, telefono y mail).
+- reservas: es la tabla intermedia que une al cliente con el recurso reservado, la fecha, las horas y el precio total.
+- auditoria_reservas: guarda un registro automatico cada vez que alguien cancela una reserva.
 
-## ✅ Parte 1: Base de Datos (MySQL) - YA TERMINADA
+Vistas:
+- vw_detalle_reservas: muestra la lista de reservas con los nombres de clientes y recursos en vez de los numeros de id.
+- vw_resumen_recursos: muestra cuanto dinero recaudo cada sala u oficina y cuantas reservas tuvo.
 
-Todo el código de la base de datos está guardado y probado en `Trabajo Final/DB/DB_TPFinal.sql`.
+Funcion:
+- fn_verificar_disponibilidad: recibe el id del recurso y la fecha. Devuelve 1 si esta libre o 0 si ya esta reservado.
 
-### 1. Tablas creadas
-* **`tipo_recursos`**: guarda las categorías de los lugares (`Sala de Reuniones`, `Oficina Privada`, `Puesto de Trabajo`).
-* **`recursos`**: son los lugares físicos con su nombre, descripción, ubicación y precio por hora. Se conecta con el tipo de recurso.
-* **`clientes`**: los datos de las personas que alquilan (nombre, apellido, teléfono, mail).
-* **`reservas` (Tabla pivote o intermedia)**: une al cliente con el recurso que reservó, la fecha, las horas y el total a pagar. Es la tabla principal del sistema.
-* **`auditoria_reservas`**: tabla especial donde se anota automáticamente cuando alguien cancela una reserva.
+Procedimientos almacenados:
+- sp_alta_cliente: agrega un cliente nuevo.
+- sp_modificar_cliente: cambia los datos de un cliente existente.
+- sp_alta_recurso: agrega una sala u oficina nueva.
+- sp_modificar_recurso: actualiza datos o precios de un recurso.
+- sp_alta_reserva: verifica con la funcion si el lugar esta libre. Si esta libre guarda la reserva, si esta ocupado tira un cartel de error usando SIGNAL 45000.
+- sp_cancelar_reserva: cambia el estado de la reserva a cancelada.
 
-### 2. Diagrama DER
-* Lo armamos en MySQL Workbench y lo guardamos en la carpeta `DB`:
-  - `Diagrama_DER.png`: la foto del diagrama para pegar en el informe.
-  - `Diagrama_Editable.mwb`: el archivo editable por si queremos cambiar algo después.
-* Muestra las tablas conectadas con relaciones de 1 a N (uno a muchos).
+Trigger:
+- trg_auditoria_reservas: salta solo cuando se cancela una reserva y anota la fecha y usuario en la tabla de auditoria.
 
-### 3. Procedimientos Almacenados (Stored Procedures)
-Los usamos para no escribir consultas largas desde el código:
-* **`sp_alta_cliente`** y **`sp_modificar_cliente`**: para agregar o actualizar clientes.
-* **`sp_alta_recurso`** y **`sp_modificar_recurso`**: para dar de alta salas u oficinas y cambiarles el precio.
-* **`sp_alta_reserva`**: guarda una reserva nueva. **Ojo:** primero usa la función de disponibilidad. Si la sala ya está ocupada en ese horario, tira un error con `SIGNAL SQLSTATE '45000'` para avisar que no se puede.
-* **`sp_cancelar_reserva`**: le cambia el estado a 'Cancelada'.
+Cursor:
+- sp_calcular_total_recaudado_cursor: recorre fila por fila las reservas confirmadas y va sumando la plata para devolver el total general.
 
-### 4. Vistas (Views)
-Son consultas que dejamos guardadas para no hacer `JOIN` todo el tiempo:
-* **`vw_detalle_reservas`**: muestra la lista de reservas con los nombres reales de los clientes y las salas (en vez de mostrar solo números de ID).
-* **`vw_resumen_recursos`**: muestra cada lugar con cuántas reservas tuvo y cuánta plata recaudó en total.
+3. Diagrama DER
+El diagrama entidad relacion de las tablas lo hicimos en MySQL Workbench y dejamos la imagen guardada en Trabajo Final/DB/Diagrama_DER.png junto con el archivo editable Diagrama_Editable.mwb.
 
-### 5. Función de Disponibilidad (UDF)
-* **`fn_verificar_disponibilidad`**: le pasamos el ID del lugar y la fecha/hora. Si está libre devuelve `1`, si ya hay alguien devuelve `0`.
-
-### 6. Trigger (Disparador automático)
-* **`trg_auditoria_reservas`**: salta solo después de que alguien cancela una reserva y anota en `auditoria_reservas` la fecha, qué reserva fue y quién lo hizo.
-
-### 7. Cursor
-* **`sp_calcular_total_recaudado_cursor`**: recorre las reservas confirmadas una por una (como un bucle `while`) y va sumando la plata en una variable para saber la recaudación total.
-
----
-
-## ⏳ Próximos pasos (lo que nos falta hacer de a poco)
-
-* [ ] **Parte 2: Programación Orientada a Objetos en C#**
-  - Crear la clase abstracta `Recurso` y las clases que heredan de ella (`Sala`, `OficinaPrivada`, `PuestoTrabajo`).
-  - Crear la interfaz `IReservable`.
-  - Crear las clases `Cliente` y `Reserva`.
-* [ ] **Parte 3: Formularios de Windows Forms**
-  - Pantalla principal con menú.
-  - Pantallas para cargar clientes, recursos y hacer reservas.
-* [ ] **Parte 4: Conectar C# con MySQL**
-  - Armar la clase de conexión y los métodos para ejecutar los procedimientos que ya creamos.
-* [ ] **Parte 5: Manejo de errores y archivo JSON**
-  - Atapar el error `45000` de MySQL desde C# para mostrar un cartel lindo al usuario si la sala está ocupada.
-  - Exportar/importar datos en JSON.
+4. Lo que nos falta hacer
+- Programar las clases en C# con Windows Forms (clase abstracta Recurso, las clases hijas Sala, OficinaPrivada, PuestoTrabajo, y las clases Cliente y Reserva).
+- Armar los formularios de la interfaz grafica.
+- Conectar C# con MySQL para llamar a los procedimientos almacenados.
+- Hacer la parte de importar y exportar en JSON.
