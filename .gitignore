@@ -1,0 +1,19 @@
+## Visual Studio / C# / .NET
+.vs/
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+packages/
+*.nupkg
+
+## Archivos de Sistema y Editor
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
