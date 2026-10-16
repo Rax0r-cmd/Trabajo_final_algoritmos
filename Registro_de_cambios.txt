@@ -1,0 +1,75 @@
+Apuntes de lo que voy haciendo en el proyecto final
+Sistema de Coworking - Algoritmos 2
+
+Aca voy anotando todo paso a paso como lo fui haciendo, para tenerlo a mano por si me olvido de algo o para cuando tenga que defender el trabajo.
+
+Paso 1: La base de datos en XAMPP y Mysql Workbench
+Primero que nada abri el XAMPP y levante el modulo de MySQL. Ahi me conecte con el usuario root sin contraseña en el puerto 3306 y cree la base de datos llamada tp_final_db.
+Despues arme las tablas para el sistema:
+- Cree la tabla tipo_recursos para guardar las categorias de espacios (si es sala de reunion, oficina privada o un puesto de trabajo).
+- Cree la tabla recursos que son los lugares posta que se alquilan, con el precio por hora, la capacidad de gente y la ubicacion.
+- Cree la tabla clientes para guardar los datos de las personas que reservan (nombre, apellido, dni, mail y telefono).
+- Cree la tabla reservas que junta al cliente con el recurso que reservo, la fecha, las horas y la plata total.
+- Cree la tabla auditoria_reservas para que quede guardado un registro cada vez que se cancela una reserva.
+
+A la base le agregue la logica que nos pidieron:
+- Arme los procedimientos almacenados para dar de alta clientes, recursos y reservas.
+- En el procedimiento de alta de reserva meti una validacion con SIGNAL SQLSTATE 45000 para que si alguien quiere reservar un lugar que ya esta ocupado a esa hora, la base tire error y no deje guardar la reserva repetida.
+- Cree un trigger llamado trg_auditoria_reservas para que apenas una reserva pase a cancelada, se guarde sola en la tabla de auditoria.
+- Cree una funcion para chequear si el lugar esta libre o no.
+- Arme dos vistas para consultar facil los datos con joins.
+- Y dibuje el diagrama de las tablas en MySQL Workbench y lo guarde como imagen en la carpeta DB.
+
+Paso 2: Crear el proyecto en Visual Studio
+Despues abri el Visual Studio y cree el proyecto nuevo como aplicacion de Windows Forms en C# usando .NET Framework 4.7.2. Le puse de nombre SistemaDeGestion.
+Para que C# pueda hablar con la base de datos MySQL, le instale el paquete NuGet MySql.Data de Oracle.
+Tambien cree el archivo .gitignore en la carpeta del repositorio para no subir al GitHub los archivos que genera Visual Studio al compilar, ni las carpetas data o estos apuntes locales.
+
+Paso 3: Armar la conexion a la base (Conexion.cs)
+Para no repetir la cadena de conexion en todas las ventanas (como nos enseño el profe en la clase 11), cree una carpeta llamada ConexionDB y adentro cree el archivo Conexion.cs.
+Ahi adentro arme la clase estatica Conexion con la cadena que apunta a localhost, puerto 3306, base tp_final_db y usuario root.
+Le puse el metodo CrearConexion() que me devuelve la conexion lista para usar con un using y abrirla con .Open() recien cuando voy a hacer una consulta.
+
+Que responder si me preguntan por Conexion.cs:
+- Por que es static? Porque no representa una entidad del negocio como un cliente o una reserva. No hace falta hacer new Conexion(), se usa directo como un punto central para pedir conexiones.
+- Por que CrearConexion no hace .Open()? Porque cada ventana o clase decide cuando abrirla y cuando cerrarla con el using para no dejar conexiones colgadas al cuete.
+
+Paso 4: Crear las carpetas de las clases
+Siguiendo las clases de la materia, hay que separar el codigo y no meter todo en el formulario.
+Por eso cree dos carpetas dentro del proyecto:
+- La carpeta Modelos: aca van a estar todas las clases de las cosas del sistema (el cliente, la reserva, los recursos).
+- La carpeta Gestoras: aca va a estar la clase que maneja las listas y la logica.
+
+Adentro de la carpeta Modelos cree estos archivos vacios para ir completandolos:
+- IReservable.cs
+- EstadoReserva.cs
+- Recurso.cs
+- Sala.cs
+- OficinaPrivada.cs
+- PuestoTrabajo.cs
+- Cliente.cs
+- Reserva.cs
+
+Y adentro de la carpeta Gestoras cree:
+- GestoraCoworking.cs
+
+Paso 5: Programar las primeras clases del modelo
+
+1. IReservable.cs (Interfaz):
+Le puse el metodo bool PuedeReservarse(DateTime fecha).
+Que responder si me preguntan:
+Es una interfaz porque define una regla que tienen que cumplir todos los recursos que se alquilan. No lleva codigo adentro, solo la firma. Si el dia de mañana agregamos otra cosa alquilable (como un proyector suelto), le implementamos IReservable y el sistema ya lo entiende.
+
+2. EstadoReserva.cs (Enumerado):
+Le puse los tres estados: Pendiente, Confirmada y Cancelada.
+Que responder si me preguntan:
+Uso un enum en vez de escribir texto o numeros sueltos para no equivocarme al tipear en el codigo. Es 100% compatible con el varchar(20) de la tabla reservas de MySQL porque cuando guardo hago .ToString() y guarda "Confirmada" tal cual pide la base.
+
+3. Recurso.cs (Clase abstracta base):
+Le puse las propiedades comunes: IdRecurso, Nombre, Descripcion, Ubicacion, PrecioPorHora e IdTipoRecurso. Implementa IReservable y tiene el metodo abstracto CalcularCosto(horas).
+Que responder si me preguntan:
+- Por que es abstract? Porque en la vida real nadie alquila un "recurso" generico, alquilas una sala, una oficina o un puesto. Entonces con abstract no dejo que se cree un new Recurso() suelto y me sirve para no repetir el nombre y el precio en todas las clases hijas.
+- Por que CalcularCosto es abstracto? Porque cada lugar hace la cuenta segun lo suyo (por ejemplo la sala si tiene proyector). Al dejarlo sin cuerpo, obligo a que las hijas hagan su propia cuenta con override. A eso se le llama polimorfismo.
+
+Lo que sigue ahora:
+Ahora me toca programar las clases hijas en la carpeta Modelos: Sala.cs, OficinaPrivada.cs y PuestoTrabajo.cs, que van a heredar de Recurso.
