@@ -1,4 +1,4 @@
--- Primero que nada borra la base de datos si existe para evitar errores, la creamos nuevamente y la ponemos en uso.
+-- Primero que nada borra la base de datos si existe para evitar errores, luego la creamos nuevamente y la ponemos en uso.
 drop database if exists tp_final_db;
 create database tp_final_db;
 use tp_final_db;
