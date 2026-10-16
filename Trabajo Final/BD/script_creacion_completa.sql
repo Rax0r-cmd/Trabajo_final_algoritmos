@@ -1,32 +1,18 @@
--- ==============================================================================
--- TRABAJO PRÁCTICO: SISTEMA DE COWORKING Y RESERVAS
--- Materia: Algoritmos II
--- ==============================================================================
-
-
--- ==============================================================================
--- PASO 1: CREAR LA BASE DE DATOS
--- Si ya existe una base con este nombre la borramos para empezar de cero,
--- la creamos limpia y nos paramos en ella para trabajar.
--- ==============================================================================
 DROP DATABASE IF EXISTS TP_FINAL_DB;
 CREATE DATABASE TP_FINAL_DB;
 USE TP_FINAL_DB;
 
+-- --------------------------------------------------
+-- TABLAS
+-- --------------------------------------------------
 
--- ==============================================================================
--- PASO 2: CREAR LAS TABLAS
--- Definimos las tablas principales del sistema con sus columnas y tipos de datos.
--- Usamos AUTO_INCREMENT para que los códigos (ID) se numeren solos (1, 2, 3...).
--- ==============================================================================
-
--- Tabla para guardar los tipos de espacios que ofrecemos (ej: sala, oficina, escritorio)
+-- Tipos de espacios (salas, oficinas, escritorios)
 CREATE TABLE tipo_recursos (
     id_tipo_recurso INT AUTO_INCREMENT PRIMARY KEY,
     nombre_tipo VARCHAR(100) NOT NULL
 );
 
--- Tabla para los recursos o espacios físicos que se alquilan
+-- Recursos / espacios
 CREATE TABLE recursos (
     id_recurso INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -34,14 +20,12 @@ CREATE TABLE recursos (
     ubicacion VARCHAR(100) NOT NULL,
     precio_por_hora DECIMAL(10,2) NOT NULL,
     id_tipo_recurso INT NOT NULL,
-    
-    -- Conectamos esta tabla con la de tipos de recursos
     CONSTRAINT fk_recursos_tipo
         FOREIGN KEY (id_tipo_recurso)
         REFERENCES tipo_recursos(id_tipo_recurso)
 );
 
--- Tabla para los clientes que vienen a trabajar o alquilar
+-- Clientes
 CREATE TABLE clientes (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -51,7 +35,7 @@ CREATE TABLE clientes (
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabla principal de reservas: relaciona qué cliente reservó qué recurso y cuándo
+-- Reservas
 CREATE TABLE reservas (
     id_reserva INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
@@ -59,20 +43,16 @@ CREATE TABLE reservas (
     fecha_reserva DATETIME NOT NULL,
     horas INT NOT NULL DEFAULT 1,
     total DECIMAL(10,2) NOT NULL,
-    estado VARCHAR(20) NOT NULL DEFAULT 'Confirmada', -- puede ser Confirmada o Cancelada
-    
-    -- Conectamos con el cliente
+    estado VARCHAR(20) NOT NULL DEFAULT 'Confirmada',
     CONSTRAINT fk_reservas_cliente
         FOREIGN KEY (id_cliente)
         REFERENCES clientes(id_cliente),
-        
-    -- Conectamos con el recurso alquilado
     CONSTRAINT fk_reservas_recurso
         FOREIGN KEY (id_recurso)
         REFERENCES recursos(id_recurso)
 );
 
--- Tabla de auditoría: acá se anota automáticamente cuando alguien cancela una reserva
+-- Tabla de auditoria para el trigger
 CREATE TABLE auditoria_reservas (
     id_auditoria INT AUTO_INCREMENT PRIMARY KEY,
     id_reserva INT NOT NULL,
@@ -82,34 +62,29 @@ CREATE TABLE auditoria_reservas (
 );
 
 
--- ==============================================================================
--- PASO 3: CARGAR DATOS DE EJEMPLO
--- Ponemos datos de prueba para que la base no esté vacía al abrir el programa.
--- ==============================================================================
+-- --------------------------------------------------
+-- DATOS DE PRUEBA
+-- --------------------------------------------------
 
--- Cargamos 3 tipos de espacios
 INSERT INTO tipo_recursos (nombre_tipo) VALUES 
 ('Sala de Reuniones'),
 ('Oficina Privada'),
 ('Puesto de Trabajo');
 
--- Cargamos salas, oficinas y escritorios con sus precios
 INSERT INTO recursos (nombre, descripcion, ubicacion, precio_por_hora, id_tipo_recurso) VALUES 
-('Sala Innovación', 'Tiene proyector y pizarra para 10 personas', 'Piso 1 - Sector A', 3500.00, 1),
-('Sala Creativa', 'Mesa redonda para 6 personas con tele Smart', 'Piso 1 - Sector B', 2500.00, 1),
-('Oficina Ejecutiva 1', 'Oficina privada para 2 personas con aire acondicionado', 'Piso 2 - Of. 201', 4500.00, 2),
-('Oficina Individual 2', 'Oficina privada para 1 persona tranquila', 'Piso 2 - Of. 202', 3000.00, 2),
-('Escritorio Flex 01', 'Puesto individual con wifi rápido', 'Planta Baja - Box 1', 1200.00, 3),
-('Escritorio Flex 02', 'Puesto individual con enchufe y lámpara', 'Planta Baja - Box 2', 1200.00, 3);
+('Sala Innovación', 'Proyector y pizarra para 10 personas', 'Piso 1 - Sector A', 3500.00, 1),
+('Sala Creativa', 'Mesa para 6 personas con TV', 'Piso 1 - Sector B', 2500.00, 1),
+('Oficina Ejecutiva 1', 'Oficina privada para 2 personas', 'Piso 2 - Of. 201', 4500.00, 2),
+('Oficina Individual 2', 'Oficina privada individual', 'Piso 2 - Of. 202', 3000.00, 2),
+('Escritorio Flex 01', 'Puesto individual en compartido', 'Planta Baja - Box 1', 1200.00, 3),
+('Escritorio Flex 02', 'Puesto individual en compartido', 'Planta Baja - Box 2', 1200.00, 3);
 
--- Cargamos 4 clientes de prueba
 INSERT INTO clientes (nombre, apellido, telefono, mail) VALUES 
 ('Lucas', 'Gonzalez', '1145678901', 'lucas.gonzalez@gmail.com'),
 ('Mariana', 'Lopez', '1178901234', 'mariana.lopez@hotmail.com'),
 ('Martin', 'Perez', '1134567890', 'martin.perez@yahoo.com'),
 ('Sofia', 'Fernandez', '1165432109', 'sofia.fernandez@gmail.com');
 
--- Cargamos algunas reservas hechas
 INSERT INTO reservas (id_cliente, id_recurso, fecha_reserva, horas, total, estado) VALUES 
 (1, 1, '2026-11-01 10:00:00', 2, 7000.00, 'Confirmada'),
 (2, 3, '2026-11-01 14:00:00', 3, 13500.00, 'Confirmada'),
@@ -117,17 +92,14 @@ INSERT INTO reservas (id_cliente, id_recurso, fecha_reserva, horas, total, estad
 (1, 2, '2026-11-03 16:00:00', 1, 2500.00, 'Cancelada');
 
 
--- ==============================================================================
--- PASO 4: VISTAS E ÍNDICES
--- - Los índices hacen que buscar por fecha o tipo sea más rápido.
--- - Las vistas son consultas que dejamos guardadas para usarlas como si fueran tablas.
--- ==============================================================================
+-- --------------------------------------------------
+-- INDICES Y VISTAS
+-- --------------------------------------------------
 
--- Ponemos índices en las columnas donde más vamos a buscar
 CREATE INDEX idx_reservas_fecha ON reservas(fecha_reserva);
 CREATE INDEX idx_recursos_tipo ON recursos(id_tipo_recurso);
 
--- Vista 1: Muestra todas las reservas juntas con el nombre del cliente y del recurso
+-- Vista con el detalle de las reservas y nombres de cliente/recurso
 CREATE VIEW vw_detalle_reservas AS
 SELECT 
     r.id_reserva,
@@ -144,7 +116,7 @@ INNER JOIN clientes c ON r.id_cliente = c.id_cliente
 INNER JOIN recursos rec ON r.id_recurso = rec.id_recurso
 INNER JOIN tipo_recursos t ON rec.id_tipo_recurso = t.id_tipo_recurso;
 
--- Vista 2: Muestra cuántas reservas tuvo cada sala u oficina y cuánta plata generó
+-- Vista resumen para ver reservas totales y recaudacion por recurso
 CREATE VIEW vw_resumen_recursos AS
 SELECT 
     rec.id_recurso,
@@ -159,13 +131,13 @@ LEFT JOIN reservas r ON rec.id_recurso = r.id_recurso
 GROUP BY rec.id_recurso, rec.nombre, t.nombre_tipo, rec.precio_por_hora;
 
 
--- ==============================================================================
--- PASO 5: FUNCIÓN ALMACENADA (UDF)
--- Esta función chequea si un espacio está libre u ocupado en una fecha y hora.
--- Si está libre devuelve 1. Si ya lo reservaron devuelve 0.
--- ==============================================================================
+-- --------------------------------------------------
+-- FUNCION: DISPONIBILIDAD
+-- --------------------------------------------------
+
 DELIMITER //
 
+-- Devuelve 1 si esta libre o 0 si ya esta reservado en esa fecha
 CREATE FUNCTION fn_verificar_disponibilidad(
     p_id_recurso INT,
     p_fecha DATETIME
@@ -176,31 +148,29 @@ READS SQL DATA
 BEGIN
     DECLARE v_cantidad INT DEFAULT 0;
     
-    -- Nos fijamos si hay alguna reserva confirmada justo en ese horario
     SELECT COUNT(*) INTO v_cantidad
     FROM reservas
     WHERE id_recurso = p_id_recurso
       AND fecha_reserva = p_fecha
       AND estado = 'Confirmada';
       
-    -- Si la cuenta dio 0 significa que no hay nadie, devolvemos 1 (disponible)
     IF v_cantidad = 0 THEN
         RETURN 1;
     ELSE
-        RETURN 0; -- Ocupado
+        RETURN 0;
     END IF;
 END //
 
 DELIMITER ;
 
 
--- ==============================================================================
--- PASO 6: PROCEDIMIENTOS ALMACENADOS (STORED PROCEDURES)
--- Son funciones guardadas dentro de la base para agregar, modificar o cancelar datos.
--- ==============================================================================
+-- --------------------------------------------------
+-- STORED PROCEDURES
+-- --------------------------------------------------
+
 DELIMITER //
 
--- Procedimiento para dar de alta a un cliente nuevo
+-- Alta cliente
 CREATE PROCEDURE sp_alta_cliente(
     IN p_nombre VARCHAR(100),
     IN p_apellido VARCHAR(100),
@@ -212,7 +182,7 @@ BEGIN
     VALUES (p_nombre, p_apellido, p_telefono, p_mail);
 END //
 
--- Procedimiento para modificar los datos de un cliente que ya existe
+-- Modificar cliente
 CREATE PROCEDURE sp_modificar_cliente(
     IN p_id_cliente INT,
     IN p_nombre VARCHAR(100),
@@ -229,7 +199,7 @@ BEGIN
     WHERE id_cliente = p_id_cliente;
 END //
 
--- Procedimiento para agregar un recurso nuevo (sala, oficina, etc.)
+-- Alta recurso
 CREATE PROCEDURE sp_alta_recurso(
     IN p_nombre VARCHAR(100),
     IN p_descripcion TEXT,
@@ -242,7 +212,7 @@ BEGIN
     VALUES (p_nombre, p_descripcion, p_ubicacion, p_precio, p_id_tipo);
 END //
 
--- Procedimiento para cambiar los datos o precio de un recurso
+-- Modificar recurso
 CREATE PROCEDURE sp_modificar_recurso(
     IN p_id_recurso INT,
     IN p_nombre VARCHAR(100),
@@ -261,8 +231,7 @@ BEGIN
     WHERE id_recurso = p_id_recurso;
 END //
 
--- Procedimiento para crear una reserva.
--- Tiene un HANDLER para errores y usa SIGNAL 45000 si el lugar ya está ocupado.
+-- Alta de reserva (valida disponibilidad con la funcion y tira error con signal si esta ocupado)
 CREATE PROCEDURE sp_alta_reserva(
     IN p_id_cliente INT,
     IN p_id_recurso INT,
@@ -273,43 +242,35 @@ CREATE PROCEDURE sp_alta_reserva(
 BEGIN
     DECLARE v_disponible INT;
     
-    -- Handler: si salta cualquier error raro de SQL, lo relanza para no ocultarlo
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         RESIGNAL;
     END;
 
-    -- Usamos nuestra función del PASO 5 para revisar si está libre
     SET v_disponible = fn_verificar_disponibilidad(p_id_recurso, p_fecha);
 
-    -- Si la función devolvió 0, tiramos el error con SIGNAL 45000
     IF v_disponible = 0 THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'El recurso ya se encuentra reservado en ese dia y horario.';
     ELSE
-        -- Si está libre, guardamos la reserva normalmente
         INSERT INTO reservas (id_cliente, id_recurso, fecha_reserva, horas, total, estado)
         VALUES (p_id_cliente, p_id_recurso, p_fecha, p_horas, p_total, 'Confirmada');
     END IF;
 END //
 
--- Procedimiento para cancelar una reserva que estaba confirmada
+-- Cancelar reserva
 CREATE PROCEDURE sp_cancelar_reserva(
     IN p_id_reserva INT
 )
 BEGIN
     DECLARE v_existe INT DEFAULT 0;
 
-    -- Nos fijamos si el ID que nos pasaron existe en la tabla
     SELECT COUNT(*) INTO v_existe FROM reservas WHERE id_reserva = p_id_reserva;
 
     IF v_existe = 0 THEN
-        -- Si no existe, tiramos error con SIGNAL
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'La reserva que intentas cancelar no existe.';
     ELSE
-        -- Si existe, le cambiamos el estado a Cancelada
-        -- (Al hacer este UPDATE, se va a disparar solo el Trigger del Paso 8)
         UPDATE reservas
         SET estado = 'Cancelada'
         WHERE id_reserva = p_id_reserva;
@@ -317,62 +278,51 @@ BEGIN
 END //
 
 
--- ==============================================================================
--- PASO 7: CURSOR
--- Un cursor funciona como un 'while' o 'foreach' en programación:
--- va leyendo fila por fila una consulta y va sumando la plata de cada reserva.
--- ==============================================================================
+-- --------------------------------------------------
+-- CURSOR
+-- --------------------------------------------------
+
+-- Procedimiento con cursor para recorrer reservas confirmadas y sumar el total
 CREATE PROCEDURE sp_calcular_total_recaudado_cursor(
     OUT p_total_general DECIMAL(10,2)
 )
 BEGIN
-    -- Variables para controlar el bucle y acumular la plata
     DECLARE v_fin INT DEFAULT FALSE;
     DECLARE v_monto DECIMAL(10,2) DEFAULT 0.00;
     DECLARE v_acumulador DECIMAL(10,2) DEFAULT 0.00;
 
-    -- Declaramos el cursor con las reservas confirmadas que queremos leer
     DECLARE cur_reservas CURSOR FOR 
         SELECT total FROM reservas WHERE estado = 'Confirmada';
 
-    -- Handler: cuando ya no queden más filas que leer (NOT FOUND), ponemos v_fin en TRUE
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_fin = TRUE;
 
-    -- Abrimos el cursor para empezar a leer
     OPEN cur_reservas;
 
-    -- Bucle que lee registro por registro
     bucle_reservas: LOOP
-        -- Traemos el monto de la fila actual
         FETCH cur_reservas INTO v_monto;
         
-        -- Si se terminaron las filas, salimos del bucle
         IF v_fin THEN
             LEAVE bucle_reservas;
         END IF;
 
-        -- Sumamos el monto al total acumulado
         SET v_acumulador = v_acumulador + v_monto;
     END LOOP;
 
-    -- Cerramos el cursor cuando terminamos
     CLOSE cur_reservas;
 
-    -- Guardamos el total final en la variable de salida (OUT)
     SET p_total_general = v_acumulador;
 END //
 
 
--- ==============================================================================
--- PASO 8: TRIGGER (DISPARADOR)
--- Es una acción automática: cada vez que alguien cancela una reserva (UPDATE),
--- este trigger salta solo y anota en la tabla auditoria_reservas qué pasó y cuándo.
--- ==============================================================================
+-- --------------------------------------------------
+-- TRIGGER
+-- --------------------------------------------------
+
+-- Guarda en auditoria cuando se cancela una reserva
 CREATE TRIGGER trg_auditoria_reservas
 AFTER UPDATE ON reservas
 FOR EACH ROW
 BEGIN
-    -- Solo guardamos en auditoría si el estado cambió a 'Cancelada'
     IF NEW.estado = 'Cancelada' AND OLD.estado != 'Cancelada' THEN
         INSERT INTO auditoria_reservas (id_reserva, accion, fecha_accion, usuario)
         VALUES (NEW.id_reserva, 'Cancelacion de reserva', NOW(), CURRENT_USER());
@@ -382,17 +332,15 @@ END //
 DELIMITER ;
 
 
--- ==============================================================================
--- PASO 9: CONSULTAS DE EJEMPLO PARA MOSTRAR AL PROFESOR
--- Son consultas preparadas para probar que todo anda bien y mostrarlas en clase.
--- ==============================================================================
+-- --------------------------------------------------
+-- CONSULTAS DE PRUEBA
+-- --------------------------------------------------
 
--- 1. CONSULTA CON JOIN Y FILTRADO (Unidad 6 y 7):
--- Muestra las reservas confirmadas con el nombre del cliente y el lugar
+-- 1. Reservas confirmadas con join
 SELECT 
     r.id_reserva,
     c.nombre AS cliente,
-    rec.nombre AS espacio_alquilado,
+    rec.nombre AS espacio,
     r.fecha_reserva,
     r.total
 FROM reservas r
@@ -401,14 +349,13 @@ INNER JOIN recursos rec ON r.id_recurso = rec.id_recurso
 WHERE r.estado = 'Confirmada'
 ORDER BY r.fecha_reserva ASC;
 
-
--- 2. SUBCONSULTAS (Unidad Subconsultas):
--- a) Lugares que todavía NUNCA nadie reservó (usa una subconsulta con NOT IN)
+-- 2. Subconsultas
+-- Recursos sin reservas
 SELECT id_recurso, nombre, ubicacion
 FROM recursos
 WHERE id_recurso NOT IN (SELECT DISTINCT id_recurso FROM reservas);
 
--- b) Clientes que gastaron más que el promedio general de todas las reservas
+-- Clientes que gastaron mas que el promedio
 SELECT nombre, apellido, mail
 FROM clientes
 WHERE id_cliente IN (
@@ -417,9 +364,7 @@ WHERE id_cliente IN (
     WHERE total > (SELECT AVG(total) FROM reservas)
 );
 
-
--- 3. CTE (Tabla temporal con WITH ... AS de la Unidad UDF y CTE):
--- Agrupa los recursos por tipo y calcula el precio promedio de cada categoría
+-- 3. CTE para ver promedios por tipo de recurso
 WITH ResumenPorTipo AS (
     SELECT 
         t.nombre_tipo,
