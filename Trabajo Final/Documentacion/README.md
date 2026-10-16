@@ -4,7 +4,7 @@ Sistema de Gestion de Coworking y Reservas
 Carrera: Analista de Sistemas  
 Profesor: Lic. Adrian Aroca  
 
-Integrantes:
+Desarrolladores:
 - Jonathan Lester Tullo
 - David Samuel Ortega
 - Maximiliano Scollo

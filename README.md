@@ -1,11 +1,17 @@
 # Sistema de Gestion de Coworking y Reservas
 
+![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Windows Forms](https://img.shields.io/badge/Windows_Forms-0078D7?style=for-the-badge&logo=windows&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+
 Trabajo Practico Final de Algoritmos II  
 Carrera: Analista de Sistemas  
 Institucion: Instituto Argentino de la Empresa  
 Profesor: Lic. Adrian Aroca  
 
-Integrantes:
+Desarrolladores:
 - Jonathan Lester Tullo
 - David Samuel Ortega
 - Maximiliano Scollo
