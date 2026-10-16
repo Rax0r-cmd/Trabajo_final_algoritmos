@@ -44,7 +44,7 @@ Cursor:
 - sp_calcular_total_recaudado_cursor: recorre fila por fila las reservas confirmadas y va sumando la plata para devolver el total general.
 
 3. Diagrama DER
-El diagrama entidad relacion de las tablas lo hicimos en MySQL Workbench y dejamos la imagen guardada en Trabajo Final/DB/Diagrama_DER.png junto con el archivo editable Diagrama_Editable.mwb.
+El diagrama entidad relacion de las tablas lo hicimos en MySQL Workbench y dejamos la imagen guardada en DB/Diagrama_DER.png junto con el archivo editable Diagrama_Editable.mwb.
 
 4. Lo que nos falta hacer
 - Programar las clases en C# con Windows Forms (clase abstracta Recurso, las clases hijas Sala, OficinaPrivada, PuestoTrabajo, y las clases Cliente y Reserva).

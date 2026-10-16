@@ -45,7 +45,7 @@ git clone git@github.com:Rax0r-cmd/Trabajo_final_algoritmos.git
 
 Abrir MySQL Workbench o phpMyAdmin y ejecutar el script ubicado en:
 ```text
-Trabajo Final/DB/DB_TPFinal.sql
+DB/DB_TPFinal.sql
 ```
 Esto crea la base de datos `tp_final_db`, las tablas, las vistas, los procedimientos almacenados, las funciones y los triggers necesarios.
 
@@ -53,7 +53,7 @@ Esto crea la base de datos `tp_final_db`, las tablas, las vistas, los procedimie
 
 Abrir la solucion en Visual Studio desde la carpeta:
 ```text
-Trabajo Final/src/
+src/
 ```
 Compilar y presionar F5 (Iniciar) para ejecutar el sistema.
 
@@ -62,7 +62,6 @@ Compilar y presionar F5 (Iniciar) para ejecutar el sistema.
 ## Organizacion del Repositorio
 
 ```text
-Trabajo Final/
 ├── DB/
 │   ├── DB_TPFinal.sql          (script SQL completo con tablas, vistas, SPs y triggers)
 │   ├── Diagrama_DER.png        (diagrama Entidad-Relacion visual generado en Workbench)
