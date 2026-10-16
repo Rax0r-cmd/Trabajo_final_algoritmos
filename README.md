@@ -27,6 +27,38 @@ El sistema administra un espacio de trabajo compartido (Coworking), permitiendo:
 
 ---
 
+## Como usar / Instalacion
+
+### 1. Clonar el repositorio
+
+Clonar con HTTPS:
+```bash
+git clone https://github.com/Rax0r-cmd/Trabajo_final_algoritmos.git
+```
+
+Clonar con SSH:
+```bash
+git clone git@github.com:Rax0r-cmd/Trabajo_final_algoritmos.git
+```
+
+### 2. Base de Datos (MySQL)
+
+Abrir MySQL Workbench o phpMyAdmin y ejecutar el script ubicado en:
+```text
+Trabajo Final/DB/DB_TPFinal.sql
+```
+Esto crea la base de datos `tp_final_db`, las tablas, las vistas, los procedimientos almacenados, las funciones y los triggers necesarios.
+
+### 3. Ejecutar la aplicacion
+
+Abrir la solucion en Visual Studio desde la carpeta:
+```text
+Trabajo Final/src/
+```
+Compilar y presionar F5 (Iniciar) para ejecutar el sistema.
+
+---
+
 ## Organizacion del Repositorio
 
 ```text
