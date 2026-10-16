@@ -10,7 +10,9 @@ Institucion: Instituto Argentino de la Empresa
 Profesor: Lic. Adrian Aroca  
 
 Desarrolladores:  
-Jonathan Lester Tullo · David Samuel Ortega · Maximiliano Scollo  
+Jonathan Lester Tullo
+David Samuel Ortega
+Maximiliano Scollo  
 
 ---
 
