@@ -17,3 +17,11 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
+
+## Archivos y utilidades locales del espacio de trabajo
+/DB/
+/index.html
+/app.js
+/styles.css
+/*.html
+
