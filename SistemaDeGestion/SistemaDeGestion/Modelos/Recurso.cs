@@ -2,15 +2,12 @@ using System;
 
 namespace SistemaDeGestion.Modelos
 {
-    // Clase abstracta:
-    // La hago abstract porque en la realidad nadie alquila "un recurso" suelto en el aire,
-    // vos alquilas una sala, una oficina o un escritorio.
-    // Al ponerle abstract nadie puede hacer "new Recurso()" por error, y ademas me ahorro
-    // repetir en cada clase las cosas que tienen todos en comun (nombre, precio, ubicacion).
-    // Tambien le implemento la interfaz IReservable para que cumpla con la regla de reserva.
+    // Clase abstracta para los lugares del coworking.
+    // La hago abstract para no crear un recurso suelto y usarla de base para las demas.
+    // Tambien implementa IReservable para saber si se puede alquilar.
     public abstract class Recurso : IReservable
     {
-        // Propiedades que comparten todos los lugares del coworking
+        // Propiedades que comparten todos los lugares
         public int IdRecurso { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
@@ -34,18 +31,14 @@ namespace SistemaDeGestion.Modelos
             IdTipoRecurso = idTipoRecurso;
         }
 
-        // Este metodo viene de la interfaz IReservable.
-        // Lo dejamos preparado con una regla logica: no te deja reservar para dias que ya pasaron.
+        // Revisa que no se reserve una fecha que ya paso
         public virtual bool PuedeReservarse(DateTime fecha)
         {
             return fecha.Date >= DateTime.Today;
         }
 
-        // Metodo abstracto para calcular el costo:
-        // Lo pongo abstracto y sin llaves porque cada lugar calcula la plata segun lo suyo
-        // (por ejemplo si una sala tiene proyector o si la oficina tiene mas escritorios).
-        // Como aca no tiene codigo, obligo a que cada clase hija (Sala, Oficina, Puesto)
-        // haga su propia cuenta usando override. Esto es polimorfismo puro.
+        // Metodo para sacar el precio total segun las horas que se alquila.
+        // Es abstracto porque cada lugar (sala, oficina, etc.) tiene su propia cuenta.
         public abstract decimal CalcularCosto(int horas);
     }
 }
