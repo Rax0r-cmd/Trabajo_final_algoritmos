@@ -29,6 +29,38 @@ El sistema administra un espacio de trabajo compartido (Coworking), permitiendo:
 
 ---
 
+## Arquitectura Tecnica
+
+```text
+├── Plataforma / Lenguaje: C# (.NET Framework 4.7.2) / Windows Forms
+├── Base de Datos: MySQL / MariaDB 10.4+ en XAMPP (Motor InnoDB con claves foraneas)
+├── Acceso a Datos: MySql.Data con conexion centralizada (Conexion.cs) + Stored Procedures
+├── Logica de Negocio: POO (Clase abstracta Recurso, Interfaces, Clases Gestoras con LINQ)
+└── Manejo de Errores: Validacion transaccional con SIGNAL SQLSTATE '45000' + Try/Catch
+```
+
+```mermaid
+graph TD
+    UI["Interfaz de Usuario (Windows Forms)\nFormularios: Clientes, Recursos, Reservas"]
+    
+    UI -->|Accion del Usuario| Gestora["Capa Gestora (GestoraCoworking)\nLogica de Negocio y LINQ"]
+    
+    Gestora -->|Manipula Objetos| Modelos["Modelos del Dominio\nRecurso (Sala, Oficina, Puesto)\nCliente, Reserva"]
+    
+    Gestora -->|Solicita Conexion| Conexion["Conexion Centralizada (Conexion.cs)\nCrea objetos MySqlConnection"]
+    
+    Conexion -->|Ejecuta SPs y Vistas| BD[("Base de Datos MySQL (XAMPP)\ntp_final_db")]
+    
+    BD -->|Verifica Disponibilidad| Valida{"fn_verificar_disponibilidad"}
+    Valida -->|Libre| Exito["Guarda Reserva (INSERT)\nDispara Trigger si hay cancelacion"]
+    Valida -->|Ocupado| Error["SIGNAL SQLSTATE '45000'\nRechazo de Reserva"]
+    
+    Error -->|Excepcion capturada| UI
+    Exito -->|Actualiza Grilla| UI
+```
+
+---
+
 ## Como usar / Instalacion
 
 ### 1. Clonar el repositorio
