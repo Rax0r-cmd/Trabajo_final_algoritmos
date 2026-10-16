@@ -1,10 +1,8 @@
 # Sistema de Gestion de Coworking y Reservas
 
-![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white)
-![.NET](https://img.shields.io/badge/.NET-512BD4?logo=dotnet&logoColor=white)
-![Windows Forms](https://img.shields.io/badge/Windows_Forms-0078D7?logo=windows&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
+<p align="left">
+  <img src="https://skillicons.dev/icons?i=cs,dotnet,mysql,git,visualstudio" alt="Tech Stack" />
+</p>
 
 Trabajo Practico Final de Algoritmos II  
 Carrera: Analista de Sistemas  
