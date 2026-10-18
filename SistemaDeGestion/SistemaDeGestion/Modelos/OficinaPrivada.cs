@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace SistemaDeGestion.Modelos
         }
 
       
-        // Para el calculo de costo podemos incluir alguna acaracteristica unica praa cada una. 
+        // Para el calculo de costo podemos incluir alguna acaracteristica unica para cada una. 
         public override decimal CalcularCosto(int horas)
         {
             return PrecioPorHora * horas;

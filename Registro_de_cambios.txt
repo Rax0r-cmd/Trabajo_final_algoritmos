@@ -97,3 +97,8 @@ Implementación realizada:
 - Se implementaron los métodos CalcularCosto(horas) y PuedeReservarse(DateTime fecha).
 - Se crearon las propiedades y constructores de Cliente.cs y Reserva.cs acordes a las tablas de la BD.
 - Se reubicó EstadoReserva.cs dentro de la carpeta Enum y se actualizó la referencia en SistemaDeGestion.csproj.
+ 
+
+Paso 6 Crear clase Gestora. 
+- Se implementó la clase GestoraCoworking.cs
+- Se crearon los métodos  de  lista 

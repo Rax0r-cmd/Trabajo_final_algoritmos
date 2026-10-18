@@ -6,6 +6,7 @@ namespace SistemaDeGestion.Modelos
     {
         Pendiente,
         Confirmada,
-        Cancelada
+        Cancelada,
+        Finalizada
     }
 }
