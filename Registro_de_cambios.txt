@@ -3,6 +3,8 @@ Sistema de Coworking - Algoritmos 2
 
 Aca voy anotando todo paso a paso como lo fui haciendo, para tenerlo a mano por si me olvido de algo o para cuando tenga que defender el trabajo.
 
+=================================================   JONATHAN ===========================================================
+
 Paso 1: La base de datos en XAMPP y Mysql Workbench
 Primero que nada abri el XAMPP y levante el modulo de MySQL. Ahi me conecte con el usuario root sin contraseña en el puerto 3306 y cree la base de datos llamada tp_final_db.
 Despues arme las tablas para el sistema:
@@ -73,3 +75,20 @@ Que responder si me preguntan:
 
 Lo que sigue ahora:
 Ahora me toca programar las clases hijas en la carpeta Modelos: Sala.cs, OficinaPrivada.cs y PuestoTrabajo.cs, que van a heredar de Recurso.
+
+
+==================================== MAXI ==============================================================
+
+
+Paso 5 (Continuación) : 
+1- Clase hija Oficina privada
+2- Clase hija Puesto trabajo
+3- Clase hija Sala
+
+Observación: 
+-Al necesitar realizar un calculo distinto entre cada clase hija, necesitarán inherentemente una propieda nueva, por lo que se necesitará de almacenarla en la base de datos. 
+-Hay 2 caminos, o se crea un campo flexible en recursos O una fk que tenga listada los 3 tipos de recursos en aprticular con sus peculiaridades.
+ej: Oficina Privada : Moviliario incluido como bool 
+    Sala: Cantidad de sillas  INT 
+    Puesto de trabajo: Nro de categoria INT
+
