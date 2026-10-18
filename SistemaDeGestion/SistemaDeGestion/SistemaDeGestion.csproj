@@ -94,7 +94,7 @@
   <ItemGroup>
     <Compile Include="ConexionDB\Conexion.cs" />
     <Compile Include="Modelos\IReservable.cs" />
-    <Compile Include="Modelos\EstadoReserva.cs" />
+    <Compile Include="Enum\EstadoReserva.cs" />
     <Compile Include="Modelos\Recurso.cs" />
     <Compile Include="Modelos\Sala.cs" />
     <Compile Include="Modelos\OficinaPrivada.cs" />

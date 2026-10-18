@@ -92,3 +92,8 @@ ej: Oficina Privada : Moviliario incluido como bool
     Sala: Cantidad de sillas  INT 
     Puesto de trabajo: Nro de categoria INT
 
+Implementación realizada:
+- Se implementaron las clases hijas OficinaPrivada.cs, PuestoTrabajo.cs y Sala.cs heredando de Recurso.
+- Se implementaron los métodos CalcularCosto(horas) y PuedeReservarse(DateTime fecha).
+- Se crearon las propiedades y constructores de Cliente.cs y Reserva.cs acordes a las tablas de la BD.
+- Se reubicó EstadoReserva.cs dentro de la carpeta Enum y se actualizó la referencia en SistemaDeGestion.csproj.
