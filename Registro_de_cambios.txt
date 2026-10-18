@@ -80,7 +80,7 @@ Ahora me toca programar las clases hijas en la carpeta Modelos: Sala.cs, Oficina
 ==================================== MAXI ==============================================================
 
 
-Paso 5 (Continuación) : 
+Paso 2.5 (Continuación) : 
 1- Clase hija Oficina privada
 2- Clase hija Puesto trabajo
 3- Clase hija Sala
@@ -99,6 +99,27 @@ Implementación realizada:
 - Se reubicó EstadoReserva.cs dentro de la carpeta Enum y se actualizó la referencia en SistemaDeGestion.csproj.
  
 
-Paso 6 Crear clase Gestora. 
+Paso 2.6 Crear clase Gestora. 
 - Se implementó la clase GestoraCoworking.cs
-- Se crearon los métodos  de  lista 
+- Se crearon los métodos de lista 
+
+
+================================================== David ====================================================
+
+Paso 3:
+- Se agregó el formulario de login de Usuario para que la presentación quede mas prolija.
+
+Assets:
+- Se creó la carpeta "Img" que contiene las imagenes de Background, logo, e icono del proyecto.
+
+Observaciónes corregidas:
+
+- En la tabla recursos dentro de la base de datos corregí los parametros que eran necesarios para_
+que las tablas "sala", "OficinaPrivada" y "PuestoTrabajo" pudieran tener una forma de calcular el costo correctamente.
+
+- En la DB agregué los parametros directamente dentro de la tabla recursos, y en las respectivas clases se añadió cada parametro_
+correspondiente según la clase, y luego modifiqué el calculo del costo según lo especificado en el TP.
+
+a continuación:
+Pasos del 3.3 al 3.7
+

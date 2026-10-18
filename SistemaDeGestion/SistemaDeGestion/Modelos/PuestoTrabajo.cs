@@ -8,21 +8,37 @@ namespace SistemaDeGestion.Modelos
 {
     public class PuestoTrabajo : Recurso
     {
+        //Propiedad unica de la clase hija (dentro del costructor se asigna su valor unico)
+        public int NroCategoria { get; set; }
         public PuestoTrabajo()
         {
             IdTipoRecurso = 3;
         }
 
-        public PuestoTrabajo(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precioPorHora, int idTipoRecurso = 3)
+        public PuestoTrabajo(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precioPorHora, int nroCategoria, int idTipoRecurso = 3)
             : base(idRecurso, nombre, descripcion, ubicacion, precioPorHora, idTipoRecurso)
         {
+            NroCategoria = nroCategoria;
         }
 
         
         // Para el calculo de costo podemos incluir alguna acaracteristica unica praa cada una. 
         public override decimal CalcularCosto(int horas)
         {
-            return PrecioPorHora * horas;
+            decimal costo = PrecioPorHora * horas;
+            if (NroCategoria == 1) 
+            {
+                return costo + 3500;
+            }
+            else if (NroCategoria == 2) 
+            {
+                return costo + 5500;
+            }
+            else if (NroCategoria == 3) 
+            {
+                return costo + 8000;
+            }
+            return costo;
         }
 
         // Implementamos el metodo abstracto de la interfaz IReservable

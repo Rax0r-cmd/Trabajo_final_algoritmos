@@ -21,6 +21,11 @@ create table recursos (
     descripcion text,
     ubicacion varchar(100) not null,
     precio_por_hora decimal(10,2) not null,
+    -- recursos detalle --
+    mobiliario_incluido boolean null,
+    cantidad_sillas int null,
+    nro_categoria int null,
+    -- =============== --
     id_tipo_recurso int not null,
     constraint fk_recursos_tipo
         foreign key (id_tipo_recurso)
@@ -77,13 +82,13 @@ insert into tipo_recursos (nombre_tipo) values
 ('Oficina Privada'),
 ('Puesto de Trabajo');
 
-insert into recursos (nombre, descripcion, ubicacion, precio_por_hora, id_tipo_recurso) values 
-('Sala Innovación', 'Proyector y pizarra para 10 personas', 'Piso 1 - Sector A', 3500.00, 1),
-('Sala Creativa', 'Mesa para 6 personas con TV', 'Piso 1 - Sector B', 2500.00, 1),
-('Oficina Ejecutiva 1', 'Oficina privada para 2 personas', 'Piso 2 - Of. 201', 4500.00, 2),
-('Oficina Individual 2', 'Oficina privada individual', 'Piso 2 - Of. 202', 3000.00, 2),
-('Escritorio Flex 01', 'Puesto individual en compartido', 'Planta Baja - Box 1', 1200.00, 3),
-('Escritorio Flex 02', 'Puesto individual en compartido', 'Planta Baja - Box 2', 1200.00, 3);
+insert into recursos (nombre, descripcion, ubicacion, precio_por_hora, mobiliario_incluido, cantidad_sillas, nro_categoria, id_tipo_recurso) values 
+('Sala Innovación', 'Proyector y pizarra para 10 personas', 'Piso 1 - Sector A', 3500.00, null, 40, null, 1),
+('Sala Creativa', 'Mesa para 6 personas con TV', 'Piso 1 - Sector B', 2500.00, null, 70, null, 1),
+('Oficina Ejecutiva 1', 'Oficina privada para 2 personas', 'Piso 2 - Of. 201', 4500.00, true, null, null, 2),
+('Oficina Individual 2', 'Oficina privada individual', 'Piso 2 - Of. 202', 3000.00, false, null, null, 2),
+('Puesto de trabajo 1', 'Puesto individual', 'Planta Baja - Box 1', 1200.00, null, null, 1, 3),
+('Puesto de trabajo 2', 'Puesto compartido', 'Planta Baja - Box 2', 1800.00, null, null, 3, 3);
 
 insert into clientes (nombre, apellido, telefono, mail) values 
 ('Lucas', 'Gonzalez', '1145678901', 'lucas.gonzalez@gmail.com'),
@@ -218,11 +223,14 @@ create procedure sp_alta_recurso(
     in p_descripcion text,
     in p_ubicacion varchar(100),
     in p_precio decimal(10,2),
+    in p_mobiliario_incluido boolean,
+    in p_cantidad_sillas int,
+    in p_nro_categoria int,
     in p_id_tipo int
 )
 begin
-    insert into recursos (nombre, descripcion, ubicacion, precio_por_hora, id_tipo_recurso)
-    values (p_nombre, p_descripcion, p_ubicacion, p_precio, p_id_tipo);
+    insert into recursos (nombre, descripcion, ubicacion, precio_por_hora, mobiliario_incluido, cantidad_sillas, nro_categoria, id_tipo_recurso)
+    values (p_nombre, p_descripcion, p_ubicacion, p_precio, p_mobiliario_incluido, p_cantidad_sillas, p_nro_categoria, p_id_tipo);
 end //
 -- agrega una nueva sala u oficina a la tabla recursos
 
@@ -233,6 +241,9 @@ create procedure sp_modificar_recurso(
     in p_descripcion text,
     in p_ubicacion varchar(100),
     in p_precio decimal(10,2),
+    in p_mobiliario_incluido boolean,
+    in p_cantidad_sillas int,
+    in p_nro_categoria int,
     in p_id_tipo int
 )
 begin
@@ -241,6 +252,9 @@ begin
         descripcion = p_descripcion,
         ubicacion = p_ubicacion,
         precio_por_hora = p_precio,
+        mobiliario_incluido = p_mobiliario_incluido,
+        cantidad_sillas = p_cantidad_sillas,
+        nro_categoria = p_nro_categoria,
         id_tipo_recurso = p_id_tipo
     where id_recurso = p_id_recurso;
 end //

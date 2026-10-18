@@ -9,6 +9,8 @@ namespace SistemaDeGestion.Modelos
     // Usar herencia de manera funcional y que cada  clase hija tenga su caracteristica y comportamiento propio
     public class OficinaPrivada : Recurso
     {
+        //Propiedad unica de la clase hija (dentro del costructor se asigna su valor unico)
+        public bool MobiliarioIncluido { get; set; }
         // Constructor vacio
         public OficinaPrivada()
         {
@@ -16,16 +18,25 @@ namespace SistemaDeGestion.Modelos
         }
 
         // Constructor con datos para cuando traemos la info cargada
-        public OficinaPrivada(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precioPorHora, int idTipoRecurso = 2)
+        public OficinaPrivada(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precioPorHora, bool mobiliarioIncluido, int idTipoRecurso = 2)
             : base(idRecurso, nombre, descripcion, ubicacion, precioPorHora, idTipoRecurso)
         {
+            MobiliarioIncluido = mobiliarioIncluido;
         }
 
       
         // Para el calculo de costo podemos incluir alguna acaracteristica unica para cada una. 
         public override decimal CalcularCosto(int horas)
         {
-            return PrecioPorHora * horas;
+            decimal costo = PrecioPorHora * horas;
+            if (MobiliarioIncluido) 
+            {
+                return costo + 1500;
+            }
+            else 
+            {
+                return costo;
+            }
         }
 
         // Implementamos el metodo abstracto de la interfaz IReservable
