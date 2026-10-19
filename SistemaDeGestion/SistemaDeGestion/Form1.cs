@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SistemaDeGestion.Formularios;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,6 +21,36 @@ namespace SistemaDeGestion
         private void LbltituloCw_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnLogin_Click(object sender, EventArgs e)
+        {
+            string Usuario = TxtUsuario.Text.Trim();
+            string Contraseña = TxtContrasenia.Text.Trim();
+
+            if(Usuario != "Admin")
+            {
+                MessageBox.Show("El Usuario es incorrecto", "Advertencia...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                TxtUsuario.Focus();
+                return;
+            }
+            if(Contraseña != "123456")
+            {
+                MessageBox.Show("La Contraseña es incorrecta", "Advertencia...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                TxtContrasenia.Focus();
+                return;
+            }
+
+            MessageBox.Show("Acceso Permitido", "Bienvenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // aca va el codigo donde el formulario de login pasa al frmprincipal
+            FrmPrincipal Principal = new FrmPrincipal();
+            Principal.Show();
+            this.Hide();
         }
     }
 }
