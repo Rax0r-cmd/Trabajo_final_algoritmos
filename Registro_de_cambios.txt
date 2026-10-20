@@ -125,3 +125,21 @@ Pasos del 3.3 al 3.7
 
 ==================================== MAXI ==============================================================
 Actualización del DER 
+
+================================================== David ====================================================
+
+Paso 3.3 
+- se creo el formulario Principal, con las respectivas solapas de
+    CONTROL: desde aquí se crean las reservas del cliente
+    RESERVAS: desde aquí se visualizan las reservas del cliente, y desde aquí se cancelan
+    GESTION: esta solapa solamente es visible para el Administrador, permite editar, crear Clientes y Recursos
+
+- se agregó logica dentro del FrmLogin para pedir asistencia a traves de whatsapp
+- se agregó lógica al registrarse como administrador en el FrmPrincipal, lo que te habilita la solapa de "GESTION"
+- se implementó la parte grafica y la disposición de botones, comboBox, y grillas en los formularios, y sus diferentes solapas.
+
+a continuación:
+    - confirmar si la parte grafica requiere ajustes.
+    - terminar la funcionabilidad de las solapas de GESTION.
+    - Confirmar de qué manera se agregarán los Clientes y Recursos
+    - Hacer que la logica de los formularios se conecte con las clases, y Bdd
