@@ -30,5 +30,10 @@ namespace SistemaDeGestion.Modelos
             Total = total;
             EstadoReserva = estadoReserva;
         }
+        // Constructor que no recibe EstadoReserva y pasa "Confirmada" por defecto
+        public Reserva(int idReserva, int idCliente, int idRecurso, DateTime fecha, int horas, decimal total)
+            : this(idReserva, idCliente, idRecurso, fecha, horas, total, EstadoReserva.Confirmada)
+        {
+        }
     }
 }
