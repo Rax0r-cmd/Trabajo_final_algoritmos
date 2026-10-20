@@ -123,3 +123,5 @@ correspondiente según la clase, y luego modifiqué el calculo del costo según 
 a continuación:
 Pasos del 3.3 al 3.7
 
+==================================== MAXI ==============================================================
+Actualización del DER 
