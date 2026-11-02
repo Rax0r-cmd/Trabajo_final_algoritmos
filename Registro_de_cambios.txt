@@ -139,7 +139,7 @@ Paso 3.3
 - se implementó la parte grafica y la disposición de botones, comboBox, y grillas en los formularios, y sus diferentes solapas.
 
 a continuación:
-    - confirmar si la parte grafica requiere ajustes.
+    - Continuar puliendo la parte grafica.
     - terminar la funcionabilidad de las solapas de GESTION.
     - Confirmar de qué manera se agregarán los Clientes y Recursos
-    - Hacer que la logica de los formularios se conecte con las clases, y Bdd
+    - Hacer que la logica de los formularios se conecte con las clases, y Bdd.
