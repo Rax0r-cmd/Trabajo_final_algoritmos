@@ -220,31 +220,75 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
     r_div = p_div.add_run("—" * 40)
     r_div.font.color.rgb = COLOR_TEXT_BLACK
 
-    meta_items = [
-        ("Integrantes del Equipo", "Tullo, Jonathan Lester (shonimdp@gmail.com)\nOrtega, David Samuel (davidortegaa86@gmail.com)\nScollo, Maximiliano (maximilianoscollo17@gmail.com)"),
-        ("Comisión / Curso", "2º Año · Modalidad Regular"),
+    # 5. Metadatos institucionales claros y ordenados verticalmente (uno abajo del otro)
+    # A) Titulo de integrantes en su propia linea
+    p_int_title = doc.add_paragraph()
+    p_int_title.paragraph_format.space_before = Pt(4)
+    p_int_title.paragraph_format.space_after = Pt(4)
+    p_int_title.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    r_it = p_int_title.add_run("Integrantes del Equipo:")
+    r_it.font.name = 'Arial'
+    r_it.font.bold = True
+    r_it.font.size = Pt(10)
+    r_it.font.color.rgb = COLOR_TEXT_BLACK
+
+    # B) Cada integrante en su propia linea con sangria y viñeta
+    integrantes = [
+        ("Tullo, Jonathan Lester", "shonimdp@gmail.com"),
+        ("Ortega, David Samuel", "davidortegaa86@gmail.com"),
+        ("Scollo, Maximiliano", "maximilianoscollo17@gmail.com")
+    ]
+    for nom, mail in integrantes:
+        p_miembro = doc.add_paragraph()
+        p_miembro.paragraph_format.left_indent = Inches(0.25)
+        p_miembro.paragraph_format.space_before = Pt(0)
+        p_miembro.paragraph_format.space_after = Pt(3)
+        p_miembro.paragraph_format.line_spacing = 1.15
+        p_miembro.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+        r_dot = p_miembro.add_run("- ")
+        r_dot.font.name = 'Arial'
+        r_dot.font.bold = True
+        r_dot.font.size = Pt(9.5)
+        r_dot.font.color.rgb = COLOR_TEXT_BLACK
+
+        r_n = p_miembro.add_run(nom)
+        r_n.font.name = 'Arial'
+        r_n.font.bold = True
+        r_n.font.size = Pt(9.5)
+        r_n.font.color.rgb = COLOR_TEXT_BLACK
+
+        r_m = p_miembro.add_run(f" ({mail})")
+        r_m.font.name = 'Arial'
+        r_m.font.size = Pt(9.0)
+        r_m.font.color.rgb = COLOR_TEXT_BLACK
+
+    # C) Los demas campos institucionales bien espaciados y uno abajo del otro
+    otros_metadatos = [
         ("Docente a cargo", "Lic. Adrián Aroca"),
+        ("Comisión / Curso", "2º Año · Modalidad Regular"),
         ("Ciclo lectivo", "2026"),
         ("Fecha de entrega", "Noviembre de 2026"),
         ("Versión del documento", "Versión 1.0 (Entrega Integrada Final)")
     ]
 
-    for label, val in meta_items:
-        p_item = doc.add_paragraph()
-        p_item.paragraph_format.space_before = Pt(0)
-        p_item.paragraph_format.space_after = Pt(3)
-        p_item.paragraph_format.line_spacing = 1.15
-        p_item.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        r_lbl = p_item.add_run(f"{label}: ")
-        r_lbl.font.name = 'Arial'
-        r_lbl.font.bold = True
-        r_lbl.font.size = Pt(9.5)
-        r_lbl.font.color.rgb = COLOR_TEXT_BLACK
+    for i, (label, val) in enumerate(otros_metadatos):
+        p_m = doc.add_paragraph()
+        p_m.paragraph_format.space_before = Pt(6 if i == 0 else 3)
+        p_m.paragraph_format.space_after = Pt(3)
+        p_m.paragraph_format.line_spacing = 1.15
+        p_m.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
-        r_val = p_item.add_run(val)
-        r_val.font.name = 'Arial'
-        r_val.font.size = Pt(9.5)
-        r_val.font.color.rgb = COLOR_TEXT_BLACK
+        r_l = p_m.add_run(f"{label}: ")
+        r_l.font.name = 'Arial'
+        r_l.font.bold = True
+        r_l.font.size = Pt(10)
+        r_l.font.color.rgb = COLOR_TEXT_BLACK
+
+        r_v = p_m.add_run(val)
+        r_v.font.name = 'Arial'
+        r_v.font.size = Pt(10)
+        r_v.font.color.rgb = COLOR_TEXT_BLACK
 
 def add_toc(doc, items):
     """Índice de contenidos con tabulación exacta a 9029 dxa y puntos guía, texto negro."""
