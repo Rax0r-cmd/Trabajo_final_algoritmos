@@ -36,6 +36,11 @@ def setup_document(doc):
     sec.different_first_page_header_footer = False
     sec.footer.paragraphs[0].text = ""
 
+    # Actualización automática de campos en Word (números de página, TOC)
+    settings = doc.settings.element
+    if settings.find(docx.oxml.ns.qn('w:updateFields')) is None:
+        settings.append(parse_xml(f'<w:updateFields {nsdecls("w")} w:val="true"/>'))
+
     style_normal = doc.styles['Normal']
     style_normal.font.name = 'Arial'
     style_normal.font.size = Pt(11)
@@ -45,7 +50,7 @@ def setup_document(doc):
     style_normal.paragraph_format.space_after = Pt(4)
 
 def start_body_section(doc, doc_short_title):
-    """Inicializa la sección 2 (a partir de pág. 2) con pie de página numerado en números arábigos."""
+    """Inicializa la sección 2 (a partir de pág. 2) con pie de página anclado al fondo en números arábigos."""
     sec2 = doc.add_section(WD_SECTION_START.NEW_PAGE)
     sec2.page_width = Inches(8.27)
     sec2.page_height = Inches(11.69)
@@ -53,6 +58,7 @@ def start_body_section(doc, doc_short_title):
     sec2.bottom_margin = Inches(1.0)
     sec2.left_margin = Inches(1.0)
     sec2.right_margin = Inches(1.0)
+    sec2.footer_distance = Inches(0.5)
     sec2.different_first_page_header_footer = False
 
     sec2.footer.is_linked_to_previous = False
@@ -66,7 +72,10 @@ def start_body_section(doc, doc_short_title):
     r_ft.font.size = Pt(9)
     r_ft.font.color.rgb = COLOR_TEXT_BLACK
 
-    fld_page = parse_xml(r'<w:fldSimple %s w:instr="PAGE"/>' % nsdecls('w'))
+    # Campo de página con valor por defecto visible para evitar campo en blanco al abrir
+    fld_page = parse_xml(
+        r'<w:fldSimple %s w:instr="PAGE"><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:color w:val="000000"/><w:sz w:val="18"/></w:rPr><w:t>2</w:t></w:r></w:fldSimple>' % nsdecls('w')
+    )
     p_ft._p.append(fld_page)
 
     style_normal = doc.styles['Normal']
@@ -149,14 +158,32 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
     r_inst.font.size = Pt(12)
     r_inst.font.color.rgb = COLOR_TEXT_BLACK
 
-    p_subinst = doc.add_paragraph()
-    p_subinst.paragraph_format.space_before = Pt(0)
-    p_subinst.paragraph_format.space_after = Pt(14)
-    p_subinst.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r_subinst = p_subinst.add_run("Carrera: Analista de Sistemas de Información\nAsignatura: Algoritmos II · Ciclo Lectivo 2026")
-    r_subinst.font.name = 'Arial'
-    r_subinst.font.size = Pt(10)
-    r_subinst.font.color.rgb = COLOR_TEXT_BLACK
+    p_car = doc.add_paragraph()
+    p_car.paragraph_format.space_before = Pt(0)
+    p_car.paragraph_format.space_after = Pt(2)
+    p_car.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r_car = p_car.add_run("Carrera: Analista de Sistemas de Información")
+    r_car.font.name = 'Arial'
+    r_car.font.size = Pt(10)
+    r_car.font.color.rgb = COLOR_TEXT_BLACK
+
+    p_asig = doc.add_paragraph()
+    p_asig.paragraph_format.space_before = Pt(0)
+    p_asig.paragraph_format.space_after = Pt(2)
+    p_asig.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r_asig = p_asig.add_run("Asignatura: Algoritmos II")
+    r_asig.font.name = 'Arial'
+    r_asig.font.size = Pt(10)
+    r_asig.font.color.rgb = COLOR_TEXT_BLACK
+
+    p_ciclo = doc.add_paragraph()
+    p_ciclo.paragraph_format.space_before = Pt(0)
+    p_ciclo.paragraph_format.space_after = Pt(12)
+    p_ciclo.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r_ciclo = p_ciclo.add_run("Ciclo Lectivo: 2026")
+    r_ciclo.font.name = 'Arial'
+    r_ciclo.font.size = Pt(10)
+    r_ciclo.font.color.rgb = COLOR_TEXT_BLACK
 
     # Logo
     logo_path = os.path.abspath("src/Img/Logo/Logo_coWorking_para_fondo_blanco.png")
@@ -478,37 +505,28 @@ def add_figure_apa7(doc, img_path, fig_num, title, note_text=None, width=Inches(
         r_ntext.font.color.rgb = COLOR_TEXT_BLACK
 
 def add_code_snippet(doc, code_text, caption=None):
-    """Caja de código con tipografía monospace Consolas y texto estrictamente negro."""
-    table = doc.add_table(rows=1, cols=1)
-    table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    cell = table.cell(0, 0)
-    set_cell_padding(cell, top=60, bottom=60, left=90, right=90)
-    set_cell_shading(cell, "F8F8F8")
-    tblPr = table._tbl.tblPr
-    borders = parse_xml(
-        f'<w:tblBorders {nsdecls("w")}>'
-        f'<w:top w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/>'
-        f'<w:left w:val="single" w:sz="16" w:space="0" w:color="000000"/>'
-        f'<w:bottom w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/>'
-        f'<w:right w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/>'
-        f'</w:tblBorders>'
-    )
-    tblPr.append(borders)
-    p = cell.paragraphs[0]
-    p.paragraph_format.space_before = Pt(0)
-    p.paragraph_format.space_after = Pt(0)
-    p.paragraph_format.line_spacing = 1.15
-    p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    run = p.add_run(code_text)
-    run.font.name = 'Consolas'
-    run.font.size = Pt(8.5)
-    run.font.color.rgb = COLOR_TEXT_BLACK
+    """Inserta código formateado limpiamente con tipografía monospace Consolas,
+    sangría izquierda, saltos de línea e indentación real, SIN cajas ni tablas grises."""
+    lines = code_text.strip().splitlines()
+    for i, line in enumerate(lines):
+        p = doc.add_paragraph()
+        p.paragraph_format.left_indent = Inches(0.4)
+        p.paragraph_format.space_before = Pt(4 if i == 0 else 0)
+        p.paragraph_format.space_after = Pt(4 if i == len(lines) - 1 else 0)
+        p.paragraph_format.line_spacing = 1.05
+        p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+        run = p.add_run(line if line else " ")
+        run.font.name = 'Consolas'
+        run.font.size = Pt(8.5)
+        run.font.color.rgb = COLOR_TEXT_BLACK
 
     if caption:
         p_cap = doc.add_paragraph()
+        p_cap.paragraph_format.left_indent = Inches(0.4)
         p_cap.paragraph_format.space_before = Pt(2)
         p_cap.paragraph_format.space_after = Pt(8)
-        p_cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
         r_cap = p_cap.add_run(caption)
         r_cap.font.name = 'Arial'
         r_cap.font.size = Pt(8.5)

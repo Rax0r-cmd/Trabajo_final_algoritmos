@@ -46,6 +46,7 @@ def start_body_section(doc, short_title):
     sec2.bottom_margin = Inches(1.0)
     sec2.left_margin = Inches(1.0)
     sec2.right_margin = Inches(1.0)
+    sec2.footer_distance = Inches(0.5)
     sec2.different_first_page_header_footer = False
 
     # Pie de página real anclado en la parte inferior
@@ -59,7 +60,9 @@ def start_body_section(doc, short_title):
     r_ft.font.size = Pt(9)
     r_ft.font.color.rgb = COLOR_MUTED_GRAY
 
-    fld_page = parse_xml(r'<w:fldSimple %s w:instr="PAGE"/>' % nsdecls('w'))
+    fld_page = parse_xml(
+        r'<w:fldSimple %s w:instr="PAGE"><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:color w:val="000000"/><w:sz w:val="18"/></w:rPr><w:t>2</w:t></w:r></w:fldSimple>' % nsdecls('w')
+    )
     p_ft._p.append(fld_page)
 
     # Tipografia Arial 11 pt, interlineado 1.5, texto justificado segun seccion 1 de Pautas
