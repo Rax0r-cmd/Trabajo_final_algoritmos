@@ -1,48 +1,94 @@
 Apuntes de lo que voy haciendo en el proyecto final
 Sistema de Coworking - Algoritmos 2
 
-Aca voy anotando todo paso a paso como lo fui haciendo, para tenerlo a mano por si me olvido de algo o para cuando tenga que defender el trabajo.
+Aca voy anotando todo paso a paso como lo fui haciendo, para tenerlo
+a mano por si me olvido de algo o para cuando tenga que defender
+el trabajo.
 
-=================================================   JONATHAN ===========================================================
+================================== JONATHAN ====================================
 
-Paso 1: La base de datos en XAMPP y Mysql Workbench
-Primero que nada abri el XAMPP y levante el modulo de MySQL. Ahi me conecte con el usuario root sin contraseña en el puerto 3306 y cree la base de datos llamada tp_final_db.
-Despues arme las tablas para el sistema:
-- Cree la tabla tipo_recursos para guardar las categorias de espacios (si es sala de reunion, oficina privada o un puesto de trabajo).
-- Cree la tabla recursos que son los lugares posta que se alquilan, con el precio por hora, la capacidad de gente y la ubicacion.
-- Cree la tabla clientes para guardar los datos de las personas que reservan (nombre, apellido, dni, mail y telefono).
-- Cree la tabla reservas que junta al cliente con el recurso que reservo, la fecha, las horas y la plata total.
-- Cree la tabla auditoria_reservas para que quede guardado un registro cada vez que se cancela una reserva.
+Paso 1: Diseño inicial del DER y base de datos en XAMPP y Workbench
+Antes de tocar cualquier código o crear tablas en MySQL, nos juntamos
+entre los 3 (Jonathan, David y Maxi) a pensar el sistema y armamos el
+diagrama DER borrador (Diagrama_DER_Borrador.png).
+Hicimos un esquema de bloques limpio y bien básico con las entidades
+principales (CLIENTES, SISTEMA, RESERVAS, AUDITORIA, RECURSOS,
+TIPO_RECURSOS) y cómo se relacionan a nivel negocio, con el sistema
+en C# coordinando todo (sin números de pasos ni palabras técnicas
+como 'trigger', poniendo 'Registra cancelación' como relación conceptual).
+Como nos explicó el profe, el análisis conceptual es lo primero que
+se hace entre todos antes de pasar a la implementación física.
 
-A la base le agregue la logica que nos pidieron:
-- Arme los procedimientos almacenados para dar de alta clientes, recursos y reservas.
-- En el procedimiento de alta de reserva meti una validacion con SIGNAL SQLSTATE 45000 para que si alguien quiere reservar un lugar que ya esta ocupado a esa hora, la base tire error y no deje guardar la reserva repetida.
-- Cree un trigger llamado trg_auditoria_reservas para que apenas una reserva pase a cancelada, se guarde sola en la tabla de auditoria.
-- Cree una funcion para chequear si el lugar esta libre o no.
-- Arme dos vistas para consultar facil los datos con joins.
-- Y dibuje el diagrama de las tablas en MySQL Workbench y lo guarde como imagen en la carpeta DB.
+Con ese borrador claro que definimos juntos, abrí el XAMPP y levanté
+el módulo de MySQL en el puerto 3306 con el usuario root sin clave,
+y creé la base tp_final_db.
+Después armé las tablas para el sistema:
+- Cree la tabla tipo_recursos para guardar las categorías de espacios
+  (si es sala de reunión, oficina privada o puesto de trabajo).
+- Cree la tabla recursos con los lugares posta que se alquilan, con
+  precio por hora, capacidad de gente y ubicación.
+- Cree la tabla clientes para guardar los datos de contacto (nombre,
+  apellido, dni, mail y teléfono).
+- Cree la tabla reservas que junta al cliente con el recurso que
+  reservó, la fecha, las horas y la plata total.
+- Cree la tabla auditoria_reservas para que quede guardado un registro
+  cada vez que se cancela una reserva.
+
+A la base le agregué la lógica que nos pidieron:
+- Armé los procedimientos almacenados para dar de alta clientes,
+  recursos y reservas.
+- En el procedimiento de alta de reserva metí una validación con
+  SIGNAL SQLSTATE 45000 para que si alguien quiere reservar un lugar
+  que ya está ocupado a esa hora, la base tire error y no deje guardar.
+- Creé un trigger llamado trg_auditoria_reservas para que apenas una
+  reserva pase a cancelada, se guarde sola en auditoria.
+- Creé una función para chequear si el lugar está libre o no.
+- Armé dos vistas para consultar fácil los datos con joins.
+- Pasé el borrador que hicimos a las tablas en MySQL Workbench,
+  guardando el modelo editable (Diagrama_Editable.mwb) y la imagen
+  oficial (Diagrama_DER.png) en la carpeta DB.
+- A la par que iba probando el script SQL en XAMPP, arranqué a armar
+  las notas del Diccionario de Datos en la carpeta Documentacion
+  para anotar qué guardaba cada tabla, tipos de datos, procedimientos
+  y triggers. La idea fue documentar a medida que hacíamos las cosas
+  para no tener que acordarnos de todo a las apuradas después.
 
 Paso 2: Crear el proyecto en Visual Studio
-Despues abri el Visual Studio y cree el proyecto nuevo como aplicacion de Windows Forms en C# usando .NET Framework 4.7.2. Le puse de nombre SistemaDeGestion.
-Para que C# pueda hablar con la base de datos MySQL, le instale el paquete NuGet MySql.Data de Oracle.
-Tambien cree el archivo .gitignore en la carpeta del repositorio para no subir al GitHub los archivos que genera Visual Studio al compilar, ni las carpetas data o estos apuntes locales.
+Después abrí el Visual Studio y creé el proyecto nuevo como
+aplicación de Windows Forms en C# usando .NET Framework 4.7.2.
+Le puse de nombre SistemaDeGestion.
+Para que C# pueda hablar con la base de datos MySQL, le instalé
+el paquete NuGet MySql.Data de Oracle.
+También creé el archivo .gitignore en la carpeta del repositorio
+para no subir al GitHub los archivos que genera Visual Studio
+al compilar, ni las carpetas data o estos apuntes locales.
 
-Paso 3: Armar la conexion a la base (Conexion.cs)
-Para no repetir la cadena de conexion en todas las ventanas (como nos enseño el profe en la clase 11), cree una carpeta llamada ConexionDB y adentro cree el archivo Conexion.cs.
-Ahi adentro arme la clase estatica Conexion con la cadena que apunta a localhost, puerto 3306, base tp_final_db y usuario root.
-Le puse el metodo CrearConexion() que me devuelve la conexion lista para usar con un using y abrirla con .Open() recien cuando voy a hacer una consulta.
+Paso 3: Armar la conexión a la base (Conexion.cs)
+Para no repetir la cadena de conexión en todas las ventanas
+(como nos enseñó el profe en la clase 11), creé la carpeta ConexionDB
+y adentro creé el archivo Conexion.cs.
+Armé la clase estática Conexion con la cadena que apunta a localhost,
+puerto 3306, base tp_final_db y usuario root.
+Le puse el método CrearConexion() que devuelve la conexión lista
+para usar con using y abrirla con .Open() recién al consultar.
 
-Que responder si me preguntan por Conexion.cs:
-- Por que es static? Porque no representa una entidad del negocio como un cliente o una reserva. No hace falta hacer new Conexion(), se usa directo como un punto central para pedir conexiones.
-- Por que CrearConexion no hace .Open()? Porque cada ventana o clase decide cuando abrirla y cuando cerrarla con el using para no dejar conexiones colgadas al cuete.
+Qué responder si me preguntan por Conexion.cs:
+- ¿Por qué es static? Porque no representa una entidad del negocio
+  como un cliente o una reserva. No hace falta hacer new Conexion(),
+  se usa directo como punto central para pedir conexiones.
+- ¿Por qué CrearConexion no hace .Open()? Porque cada ventana o clase
+  decide cuándo abrirla y cuándo cerrarla con el using para no dejar
+  conexiones colgadas al cuete.
 
 Paso 4: Crear las carpetas de las clases
-Siguiendo las clases de la materia, hay que separar el codigo y no meter todo en el formulario.
-Por eso cree dos carpetas dentro del proyecto:
-- La carpeta Modelos: aca van a estar todas las clases de las cosas del sistema (el cliente, la reserva, los recursos).
-- La carpeta Gestoras: aca va a estar la clase que maneja las listas y la logica.
+Siguiendo las clases de la materia, hay que separar el código y no
+meter todo en el formulario.
+Por eso creé dos carpetas dentro del proyecto:
+- La carpeta Modelos: acá van todas las clases de las cosas del
+  sistema (el cliente, la reserva, los recursos).
+- La carpeta Gestoras: acá va la clase que maneja las listas y la lógica.
 
-Adentro de la carpeta Modelos cree estos archivos vacios para ir completandolos:
+Adentro de la carpeta Modelos creé estos archivos vacíos:
 - IReservable.cs
 - EstadoReserva.cs
 - Recurso.cs
@@ -52,33 +98,53 @@ Adentro de la carpeta Modelos cree estos archivos vacios para ir completandolos:
 - Cliente.cs
 - Reserva.cs
 
-Y adentro de la carpeta Gestoras cree:
+Y adentro de Gestoras creé:
 - GestoraCoworking.cs
+
+- También empecé a redactar el borrador de Documentación de Desarrollo,
+  explicando por qué separamos en capas (Presentación, Negocio,
+  Modelos, Conexión y Persistencia) y cómo íbamos a encarar POO.
 
 Paso 5: Programar las primeras clases del modelo
 
 1. IReservable.cs (Interfaz):
-Le puse el metodo bool PuedeReservarse(DateTime fecha).
-Que responder si me preguntan:
-Es una interfaz porque define una regla que tienen que cumplir todos los recursos que se alquilan. No lleva codigo adentro, solo la firma. Si el dia de mañana agregamos otra cosa alquilable (como un proyector suelto), le implementamos IReservable y el sistema ya lo entiende.
+Le puse el método bool PuedeReservarse(DateTime fecha).
+Qué responder si me preguntan:
+Es una interfaz porque define una regla que tienen que cumplir
+todos los recursos que se alquilan. No lleva código adentro, solo
+la firma. Si el día de mañana agregamos otra cosa alquilable (como
+un proyector suelto), le implementamos IReservable y el sistema ya
+lo entiende.
 
 2. EstadoReserva.cs (Enumerado):
 Le puse los tres estados: Pendiente, Confirmada y Cancelada.
-Que responder si me preguntan:
-Uso un enum en vez de escribir texto o numeros sueltos para no equivocarme al tipear en el codigo. Es 100% compatible con el varchar(20) de la tabla reservas de MySQL porque cuando guardo hago .ToString() y guarda "Confirmada" tal cual pide la base.
+Qué responder si me preguntan:
+Uso un enum en vez de escribir texto o números sueltos para no
+equivocarme al tipear en el código. Es 100% compatible con el
+varchar(20) de la tabla reservas de MySQL porque cuando guardo hago
+.ToString() y guarda "Confirmada" tal cual pide la base.
 
 3. Recurso.cs (Clase abstracta base):
-Le puse las propiedades comunes: IdRecurso, Nombre, Descripcion, Ubicacion, PrecioPorHora e IdTipoRecurso. Implementa IReservable y tiene el metodo abstracto CalcularCosto(horas).
-Que responder si me preguntan:
-- Por que es abstract? Porque en la vida real nadie alquila un "recurso" generico, alquilas una sala, una oficina o un puesto. Entonces con abstract no dejo que se cree un new Recurso() suelto y me sirve para no repetir el nombre y el precio en todas las clases hijas.
-- Por que CalcularCosto es abstracto? Porque cada lugar hace la cuenta segun lo suyo (por ejemplo la sala si tiene proyector). Al dejarlo sin cuerpo, obligo a que las hijas hagan su propia cuenta con override. A eso se le llama polimorfismo.
+Le puse las propiedades comunes: IdRecurso, Nombre, Descripcion,
+Ubicacion, PrecioPorHora e IdTipoRecurso. Implementa IReservable y
+tiene el método abstracto CalcularCosto(horas).
+Qué responder si me preguntan:
+- ¿Por qué es abstract? Porque en la vida real nadie alquila un
+  "recurso" genérico, alquilás una sala, una oficina o un puesto.
+  Entonces con abstract no dejo que se cree un new Recurso() suelto
+  y me sirve para no repetir el nombre y el precio en todas las hijas.
+- ¿Por qué CalcularCosto es abstracto? Porque cada lugar hace la cuenta
+  según lo suyo (por ejemplo la sala si tiene proyector). Al dejarlo
+  sin cuerpo, obligo a que las hijas hagan su propia cuenta con override.
+  A eso se le llama polimorfismo.
 
 Lo que sigue ahora:
-Ahora me toca programar las clases hijas en la carpeta Modelos: Sala.cs, OficinaPrivada.cs y PuestoTrabajo.cs, que van a heredar de Recurso.
+Ahora me toca programar las clases hijas en la carpeta Modelos:
+Sala.cs, OficinaPrivada.cs y PuestoTrabajo.cs, que van a heredar
+de Recurso.
 
 
-==================================== MAXI ==============================================================
-
+==================================== MAXI ======================================
 
 Paso 2.5 (Continuación) : 
 1- Clase hija Oficina privada
@@ -86,80 +152,114 @@ Paso 2.5 (Continuación) :
 3- Clase hija Sala
 
 Observación: 
--Al necesitar realizar un calculo distinto entre cada clase hija, necesitarán inherentemente una propieda nueva, por lo que se necesitará de almacenarla en la base de datos. 
--Hay 2 caminos, o se crea un campo flexible en recursos O una fk que tenga listada los 3 tipos de recursos en aprticular con sus peculiaridades.
-ej: Oficina Privada : Moviliario incluido como bool 
-    Sala: Cantidad de sillas  INT 
-    Puesto de trabajo: Nro de categoria INT
+- Al necesitar realizar un calculo distinto entre cada clase hija,
+  necesitarán inherentemente una propiedad nueva, por lo que se
+  necesitará almacenarla en la base de datos.
+- Hay 2 caminos: o se crea un campo flexible en recursos O una fk
+  que tenga listada los 3 tipos de recursos en particular con sus
+  peculiaridades.
+  ej: Oficina Privada : Mobiliario incluido como bool 
+      Sala: Cantidad de sillas INT 
+      Puesto de trabajo: Nro de categoria INT
 
 Implementación realizada:
-- Se implementaron las clases hijas OficinaPrivada.cs, PuestoTrabajo.cs y Sala.cs heredando de Recurso.
-- Se implementaron los métodos CalcularCosto(horas) y PuedeReservarse(DateTime fecha).
-- Se crearon las propiedades y constructores de Cliente.cs y Reserva.cs acordes a las tablas de la BD.
-- Se reubicó EstadoReserva.cs dentro de la carpeta Enum y se actualizó la referencia en SistemaDeGestion.csproj.
- 
+- Se implementaron las clases hijas OficinaPrivada.cs, PuestoTrabajo.cs
+  y Sala.cs heredando de Recurso.
+- Se implementaron los métodos CalcularCosto(horas) y
+  PuedeReservarse(DateTime fecha).
+- Se crearon las propiedades y constructores de Cliente.cs y Reserva.cs
+  acordes a las tablas de la BD.
+- Se reubicó EstadoReserva.cs dentro de la carpeta Enum y se actualizó
+  la referencia en SistemaDeGestion.csproj.
 
-Paso 2.6 Crear clase Gestora. 
+Paso 2.6 Crear clase Gestora:
 - Se implementó la clase GestoraCoworking.cs
 - Se crearon los métodos de lista 
 
-
-================================================== David ====================================================
+=================================== DAVID ======================================
 
 Paso 3:
-- Se agregó el formulario de login de Usuario para que la presentación quede mas prolija.
+- Se agregó el formulario de login de Usuario para que la
+  presentación quede más prolija.
 
 Assets:
-- Se creó la carpeta "Img" que contiene las imagenes de Background, logo, e icono del proyecto.
+- Se creó la carpeta "Img" que contiene las imágenes de Background,
+  logo, e icono del proyecto.
 
-Observaciónes corregidas:
-
-- En la tabla recursos dentro de la base de datos corregí los parametros que eran necesarios para_
-que las tablas "sala", "OficinaPrivada" y "PuestoTrabajo" pudieran tener una forma de calcular el costo correctamente.
-
-- En la DB agregué los parametros directamente dentro de la tabla recursos, y en las respectivas clases se añadió cada parametro_
-correspondiente según la clase, y luego modifiqué el calculo del costo según lo especificado en el TP.
+Observaciones corregidas:
+- En la tabla recursos dentro de la base de datos corregí los parámetros
+  que eran necesarios para que las tablas "sala", "OficinaPrivada" y
+  "PuestoTrabajo" pudieran tener una forma de calcular el costo
+  correctamente.
+- En la DB agregué los parámetros directamente dentro de la tabla
+  recursos, y en las respectivas clases se añadió cada parámetro
+  correspondiente según la clase, y luego modifiqué el cálculo del
+  costo según lo especificado en el TP.
 
 a continuación:
 Pasos del 3.3 al 3.7
 
-==================================== MAXI ==============================================================
-Actualización del DER 
+==================================== MAXI ======================================
 
-================================================== David ====================================================
+Paso 2.7: Actualización de campos y notas de POO
+- Dejé relevados los 3 campos específicos que necesitaban las clases
+  hijas en la tabla recursos (mobiliario_incluido, cantidad_sillas y
+  nro_categoria) para que la base pueda persistir las particularidades.
+- Le avisé a Jonathan para que cuando revise la base en Workbench
+  actualice el diagrama visual DER con estos campos nuevos.
+- Además pasé en limpio los apuntes técnicos de por qué usamos
+  polimorfismo en CalcularCosto() y la interfaz IReservable para que
+  Jonathan los sume al documento de desarrollo de la cátedra.
+
+=================================== DAVID ======================================
 
 Paso 3.3 
-- se creo el formulario Principal, con las respectivas solapas de
-    CONTROL: desde aquí se crean las reservas del cliente
-    RESERVAS: desde aquí se visualizan las reservas del cliente, y desde aquí se cancelan
-    GESTION: esta solapa solamente es visible para el Administrador, permite editar, crear Clientes y Recursos
+- Se creó el formulario Principal, con las respectivas solapas de:
+    CONTROL: desde aquí se crean las reservas del cliente.
+    RESERVAS: desde aquí se visualizan las reservas y se cancelan.
+    GESTION: visible solo para Administrador, permite editar y
+    crear Clientes y Recursos.
 
-- se agregó logica dentro del FrmLogin para pedir asistencia a traves de whatsapp
-- se agregó lógica al registrarse como administrador en el FrmPrincipal, lo que te habilita la solapa de "GESTION"
-- se implementó la parte grafica y la disposición de botones, comboBox, y grillas en los formularios, y sus diferentes solapas.
-
-a continuación:
-    - Continuar puliendo la parte grafica.
-    - terminar la funcionabilidad de las solapas de GESTION.
-    - Confirmar de qué manera se agregarán los Clientes y Recursos
-    - Hacer que la logica de los formularios se conecte con las clases, y Bdd.
-
-
-
-==================================== MAXI ==============================================================
-
-Paso 3.0 
-- Implementación de la capa DAO (GestorDAO.cs):
-    - Se creó la clase GestorDAO dentro de la carpeta Gestoras para centralizar el acceso y la persistencia en MySQL.
-    - Se crearon los métodos para Clientes: AgregarCliente, ModificarCliente, EliminarCliente y ListarClientes.
-    - Se definieron de forma parametrizada (recibiendo tipos primitivos como string e int directamente desde los TextBox y grillas del formulario, sin requerir la creación previa de objetos).
-    - Se vincularon directamente con los procedimientos almacenados de DB_TPFinal.sql:
-        * sp_alta_cliente: para dar de alta clientes con p_nombre, p_apellido, p_telefono y p_mail.
-        * sp_modificar_cliente: para actualizar los datos del cliente por p_id_cliente.
-        * EliminarCliente: mediante consulta DELETE parametrizada por id_cliente.
-    - Se añadieron también los métodos parametrizados para Recursos (sp_alta_recurso, sp_modificar_recurso, EliminarRecurso, ListarRecursos) y Reservas (sp_alta_reserva, sp_cancelar_reserva, fn_verificar_disponibilidad, sp_calcular_total_recaudado_cursor, ListarDetalleReservas y ListarResumenRecursos).
-    - Se actualizó el archivo de proyecto SistemaDeGestion.csproj para incluir GestorDAO.cs en la compilación.
+- Se agregó lógica dentro del FrmLogin para pedir asistencia por WhatsApp.
+- Se agregó lógica al registrarse como administrador en FrmPrincipal,
+  lo que habilita la solapa de GESTION.
+- Se implementó la parte gráfica y la disposición de controles
+  (botones, comboBox y grillas) en los formularios.
+- Con las pantallas ya armadas, armé el borrador del Manual de Usuario,
+  explicando el paso a paso para el operador: cómo ingresar al Login,
+  las credenciales de admin (Admin / 123456), el uso de las solapas
+  y cómo pedir soporte por WhatsApp o mandar mail a los desarrolladores
+  (Jonathan, David y Maxi) si alguien pierde la clave.
 
 a continuación:
-    - Conectar los eventos de los botones del formulario FrmPrincipal (btnCrearUsuario, btnModificarUsuario, btnEliminarUsuario) con los métodos de GestorDAO.
-    - Cargar el DataGridView (dgvClientes y dgvRecursos) utilizando ListarClientes() y ListarRecursos().
+    - Continuar puliendo la parte gráfica.
+    - Terminar la funcionalidad de las solapas de GESTION.
+    - Confirmar de qué manera se agregarán los Clientes y Recursos.
+    - Conectar la lógica de los formularios con las clases y la Bdd.
+
+==================================== MAXI ======================================
+
+Paso 3.0: Implementación de la capa DAO (GestorDAO.cs)
+- Se creó la clase GestorDAO dentro de la carpeta Gestoras para centralizar
+  el acceso y la persistencia en MySQL.
+- Se crearon los métodos para Clientes: AgregarCliente, ModificarCliente,
+  EliminarCliente y ListarClientes.
+- Se definieron de forma parametrizada (recibiendo tipos primitivos directamente
+  desde los controles del formulario, sin requerir creación previa de objetos).
+- Se vincularon con los procedimientos almacenados de DB_TPFinal.sql:
+    * sp_alta_cliente: dar de alta con nombre, apellido, teléfono y mail.
+    * sp_modificar_cliente: actualizar datos por id_cliente.
+    * EliminarCliente: borrado parametrizado por id_cliente.
+- Se añadieron los métodos parametrizados para Recursos (sp_alta_recurso,
+  sp_modificar_recurso, EliminarRecurso, ListarRecursos) y Reservas
+  (sp_alta_reserva, sp_cancelar_reserva, fn_verificar_disponibilidad,
+  sp_calcular_total_recaudado_cursor, ListarDetalleReservas y
+  ListarResumenRecursos).
+- Se incluyó GestorDAO.cs en el proyecto SistemaDeGestion.csproj.
+
+a continuación:
+    - Conectar los botones del FrmPrincipal con los métodos de GestorDAO.
+    - Cargar los DataGridView (dgvClientes y dgvRecursos) con ListarClientes()
+      y ListarRecursos().
+
+=
