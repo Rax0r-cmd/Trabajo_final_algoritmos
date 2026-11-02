@@ -1,88 +1,103 @@
-import math
+# -*- coding: utf-8 -*-
+"""
+Generador del Diagrama de Clases UML Simplificado del Dominio y POO
+Algoritmos II — Trabajo Práctico Final 2026
+Instituto Argentino de la Empresa
+
+Diseño optimizado:
+- Tipografía GRANDE y nítida (17-24 pt) para lectura directa al 100% en hojas A4 sin zoom.
+- Dimensionamiento dinámico de cajas: el texto NUNCA se desborda ni pisa los bordes.
+- Separación clara entre GestoraCoworking (negocio) y GestorDAO (persistencia MySQL).
+- Relaciones estándar UML (herencia, interfaces, agregación, multiplicidades 1 a 0..*).
+"""
+
+import os
 from PIL import Image, ImageDraw, ImageFont
 
 def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
-    # Dimensiones optimizadas para ancho completo de hoja A4 en Word con texto GRANDE y legible
-    W, H = 1400, 1020
+    W, H = 1260, 1310
     img = Image.new("RGB", (W, H), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
 
-    # Fuentes GRANDES para legibilidad perfecta en hoja A4 (sin necesidad de hacer zoom)
-    f_title = ImageFont.truetype("arialbd.ttf", 22)
-    f_subtitle = ImageFont.truetype("arial.ttf", 14)
-    f_class_name = ImageFont.truetype("arialbd.ttf", 19)
-    f_class_stereo = ImageFont.truetype("ariali.ttf", 15)
-    f_text = ImageFont.truetype("arial.ttf", 16)
-    f_text_bold = ImageFont.truetype("arialbd.ttf", 16)
-    f_text_italic = ImageFont.truetype("ariali.ttf", 16)
+    # Tipografía grande y de alta definición
+    f_title = ImageFont.truetype("arialbd.ttf", 23)
+    f_sub = ImageFont.truetype("arial.ttf", 14)
+    f_name = ImageFont.truetype("arialbd.ttf", 20)
+    f_stereo = ImageFont.truetype("ariali.ttf", 16)
+    f_txt = ImageFont.truetype("arial.ttf", 17)
+    f_txt_bold = ImageFont.truetype("arialbd.ttf", 17)
+    f_txt_italic = ImageFont.truetype("ariali.ttf", 17)
+    f_card = ImageFont.truetype("arialbd.ttf", 15)
+    f_note = ImageFont.truetype("ariali.ttf", 13)
 
     COLOR_BLACK = (0, 0, 0)
     BORDER_COLOR = (0, 0, 0)
-    HEADER_BG = (240, 240, 240)
+    HEADER_BG = (242, 242, 242)
     BOX_BG = (255, 255, 255)
     SHADOW_COLOR = (225, 225, 225)
     LINE_COLOR = (0, 0, 0)
 
-    # Encabezado superior claro y visible
+    # 1. Encabezado institucional superior
     draw.rectangle([(0, 0), (W, 60)], fill=(245, 245, 245), outline=BORDER_COLOR, width=2)
-    draw.text((25, 12), "DIAGRAMA DE CLASES SIMPLIFICADO - DOMINIO Y POO", fill=COLOR_BLACK, font=f_title)
-    draw.text((25, 38), "Jerarquía de Herencia, Interfaz IReservable y Capas del Sistema (C# .NET)", fill=(60, 60, 60), font=f_subtitle)
+    draw.text((25, 10), "DIAGRAMA DE CLASES SIMPLIFICADO — MODELO DE DOMINIO Y POO", fill=COLOR_BLACK, font=f_title)
+    draw.text((25, 36), "Jerarquía de Herencia, Implementación de Interfaz y Capas del Sistema (C# .NET / MySQL)", fill=(70, 70, 70), font=f_sub)
 
-    def draw_box(x, y, w, h, stereo, name, attributes, methods, is_abstract=False):
+    # 2. Función de dibujo de clases con cálculo dinámico exacto de altura
+    def draw_box(x, y, w, stereo, name, attributes, methods, is_abstract=False):
+        line_h = 28
+        header_h = 56 if stereo else 44
+        attr_h = (len(attributes) * line_h) + (16 if attributes else 0)
+        meth_h = (len(methods) * line_h) + (16 if methods else 0)
+        total_h = header_h + attr_h + meth_h + (10 if (not attributes and not methods) else 6)
+
         # Sombra
-        draw.rectangle([(x + 4, y + 4), (x + w + 4, y + h + 4)], fill=SHADOW_COLOR)
-        # Borde exterior
-        draw.rectangle([(x, y), (x + w, y + h)], fill=BOX_BG, outline=BORDER_COLOR, width=2)
+        draw.rectangle([(x + 4, y + 4), (x + w + 4, y + total_h + 4)], fill=SHADOW_COLOR)
+        # Borde exterior de la caja
+        draw.rectangle([(x, y), (x + w, y + total_h)], fill=BOX_BG, outline=BORDER_COLOR, width=2)
+        # Cabecera
+        draw.rectangle([(x, y), (x + w, y + header_h)], fill=HEADER_BG, outline=BORDER_COLOR, width=2)
 
-        # Header
-        header_h = 48 if stereo else 36
-        draw.rectangle([(x, y), (x + w, y + header_h)], fill=HEADER_BG, outline=BORDER_COLOR, width=1)
-        
-        curr_y = y + 4
+        curr_y = y + 5
         if stereo:
-            s_w = draw.textlength(stereo, font=f_class_stereo)
-            draw.text((x + (w - s_w) / 2, curr_y), stereo, fill=COLOR_BLACK, font=f_class_stereo)
-            curr_y += 18
+            s_w = draw.textlength(stereo, font=f_stereo)
+            draw.text((x + (w - s_w) / 2, curr_y), stereo, fill=COLOR_BLACK, font=f_stereo)
+            curr_y += 22
 
-        n_w = draw.textlength(name, font=f_class_name)
-        draw.text((x + (w - n_w) / 2, curr_y), name, fill=COLOR_BLACK, font=f_class_name)
+        n_w = draw.textlength(name, font=f_name)
+        draw.text((x + (w - n_w) / 2, curr_y), name, fill=COLOR_BLACK, font=f_name)
 
-        # Divisor de atributos
         curr_y = y + header_h
-        draw.line([(x, curr_y), (x + w, curr_y)], fill=BORDER_COLOR, width=1)
+        if attributes:
+            draw.line([(x, curr_y), (x + w, curr_y)], fill=BORDER_COLOR, width=1)
+            curr_y += 8
+            for attr in attributes:
+                draw.text((x + 14, curr_y), attr, fill=COLOR_BLACK, font=f_txt)
+                curr_y += line_h
+            curr_y += 8
 
-        # Atributos
-        curr_y += 8
-        for attr in attributes:
-            draw.text((x + 12, curr_y), attr, fill=COLOR_BLACK, font=f_text)
-            curr_y += 24
+        if methods:
+            draw.line([(x, curr_y), (x + w, curr_y)], fill=BORDER_COLOR, width=1)
+            curr_y += 8
+            for m in methods:
+                m_font = f_txt_italic if ("abstract" in m or (is_abstract and "CalcularCosto" in m)) else f_txt
+                draw.text((x + 14, curr_y), m, fill=COLOR_BLACK, font=m_font)
+                curr_y += line_h
 
-        # Divisor de métodos
-        curr_y += 4
-        draw.line([(x, curr_y), (x + w, curr_y)], fill=BORDER_COLOR, width=1)
-
-        # Métodos
-        curr_y += 8
-        for m in methods:
-            m_font = f_text_italic if ("abstract" in m or is_abstract and "CalcularCosto" in m) else f_text
-            draw.text((x + 12, curr_y), m, fill=COLOR_BLACK, font=m_font)
-            curr_y += 24
+        return total_h
 
     # =========================================================================
-    # 1. FILA SUPERIOR: IReservable + Recurso (Abstracta) + EstadoReserva
+    # FILA 1: CONTRATO E INTERFAZ BASE Y CLASE ABSTRACTA RECURSO
     # =========================================================================
-    # 1.1 IReservable (Interfaz)
-    draw_box(
-        x=40, y=90, w=350, h=110,
+    h_ires = draw_box(
+        x=70, y=85, w=480,
         stereo="<<interface>>",
         name="IReservable",
         attributes=[],
-        methods=["+ PuedeReservarse(fecha): bool"]
+        methods=["+ PuedeReservarse(fecha: DateTime): bool"]
     )
 
-    # 1.2 Recurso (Clase abstracta base)
-    draw_box(
-        x=480, y=90, w=450, h=190,
+    h_rec = draw_box(
+        x=610, y=85, w=570,
         stereo="<<abstract>>",
         name="Recurso",
         attributes=[
@@ -91,76 +106,81 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
             "+ PrecioPorHora: decimal"
         ],
         methods=[
-            "+ PuedeReservarse(fecha): bool",
+            "+ PuedeReservarse(fecha: DateTime): bool",
             "+ CalcularCosto(horas: int): decimal  {abstract}"
         ],
         is_abstract=True
     )
 
-    # 1.3 EstadoReserva (Enum)
-    draw_box(
-        x=1020, y=90, w=340, h=140,
-        stereo="<<enumeration>>",
-        name="EstadoReserva",
-        attributes=[
-            "Pendiente",
-            "Confirmada",
-            "Cancelada"
-        ],
-        methods=[]
-    )
+    # Flecha discontinua de implementación (Recurso implementa IReservable)
+    # Triángulo hueco apuntando a IReservable
+    y_imp = 138
+    draw.polygon([(550, y_imp), (568, y_imp - 8), (568, y_imp + 8)], fill=(255, 255, 255), outline=LINE_COLOR, width=2)
+    cur_x = 610
+    while cur_x > 568:
+        nxt = max(cur_x - 8, 568)
+        draw.line([(cur_x, y_imp), (nxt, y_imp)], fill=LINE_COLOR, width=2)
+        cur_x -= 16
+    draw.text((554, 112), "<<implements>>", fill=COLOR_BLACK, font=f_note)
 
     # =========================================================================
-    # 2. FILA INTERMEDIA: Las 3 Clases Derivadas de Recurso
+    # FILA 2: LAS 3 CLASES DERIVADAS POLIMÓRFICAS (HERENCIA DE RECURSO)
     # =========================================================================
-    # 2.1 Sala
-    draw_box(
-        x=40, y=370, w=400, h=150,
+    y_row2 = 390
+    h_sala = draw_box(
+        x=60, y=y_row2, w=360,
         stereo="",
         name="Sala",
-        attributes=[
-            "+ CantSillas: int"
-        ],
+        attributes=["+ CantSillas: int"],
         methods=[
-            "+ CalcularCosto(horas): decimal  {override}",
-            "+ PuedeReservarse(fecha): bool  {override}"
+            "+ CalcularCosto(horas: int): decimal",
+            "+ PuedeReservarse(fecha: DateTime): bool"
         ]
     )
 
-    # 2.2 OficinaPrivada
-    draw_box(
-        x=500, y=370, w=410, h=150,
+    h_ofic = draw_box(
+        x=450, y=y_row2, w=370,
         stereo="",
         name="OficinaPrivada",
-        attributes=[
-            "+ MobiliarioIncluido: bool"
-        ],
+        attributes=["+ MobiliarioIncluido: bool"],
         methods=[
-            "+ CalcularCosto(horas): decimal  {override}",
-            "+ PuedeReservarse(fecha): bool  {override}"
+            "+ CalcularCosto(horas: int): decimal",
+            "+ PuedeReservarse(fecha: DateTime): bool"
         ]
     )
 
-    # 2.3 PuestoTrabajo
-    draw_box(
-        x=960, y=370, w=400, h=150,
+    h_pues = draw_box(
+        x=850, y=y_row2, w=350,
         stereo="",
         name="PuestoTrabajo",
-        attributes=[
-            "+ NroCategoria: int"
-        ],
+        attributes=["+ NroCategoria: int"],
         methods=[
-            "+ CalcularCosto(horas): decimal  {override}",
-            "+ PuedeReservarse(fecha): bool  {override}"
+            "+ CalcularCosto(horas: int): decimal",
+            "+ PuedeReservarse(fecha: DateTime): bool"
         ]
     )
 
+    # Conexión de Herencia UML (Árbol con triángulo cerrado en la base de Recurso)
+    rec_center_x = 610 + 570 // 2  # 895
+    rec_bottom_y = 85 + h_rec      # 319
+    # Triángulo cerrado de herencia
+    draw.polygon([(rec_center_x, rec_bottom_y), (rec_center_x - 10, rec_bottom_y + 18), (rec_center_x + 10, rec_bottom_y + 18)], fill=(255, 255, 255), outline=LINE_COLOR, width=2)
+    # Tronco vertical
+    draw.line([(rec_center_x, rec_bottom_y + 18), (rec_center_x, 358)], fill=LINE_COLOR, width=2)
+    # Barra horizontal colectora
+    draw.line([(240, 358), (1025, 358)], fill=LINE_COLOR, width=2)
+    # Bajadas a cada clase derivada
+    draw.line([(240, 358), (240, y_row2)], fill=LINE_COLOR, width=2)
+    draw.line([(635, 358), (635, y_row2)], fill=LINE_COLOR, width=2)
+    draw.line([(1025, 358), (1025, y_row2)], fill=LINE_COLOR, width=2)
+    draw.text((rec_center_x + 14, rec_bottom_y + 20), "<<extends>>", fill=COLOR_BLACK, font=f_note)
+
     # =========================================================================
-    # 3. FILA INFERIOR: Cliente, Reserva y Capas (Gestora / DAO)
+    # FILA 3: ENTIDADES DEL NEGOCIO (CLIENTE, RESERVA Y ESTADORESERVA)
     # =========================================================================
-    # 3.1 Cliente
-    draw_box(
-        x=40, y=600, w=360, h=160,
+    y_row3 = 620
+    h_cli = draw_box(
+        x=60, y=y_row3, w=340,
         stereo="",
         name="Cliente",
         attributes=[
@@ -169,14 +189,11 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
             "+ Mail: string",
             "+ Telefono: string"
         ],
-        methods=[
-            "+ ToString(): string"
-        ]
+        methods=["+ ToString(): string"]
     )
 
-    # 3.2 Reserva
-    draw_box(
-        x=470, y=600, w=440, h=190,
+    h_res = draw_box(
+        x=430, y=y_row3, w=440,
         stereo="",
         name="Reserva",
         attributes=[
@@ -188,78 +205,87 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
             "+ Total: decimal",
             "+ Estado: EstadoReserva"
         ],
+        methods=["+ ToString(): string"]
+    )
+
+    h_est = draw_box(
+        x=900, y=y_row3, w=300,
+        stereo="<<enumeration>>",
+        name="EstadoReserva",
+        attributes=[
+            "Pendiente = 0",
+            "Confirmada = 1",
+            "Cancelada = 2"
+        ],
         methods=[]
     )
 
-    # 3.3 GestoraCoworking & DAO (Capa de Negocio y Persistencia)
-    draw_box(
-        x=960, y=600, w=400, h=200,
-        stereo="<<capas>>",
-        name="Gestora & GestorDAO",
-        attributes=[
-            "GestoraCoworking: List<Reserva>",
-            "+ AgregarReserva(r): void",
-            "+ CancelarReserva(id): void",
-            "+ ObtenerPorFecha(f): List"
-        ],
+    # Asociación Cliente — Reserva (Multiplicidad 1 a 0..*)
+    draw.line([(400, 710), (430, 710)], fill=LINE_COLOR, width=2)
+    draw.text((404, 686), "1", fill=COLOR_BLACK, font=f_card)
+    draw.text((404, 716), "0..*", fill=COLOR_BLACK, font=f_card)
+
+    # Asociación Reserva — EstadoReserva (Uso tipado con flecha discontinua)
+    draw.line([(870, 700), (900, 700)], fill=LINE_COLOR, width=2)
+    draw.polygon([(900, 700), (890, 695), (890, 705)], fill=LINE_COLOR, outline=LINE_COLOR)
+    draw.text((874, 676), "1", fill=COLOR_BLACK, font=f_card)
+
+    # =========================================================================
+    # FILA 4: ARQUITECTURA EN CAPAS (GESTORA DE NEGOCIO Y GESTOR DAO MYSQL)
+    # =========================================================================
+    y_row4 = 980
+    h_gest = draw_box(
+        x=70, y=y_row4, w=520,
+        stereo="<<capa de negocio>>",
+        name="GestoraCoworking",
+        attributes=["- listaReservas: List<Reserva>"],
         methods=[
-            "GestorDAO (Persistencia MySQL):",
-            "+ AltaReserva(...) : bool",
-            "+ CancelarReserva(...) : bool"
+            "+ AgregarReserva(r: Reserva): void",
+            "+ CancelarReserva(idReserva: int): void",
+            "+ ObtenerReservasPorFecha(f: DateTime): List"
         ]
     )
 
-    # =========================================================================
-    # FLECHAS Y CONEXIONES UML (Líneas gruesas de 2px y triángulos nítidos)
-    # =========================================================================
-    def draw_triangle(tip_x, tip_y, size=16, direction="up", fill_color=(255, 255, 255), outline_color=LINE_COLOR):
-        if direction == "up":
-            pts = [(tip_x, tip_y), (tip_x - size/2, tip_y + size), (tip_x + size/2, tip_y + size)]
-        elif direction == "left":
-            pts = [(tip_x, tip_y), (tip_x + size, tip_y - size/2), (tip_x + size, tip_y + size/2)]
-        draw.polygon(pts, fill=fill_color, outline=outline_color, width=2)
+    h_dao = draw_box(
+        x=660, y=y_row4, w=520,
+        stereo="<<capa de datos / persistencia>>",
+        name="GestorDAO",
+        attributes=["- cadenaConexion: string"],
+        methods=[
+            "+ AltaReserva(r: Reserva): bool",
+            "+ CancelarReserva(idReserva: int): bool",
+            "+ ConsultarDisponibilidad(id, f, h): bool"
+        ]
+    )
 
-    # A) Recurso IMPLEMENTA IReservable (Flecha discontinua a la izquierda)
-    x_start = 480
-    x_end = 390 + 16
-    y_pos = 145
-    step = 10
-    cur_x = x_start
-    while cur_x > x_end:
-        draw.line([(cur_x, y_pos), (max(cur_x - step, x_end), y_pos)], fill=LINE_COLOR, width=2)
-        cur_x -= step * 2
-    draw_triangle(390, 145, size=16, direction="left")
-    draw.text((395, 115), "<<implements>>", fill=COLOR_BLACK, font=f_class_stereo)
+    # Agregación GestoraCoworking <>---- Reserva (Colección en memoria)
+    # Línea en ángulo recto con rombo vacío en GestoraCoworking
+    gest_top_x = 70 + 520 // 2     # 330
+    res_bot_x = 430 + 440 // 2     # 650
+    res_bot_y = y_row3 + h_res     # 926
 
-    # B) Sala, Oficina y Puesto HEREDAN de Recurso
-    # Triángulo en bottom center de Recurso (x=705, y=280)
-    draw_triangle(705, 280, size=16, direction="up")
-    draw.line([(705, 296), (705, 330)], fill=LINE_COLOR, width=2)
-    # Barra horizontal de conexión
-    draw.line([(240, 330), (1160, 330)], fill=LINE_COLOR, width=2)
-    # Bajadas a cada clase
-    draw.line([(240, 330), (240, 370)], fill=LINE_COLOR, width=2)
-    draw.line([(705, 330), (705, 370)], fill=LINE_COLOR, width=2)
-    draw.line([(1160, 330), (1160, 370)], fill=LINE_COLOR, width=2)
-    draw.text((715, 305), "<<extends>>", fill=COLOR_BLACK, font=f_class_stereo)
+    # Rombo vacío en la cabecera de GestoraCoworking
+    diamond = [(gest_top_x, y_row4), (gest_top_x - 8, y_row4 - 12), (gest_top_x, y_row4 - 24), (gest_top_x + 8, y_row4 - 12)]
+    draw.polygon(diamond, fill=(255, 255, 255), outline=LINE_COLOR, width=2)
 
-    # C) Reserva ASOCIA con Cliente (Horizontal directa)
-    draw.line([(400, 680), (470, 680)], fill=LINE_COLOR, width=2)
-    draw.text((408, 655), "1", fill=COLOR_BLACK, font=f_text_bold)
-    draw.text((445, 655), "0..*", fill=COLOR_BLACK, font=f_text_bold)
+    # Trazado de conexión de agregación
+    draw.line([(gest_top_x, y_row4 - 24), (gest_top_x, 952)], fill=LINE_COLOR, width=2)
+    draw.line([(gest_top_x, 952), (res_bot_x - 40, 952)], fill=LINE_COLOR, width=2)
+    draw.line([(res_bot_x - 40, 952), (res_bot_x - 40, res_bot_y)], fill=LINE_COLOR, width=2)
+    draw.text((gest_top_x + 12, y_row4 - 20), "1", fill=COLOR_BLACK, font=f_card)
+    draw.text((res_bot_x - 30, res_bot_y + 6), "1..*", fill=COLOR_BLACK, font=f_card)
 
-    # D) Gestora ASOCIA con Reserva (Horizontal directa)
-    draw.line([(910, 680), (960, 680)], fill=LINE_COLOR, width=2)
-    draw.text((915, 655), "1..*", fill=COLOR_BLACK, font=f_text_bold)
+    # Dependencia GestorDAO ..> MySQL Stored Procedures
+    dao_top_x = 660 + 520 // 2     # 920
+    draw.text((dao_top_x - 140, y_row4 - 26), "<<ejecuta Stored Procedures en MySQL>>", fill=COLOR_BLACK, font=f_note)
 
-    # Pie institucional del diagrama
+    # 4. Pie institucional del diagrama
     draw.rectangle([(0, H - 40), (W, H)], fill=(245, 245, 245), outline=BORDER_COLOR, width=1)
-    footer_text = "Algoritmos II - Trabajo Practico Final 2026 - Instituto Argentino de la Empresa - Modelo POO Simplificado"
-    f_ft = ImageFont.truetype("arial.ttf", 13)
-    draw.text((25, H - 28), footer_text, fill=COLOR_BLACK, font=f_ft)
+    footer_text = "Algoritmos II — Trabajo Práctico Final 2026 — Instituto Argentino de la Empresa — Modelo de Clases UML Simplificado"
+    draw.text((25, H - 28), footer_text, fill=COLOR_BLACK, font=f_sub)
 
     img.save(output_path, dpi=(300, 300))
-    print(f"Diagrama UML simplificado con texto GRANDE generado en: {output_path}")
+    print(f"Diagrama UML simplificado de alta legibilidad generado en: {output_path}")
 
 if __name__ == "__main__":
     create_uml_diagram()
