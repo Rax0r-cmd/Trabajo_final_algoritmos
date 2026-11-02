@@ -4,13 +4,7 @@ Generador Maestro Integral de Documentación Institucional y Académica
 Algoritmos II — Trabajo Práctico Final 2026
 Instituto Argentino de la Empresa
 
-Genera:
-1. TP_Final_AlgoritmosII_Grupo2.docx / .pdf (Documento Único Integrador Oficial reglamentario)
-2. Documentacion_Desarrollo.docx / .pdf (Módulo Técnico de Arquitectura y POO)
-3. Diccionario_de_Datos.docx / .pdf (Módulo Técnico de Base de Datos MySQL)
-4. Manual_de_Usuario.docx / .pdf (Módulo Operativo de Usuario)
-
-Cumple 100% con Pautas de Presentación Institucionales y Normas APA 7.ª edición.
+Estilo estricto: Texto 100% color negro en todas las fuentes y elementos.
 """
 
 import os
@@ -25,12 +19,10 @@ from docx.enum.section import WD_SECTION_START
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
-# Paleta cromática y tipográfica institucional
-COLOR_NAVY = RGBColor(0x0B, 0x2B, 0x4A)        # Azul marino institucional títulos
-COLOR_DARK_GRAY = RGBColor(0x1E, 0x29, 0x3B)   # Gris oscuro para lectura
-COLOR_MUTED_GRAY = RGBColor(0x64, 0x74, 0x8B)  # Gris tenue para notas y subtítulos
-HEX_BORDER = "CBD5E1"
-HEX_HEADER_BG = "F1F5F9"
+# Texto estrictamente en color negro (0, 0, 0)
+COLOR_TEXT_BLACK = RGBColor(0, 0, 0)
+HEX_BORDER = "CCCCCC"
+HEX_HEADER_BG = "F2F2F2"
 
 def setup_document(doc):
     """Configura márgenes reglamentarios A4 (2.54 cm en los cuatro lados) y estilo normal Arial 11pt 1.5."""
@@ -47,7 +39,7 @@ def setup_document(doc):
     style_normal = doc.styles['Normal']
     style_normal.font.name = 'Arial'
     style_normal.font.size = Pt(11)
-    style_normal.font.color.rgb = COLOR_DARK_GRAY
+    style_normal.font.color.rgb = COLOR_TEXT_BLACK
     style_normal.paragraph_format.line_spacing = 1.5
     style_normal.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     style_normal.paragraph_format.space_after = Pt(4)
@@ -72,7 +64,7 @@ def start_body_section(doc, doc_short_title):
     r_ft = p_ft.add_run(f"Algoritmos II · {doc_short_title}  |  Pág. ")
     r_ft.font.name = 'Arial'
     r_ft.font.size = Pt(9)
-    r_ft.font.color.rgb = COLOR_MUTED_GRAY
+    r_ft.font.color.rgb = COLOR_TEXT_BLACK
 
     fld_page = parse_xml(r'<w:fldSimple %s w:instr="PAGE"/>' % nsdecls('w'))
     p_ft._p.append(fld_page)
@@ -80,7 +72,7 @@ def start_body_section(doc, doc_short_title):
     style_normal = doc.styles['Normal']
     style_normal.font.name = 'Arial'
     style_normal.font.size = Pt(11)
-    style_normal.font.color.rgb = COLOR_DARK_GRAY
+    style_normal.font.color.rgb = COLOR_TEXT_BLACK
     style_normal.paragraph_format.line_spacing = 1.5
     style_normal.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     style_normal.paragraph_format.space_after = Pt(4)
@@ -135,7 +127,7 @@ def format_table(table, col_widths=None):
                         run.font.name = 'Arial'
                         run.font.bold = True
                         run.font.size = Pt(9.5)
-                        run.font.color.rgb = COLOR_NAVY
+                        run.font.color.rgb = COLOR_TEXT_BLACK
             else:
                 for p in cell.paragraphs:
                     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
@@ -143,10 +135,10 @@ def format_table(table, col_widths=None):
                     for run in p.runs:
                         run.font.name = 'Arial'
                         run.font.size = Pt(9.0)
-                        run.font.color.rgb = COLOR_DARK_GRAY
+                        run.font.color.rgb = COLOR_TEXT_BLACK
 
 def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
-    """Portada institucional estricta según Sección 2 de Pautas de Presentación."""
+    """Portada institucional estricta según Sección 2 de Pautas de Presentación con texto 100% negro."""
     p_inst = doc.add_paragraph()
     p_inst.paragraph_format.space_before = Pt(14)
     p_inst.paragraph_format.space_after = Pt(2)
@@ -155,7 +147,7 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
     r_inst.font.name = 'Arial'
     r_inst.font.bold = True
     r_inst.font.size = Pt(12)
-    r_inst.font.color.rgb = COLOR_NAVY
+    r_inst.font.color.rgb = COLOR_TEXT_BLACK
 
     p_subinst = doc.add_paragraph()
     p_subinst.paragraph_format.space_before = Pt(0)
@@ -164,9 +156,9 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
     r_subinst = p_subinst.add_run("Carrera: Analista de Sistemas de Información\nAsignatura: Algoritmos II · Ciclo Lectivo 2026")
     r_subinst.font.name = 'Arial'
     r_subinst.font.size = Pt(10)
-    r_subinst.font.color.rgb = COLOR_MUTED_GRAY
+    r_subinst.font.color.rgb = COLOR_TEXT_BLACK
 
-    # Logo corporativo
+    # Logo
     logo_path = os.path.abspath("src/Img/Logo/Logo_coWorking_para_fondo_blanco.png")
     if not os.path.exists(logo_path):
         logo_path = os.path.abspath("src/Img/Logo/Logo_coWorking_con_lema_turquesa_y_blanco.png")
@@ -178,7 +170,7 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
         r_logo = p_logo.add_run()
         r_logo.add_picture(logo_path, width=Inches(2.7))
 
-    # Título principal reglamentario: 18 pt · negrita · centrado
+    # Título principal reglamentario: 18 pt · negrita · centrado · negro
     p_title = doc.add_paragraph()
     p_title.paragraph_format.space_before = Pt(8)
     p_title.paragraph_format.space_after = Pt(4)
@@ -187,7 +179,7 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
     r_title.font.name = 'Arial'
     r_title.font.size = Pt(18)
     r_title.font.bold = True
-    r_title.font.color.rgb = COLOR_NAVY
+    r_title.font.color.rgb = COLOR_TEXT_BLACK
 
     # Tema del trabajo
     p_theme = doc.add_paragraph()
@@ -198,7 +190,7 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
     r_theme.font.name = 'Arial'
     r_theme.font.size = Pt(14)
     r_theme.font.bold = True
-    r_theme.font.color.rgb = COLOR_DARK_GRAY
+    r_theme.font.color.rgb = COLOR_TEXT_BLACK
 
     if doc_specific_title:
         p_specific = doc.add_paragraph()
@@ -209,7 +201,7 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
         r_specific.font.name = 'Arial'
         r_specific.font.size = Pt(11)
         r_specific.font.bold = True
-        r_specific.font.color.rgb = COLOR_NAVY
+        r_specific.font.color.rgb = COLOR_TEXT_BLACK
 
     if doc_subtitle:
         p_sub = doc.add_paragraph()
@@ -220,13 +212,13 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
         r_sub.font.name = 'Arial'
         r_sub.font.size = Pt(10)
         r_sub.font.italic = True
-        r_sub.font.color.rgb = COLOR_MUTED_GRAY
+        r_sub.font.color.rgb = COLOR_TEXT_BLACK
 
     p_div = doc.add_paragraph()
     p_div.paragraph_format.space_after = Pt(14)
     p_div.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r_div = p_div.add_run("—" * 40)
-    r_div.font.color.rgb = RGBColor(0xCC, 0xCC, 0xCC)
+    r_div.font.color.rgb = COLOR_TEXT_BLACK
 
     meta_items = [
         ("Integrantes del Equipo", "Tullo, Jonathan Lester (shonimdp@gmail.com)\nOrtega, David Samuel (davidortegaa86@gmail.com)\nScollo, Maximiliano (maximilianoscollo17@gmail.com)"),
@@ -247,15 +239,15 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
         r_lbl.font.name = 'Arial'
         r_lbl.font.bold = True
         r_lbl.font.size = Pt(9.5)
-        r_lbl.font.color.rgb = COLOR_NAVY
+        r_lbl.font.color.rgb = COLOR_TEXT_BLACK
 
         r_val = p_item.add_run(val)
         r_val.font.name = 'Arial'
         r_val.font.size = Pt(9.5)
-        r_val.font.color.rgb = COLOR_DARK_GRAY
+        r_val.font.color.rgb = COLOR_TEXT_BLACK
 
 def add_toc(doc, items):
-    """Índice de contenidos con tabulación exacta a 9029 dxa (margen derecho de A4) y puntos guía."""
+    """Índice de contenidos con tabulación exacta a 9029 dxa y puntos guía, texto negro."""
     p_head = doc.add_paragraph()
     p_head.paragraph_format.page_break_before = False
     p_head.paragraph_format.space_before = Pt(14)
@@ -266,12 +258,12 @@ def add_toc(doc, items):
     r_h.font.name = 'Arial'
     r_h.font.size = Pt(14)
     r_h.font.bold = True
-    r_h.font.color.rgb = COLOR_NAVY
+    r_h.font.color.rgb = COLOR_TEXT_BLACK
 
     p_div = doc.add_paragraph()
     p_div.paragraph_format.space_after = Pt(8)
     r_div = p_div.add_run("—" * 40)
-    r_div.font.color.rgb = RGBColor(0xCC, 0xCC, 0xCC)
+    r_div.font.color.rgb = COLOR_TEXT_BLACK
 
     for title, page_num, level in items:
         p = doc.add_paragraph()
@@ -293,7 +285,7 @@ def add_toc(doc, items):
         r1.font.name = 'Arial'
         r1.font.size = Pt(10.0 if level == 1 else 9.5)
         r1.font.bold = (level == 1)
-        r1.font.color.rgb = COLOR_NAVY if level == 1 else COLOR_DARK_GRAY
+        r1.font.color.rgb = COLOR_TEXT_BLACK
 
         r_tab = p.add_run('\t')
         r_tab.font.name = 'Arial'
@@ -302,10 +294,10 @@ def add_toc(doc, items):
         r2.font.name = 'Arial'
         r2.font.size = Pt(10.0 if level == 1 else 9.5)
         r2.font.bold = (level == 1)
-        r2.font.color.rgb = COLOR_NAVY if level == 1 else COLOR_DARK_GRAY
+        r2.font.color.rgb = COLOR_TEXT_BLACK
 
 def add_h1(doc, text, page_break_before=True):
-    """Sección principal: 16 pt negrita."""
+    """Sección principal: 16 pt negrita, negro."""
     p = doc.add_paragraph()
     if page_break_before:
         p.paragraph_format.page_break_before = True
@@ -317,11 +309,11 @@ def add_h1(doc, text, page_break_before=True):
     run.font.name = 'Arial'
     run.font.size = Pt(16)
     run.font.bold = True
-    run.font.color.rgb = COLOR_NAVY
+    run.font.color.rgb = COLOR_TEXT_BLACK
     return p
 
 def add_h2(doc, text):
-    """Subsección: 13 pt negrita."""
+    """Subsección: 13 pt negrita, negro."""
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(12)
     p.paragraph_format.space_after = Pt(4)
@@ -331,11 +323,11 @@ def add_h2(doc, text):
     run.font.name = 'Arial'
     run.font.size = Pt(13)
     run.font.bold = True
-    run.font.color.rgb = COLOR_NAVY
+    run.font.color.rgb = COLOR_TEXT_BLACK
     return p
 
 def add_h3(doc, text):
-    """Tercer nivel: 11 pt negrita."""
+    """Tercer nivel: 11 pt negrita, negro."""
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(9)
     p.paragraph_format.space_after = Pt(3)
@@ -345,11 +337,11 @@ def add_h3(doc, text):
     run.font.name = 'Arial'
     run.font.size = Pt(11)
     run.font.bold = True
-    run.font.color.rgb = COLOR_DARK_GRAY
+    run.font.color.rgb = COLOR_TEXT_BLACK
     return p
 
 def add_p(doc, text, bold_prefix=None, italic=False):
-    """Párrafo de texto técnico formal en Arial 11 pt interlineado 1,5 justificado."""
+    """Párrafo de texto formal en Arial 11 pt interlineado 1,5 justificado en negro."""
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(0)
     p.paragraph_format.space_after = Pt(4)
@@ -359,15 +351,15 @@ def add_p(doc, text, bold_prefix=None, italic=False):
         r_b = p.add_run(bold_prefix)
         r_b.font.name = 'Arial'
         r_b.font.bold = True
-        r_b.font.color.rgb = COLOR_NAVY
+        r_b.font.color.rgb = COLOR_TEXT_BLACK
     r_t = p.add_run(text)
     r_t.font.name = 'Arial'
     r_t.font.italic = italic
-    r_t.font.color.rgb = COLOR_DARK_GRAY
+    r_t.font.color.rgb = COLOR_TEXT_BLACK
     return p
 
 def add_bullet(doc, text, bold_prefix=None):
-    """Viñeta técnica formal justificada."""
+    """Viñeta técnica formal justificada en negro."""
     p = doc.add_paragraph(style='List Bullet')
     p.paragraph_format.space_before = Pt(0)
     p.paragraph_format.space_after = Pt(2)
@@ -377,18 +369,17 @@ def add_bullet(doc, text, bold_prefix=None):
         r_b = p.add_run(bold_prefix)
         r_b.font.name = 'Arial'
         r_b.font.bold = True
-        r_b.font.color.rgb = COLOR_NAVY
+        r_b.font.color.rgb = COLOR_TEXT_BLACK
     r_t = p.add_run(text)
     r_t.font.name = 'Arial'
-    r_t.font.color.rgb = COLOR_DARK_GRAY
+    r_t.font.color.rgb = COLOR_TEXT_BLACK
     return p
 
 def add_figure_apa7(doc, img_path, fig_num, title, note_text=None, width=Inches(6.0)):
-    """Inserta figura rotulada rigurosamente según APA 7.ª edición."""
+    """Inserta figura rotulada según APA 7.ª edición con texto negro."""
     if not os.path.exists(img_path):
         return
 
-    # Número de figura en negrita alineado a la izquierda
     p_num = doc.add_paragraph()
     p_num.paragraph_format.space_before = Pt(12)
     p_num.paragraph_format.space_after = Pt(2)
@@ -398,9 +389,8 @@ def add_figure_apa7(doc, img_path, fig_num, title, note_text=None, width=Inches(
     r_num.font.name = 'Arial'
     r_num.font.bold = True
     r_num.font.size = Pt(10)
-    r_num.font.color.rgb = COLOR_NAVY
+    r_num.font.color.rgb = COLOR_TEXT_BLACK
 
-    # Título descriptivo en cursiva
     p_title = doc.add_paragraph()
     p_title.paragraph_format.space_before = Pt(0)
     p_title.paragraph_format.space_after = Pt(6)
@@ -410,9 +400,8 @@ def add_figure_apa7(doc, img_path, fig_num, title, note_text=None, width=Inches(
     r_title.font.name = 'Arial'
     r_title.font.italic = True
     r_title.font.size = Pt(10)
-    r_title.font.color.rgb = COLOR_DARK_GRAY
+    r_title.font.color.rgb = COLOR_TEXT_BLACK
 
-    # Imagen
     p_img = doc.add_paragraph()
     p_img.paragraph_format.space_before = Pt(0)
     p_img.paragraph_format.space_after = Pt(4)
@@ -420,7 +409,6 @@ def add_figure_apa7(doc, img_path, fig_num, title, note_text=None, width=Inches(
     r_img = p_img.add_run()
     r_img.add_picture(img_path, width=width)
 
-    # Nota APA 7
     if note_text:
         p_note = doc.add_paragraph()
         p_note.paragraph_format.space_before = Pt(0)
@@ -430,26 +418,26 @@ def add_figure_apa7(doc, img_path, fig_num, title, note_text=None, width=Inches(
         r_nlabel.font.name = 'Arial'
         r_nlabel.font.italic = True
         r_nlabel.font.size = Pt(9)
-        r_nlabel.font.color.rgb = COLOR_MUTED_GRAY
+        r_nlabel.font.color.rgb = COLOR_TEXT_BLACK
         r_ntext = p_note.add_run(note_text)
         r_ntext.font.name = 'Arial'
         r_ntext.font.size = Pt(9)
-        r_ntext.font.color.rgb = COLOR_MUTED_GRAY
+        r_ntext.font.color.rgb = COLOR_TEXT_BLACK
 
 def add_code_snippet(doc, code_text, caption=None):
-    """Caja de código con tipografía monospace Consolas y borde distintivo."""
+    """Caja de código con tipografía monospace Consolas y texto estrictamente negro."""
     table = doc.add_table(rows=1, cols=1)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     cell = table.cell(0, 0)
     set_cell_padding(cell, top=60, bottom=60, left=90, right=90)
-    set_cell_shading(cell, "F8FAFC")
+    set_cell_shading(cell, "F8F8F8")
     tblPr = table._tbl.tblPr
     borders = parse_xml(
         f'<w:tblBorders {nsdecls("w")}>'
-        f'<w:top w:val="single" w:sz="4" w:space="0" w:color="CBD5E1"/>'
-        f'<w:left w:val="single" w:sz="16" w:space="0" w:color="0B2B4A"/>'
-        f'<w:bottom w:val="single" w:sz="4" w:space="0" w:color="CBD5E1"/>'
-        f'<w:right w:val="single" w:sz="4" w:space="0" w:color="CBD5E1"/>'
+        f'<w:top w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/>'
+        f'<w:left w:val="single" w:sz="16" w:space="0" w:color="000000"/>'
+        f'<w:bottom w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/>'
+        f'<w:right w:val="single" w:sz="4" w:space="0" w:color="CCCCCC"/>'
         f'</w:tblBorders>'
     )
     tblPr.append(borders)
@@ -461,7 +449,7 @@ def add_code_snippet(doc, code_text, caption=None):
     run = p.add_run(code_text)
     run.font.name = 'Consolas'
     run.font.size = Pt(8.5)
-    run.font.color.rgb = RGBColor(0x0F, 0x17, 0x2A)
+    run.font.color.rgb = COLOR_TEXT_BLACK
 
     if caption:
         p_cap = doc.add_paragraph()
@@ -472,7 +460,7 @@ def add_code_snippet(doc, code_text, caption=None):
         r_cap.font.name = 'Arial'
         r_cap.font.size = Pt(8.5)
         r_cap.font.italic = True
-        r_cap.font.color.rgb = COLOR_MUTED_GRAY
+        r_cap.font.color.rgb = COLOR_TEXT_BLACK
 
 def save_doc_safely(doc, base_name):
     target_path = os.path.join("Documentacion", f"{base_name}.docx")
@@ -494,7 +482,6 @@ def generate_master_document():
     add_institutional_cover(doc, "DOCUMENTO TÉCNICO Y MEMORIA INTEGRADORA", "Arquitectura POO, Persistencia MySQL, Manejo de Errores y Manual de Operación")
     start_body_section(doc, "Informe Integrador Final")
 
-    # Mapeo exacto verificado con Word COM
     master_toc = [
         ("1. Introducción y Objetivo General del Sistema", "3", 1),
         ("2. Tecnologías, Herramientas y Lenguajes Utilizados", "4", 1),
@@ -1012,15 +999,18 @@ catch (Exception ex)
         r1 = p_ref.add_run(authors)
         r1.font.name = 'Arial'
         r1.font.size = Pt(10)
+        r1.font.color.rgb = COLOR_TEXT_BLACK
         
         r2 = p_ref.add_run(book_title)
         r2.font.name = 'Arial'
         r2.font.italic = True
         r2.font.size = Pt(10)
+        r2.font.color.rgb = COLOR_TEXT_BLACK
         
         r3 = p_ref.add_run(rest)
         r3.font.name = 'Arial'
         r3.font.size = Pt(10)
+        r3.font.color.rgb = COLOR_TEXT_BLACK
 
     # 10. Checklist
     add_h1(doc, "10. Checklist Institucional de Control Previo a la Entrega", page_break_before=True)
@@ -1201,10 +1191,13 @@ catch (Exception ex)
         p_ref.paragraph_format.space_after = Pt(6)
         p_ref.paragraph_format.left_indent = Inches(0.4)
         p_ref.paragraph_format.first_line_indent = Inches(-0.4)
-        p_ref.add_run(authors)
+        r1 = p_ref.add_run(authors)
+        r1.font.color.rgb = COLOR_TEXT_BLACK
         r2 = p_ref.add_run(book_title)
         r2.font.italic = True
-        p_ref.add_run(rest)
+        r2.font.color.rgb = COLOR_TEXT_BLACK
+        r3 = p_ref.add_run(rest)
+        r3.font.color.rgb = COLOR_TEXT_BLACK
 
     save_doc_safely(doc, "Documentacion_Desarrollo")
 

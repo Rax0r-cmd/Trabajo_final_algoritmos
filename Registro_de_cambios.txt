@@ -73,10 +73,10 @@ Le puse el método CrearConexion() que devuelve la conexión lista
 para usar con using y abrirla con .Open() recién al consultar.
 
 Qué responder si me preguntan por Conexion.cs:
-- ¿Por qué es static? Porque no representa una entidad del negocio
+- Por qué es static? Porque no representa una entidad del negocio
   como un cliente o una reserva. No hace falta hacer new Conexion(),
   se usa directo como punto central para pedir conexiones.
-- ¿Por qué CrearConexion no hace .Open()? Porque cada ventana o clase
+- Por qué CrearConexion no hace .Open()? Porque cada ventana o clase
   decide cuándo abrirla y cuándo cerrarla con el using para no dejar
   conexiones colgadas al cuete.
 
@@ -129,11 +129,11 @@ Le puse las propiedades comunes: IdRecurso, Nombre, Descripcion,
 Ubicacion, PrecioPorHora e IdTipoRecurso. Implementa IReservable y
 tiene el método abstracto CalcularCosto(horas).
 Qué responder si me preguntan:
-- ¿Por qué es abstract? Porque en la vida real nadie alquila un
+- Por qué es abstract? Porque en la vida real nadie alquila un
   "recurso" genérico, alquilás una sala, una oficina o un puesto.
   Entonces con abstract no dejo que se cree un new Recurso() suelto
   y me sirve para no repetir el nombre y el precio en todas las hijas.
-- ¿Por qué CalcularCosto es abstracto? Porque cada lugar hace la cuenta
+- Por qué CalcularCosto es abstracto? Porque cada lugar hace la cuenta
   según lo suyo (por ejemplo la sala si tiene proyector). Al dejarlo
   sin cuerpo, obligo a que las hijas hagan su propia cuenta con override.
   A eso se le llama polimorfismo.
@@ -273,7 +273,7 @@ fecha_reserva = p_fecha. O sea, si una sala estaba reservada de
 10:00 a 13:00 (3 horas) y otro cliente pedía la misma sala a las 11:00,
 la función buscaba si había una reserva que empiece exactamente a las
 11:00:00. Como no había ninguna a las 11 en punto, devolvía 1 (libre)
-y dejaba meter la reserva. ¡Nos quedaban dos personas en la misma sala
+y dejaba meter la reserva. Nos quedaban dos personas en la misma sala
 al mismo tiempo! El profe nos iba a bochar de una porque las consignas
 piden que no se puedan superponer reservas para un mismo recurso.
 
@@ -286,7 +286,7 @@ contra todas las reservas confirmadas. Si se superpone aunque sea un
 minuto, devuelve 0 (ocupado).
 
 Por si me preguntan en la defensa:
-'¿Cómo garantizás que no se pisen las reservas si tienen distinta hora
+'Cómo garantizás que no se pisen las reservas si tienen distinta hora
 de inicio o duraciones distintas?':
 Le respondo que la función fn_verificar_disponibilidad calcula el
 intervalo temporal completo con DATE_ADD y evalúa la intersección
@@ -358,10 +358,10 @@ Adecuación final a las Pautas de Presentación de la Cátedra (Noviembre 2026):
     TP_Final_AlgoritmosII_Grupo2.pdf (23 páginas numeradas y maquetadas en A4).
 
 Por si me preguntan en la defensa sobre Polimorfismo en CalcularCosto:
-- ¿Por qué es polimórfico? Porque el método base en Recurso es abstracto
+- Por qué es polimórfico? Porque el método base en Recurso es abstracto
   y cada clase derivada (Sala, OficinaPrivada, PuestoTrabajo) lo
   sobreescribe con override aplicando su propia fórmula de costo y recargos.
-- ¿Qué ventaja da? La pantalla o la gestora llaman a
+- Qué ventaja da? La pantalla o la gestora llaman a
   recurso.CalcularCosto(horas) usando la referencia genérica Recurso sin
   saber qué clase hija es en tiempo de compilación (enlace dinámico),
   evitando switches o if encadenados. Si mañana sumamos otro recurso,

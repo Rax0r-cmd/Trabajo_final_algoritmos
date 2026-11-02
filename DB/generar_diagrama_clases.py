@@ -15,24 +15,22 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
     f_text_bold = ImageFont.truetype("arialbd.ttf", 12)
     f_text_italic = ImageFont.truetype("ariali.ttf", 12)
 
-    # Colores institucionales
-    NAVY = (11, 43, 74)         # #0B2B4A
-    NAVY2 = (26, 75, 109)       # #1A4B6D
-    BORDER_COLOR = (40, 70, 100)
-    HEADER_BG = (235, 243, 250)
+    # Colores sobrios en blanco y negro / escala de grises estricta
+    COLOR_BLACK = (0, 0, 0)
+    BORDER_COLOR = (40, 40, 40)
+    HEADER_BG = (242, 242, 242)
     BOX_BG = (255, 255, 255)
-    TEXT_COLOR = (25, 30, 40)
-    LINE_COLOR = (50, 80, 110)
-    SHADOW_COLOR = (225, 230, 238)
+    SHADOW_COLOR = (230, 230, 230)
+    LINE_COLOR = (30, 30, 30)
 
-    # Encabezado institucional superior del diagrama
-    draw.rectangle([(0, 0), (W, 70)], fill=NAVY)
-    draw.text((35, 15), "DIAGRAMA DE CLASES SIMPLIFICADO — SISTEMA DE GESTIÓN DE COWORKING", fill=(255, 255, 255), font=f_title)
-    draw.text((35, 45), "Modelo de Dominio Orientado a Objetos (POO) · C# .NET Framework 4.7.2 · Arquitectura en Capas", fill=(245, 176, 66), font=f_subtitle)
+    # Encabezado superior en escala de grises
+    draw.rectangle([(0, 0), (W, 70)], fill=(245, 245, 245), outline=BORDER_COLOR, width=1)
+    draw.text((35, 15), "DIAGRAMA DE CLASES SIMPLIFICADO - SISTEMA DE GESTION DE COWORKING", fill=COLOR_BLACK, font=f_title)
+    draw.text((35, 45), "Modelo de Dominio Orientado a Objetos (POO) - C# .NET Framework 4.7.2 - Arquitectura en Capas", fill=(80, 80, 80), font=f_subtitle)
 
     def draw_box(x, y, w, h, stereo, name, attributes, methods, is_abstract=False, is_interface=False, is_static=False, is_enum=False):
         # Sombra suave
-        draw.rectangle([(x + 4, y + 4), (x + w + 4, y + h + 4)], fill=SHADOW_COLOR)
+        draw.rectangle([(x + 3, y + 3), (x + w + 3, y + h + 3)], fill=SHADOW_COLOR)
         # Fondo
         draw.rectangle([(x, y), (x + w, y + h)], fill=BOX_BG, outline=BORDER_COLOR, width=2)
 
@@ -44,13 +42,13 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
         curr_y = y + 4
         if stereo:
             s_w = draw.textlength(stereo, font=f_class_stereo)
-            draw.text((x + (w - s_w) / 2, curr_y), stereo, fill=NAVY2, font=f_class_stereo)
+            draw.text((x + (w - s_w) / 2, curr_y), stereo, fill=COLOR_BLACK, font=f_class_stereo)
             curr_y += 16
 
         # Nombre
         n_font = f_class_name
         n_w = draw.textlength(name, font=n_font)
-        draw.text((x + (w - n_w) / 2, curr_y), name, fill=NAVY, font=n_font)
+        draw.text((x + (w - n_w) / 2, curr_y), name, fill=COLOR_BLACK, font=n_font)
 
         # Divisor de atributos
         curr_y = y + header_h
@@ -59,7 +57,7 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
         # Atributos
         curr_y += 8
         for attr in attributes:
-            draw.text((x + 12, curr_y), attr, fill=TEXT_COLOR, font=f_text)
+            draw.text((x + 12, curr_y), attr, fill=COLOR_BLACK, font=f_text)
             curr_y += 18
 
         # Divisor de métodos
@@ -70,7 +68,7 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
         curr_y += 8
         for m in methods:
             m_font = f_text_italic if ("abstract" in m or is_abstract and "CalcularCosto" in m) else f_text
-            draw.text((x + 12, curr_y), m, fill=TEXT_COLOR, font=m_font)
+            draw.text((x + 12, curr_y), m, fill=COLOR_BLACK, font=m_font)
             curr_y += 18
 
     # 1. IReservable (Interfaz)
@@ -279,9 +277,7 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
             pts = [(tip_x, tip_y), (tip_x - size, tip_y - size/2), (tip_x - size, tip_y + size/2)]
         draw.polygon(pts, fill=fill_color, outline=outline_color)
 
-    # A) Recurso IMPLEMENTA IReservable (Flecha discontinua con triángulo hueco apuntando a IReservable)
-    # De Recurso (x=440, y=155) a IReservable (x=350, y=155)
-    # Dibujar linea de guiones
+    # A) Recurso IMPLEMENTA IReservable
     x_start = 440
     x_end = 350 + 14
     y_pos = 155
@@ -291,69 +287,56 @@ def create_uml_diagram(output_path="DB/Diagrama_Clases_UML.png"):
         draw.line([(cur_x, y_pos), (max(cur_x - step, x_end), y_pos)], fill=LINE_COLOR, width=2)
         cur_x -= step * 2
     draw_triangle(350, 155, size=14, direction="left")
-    draw.text((365, 135), "<<implements>>", fill=NAVY2, font=f_class_stereo)
+    draw.text((365, 135), "<<implements>>", fill=COLOR_BLACK, font=f_class_stereo)
 
     # B) Sala, OficinaPrivada y PuestoTrabajo HEREDAN de Recurso
-    # Triángulo hueco arriba apuntando a Recurso (bottom: x=625, y=320)
     draw_triangle(625, 320, size=14, direction="up")
-    # Línea vertical desde el triángulo hasta barra horizontal intermedia y=350
     draw.line([(625, 334), (625, 350)], fill=LINE_COLOR, width=2)
-    # Barra horizontal que une las tres clases derivadas (de x=240 a x=1010)
     draw.line([(240, 350), (1010, 350)], fill=LINE_COLOR, width=2)
-    # Bajada a Sala (x=240, y=380)
     draw.line([(240, 350), (240, 380)], fill=LINE_COLOR, width=2)
-    # Bajada a OficinaPrivada (x=625, y=380)
     draw.line([(625, 350), (625, 380)], fill=LINE_COLOR, width=2)
-    # Bajada a PuestoTrabajo (x=1010, y=350)
     draw.line([(1010, 350), (1010, 380)], fill=LINE_COLOR, width=2)
-    draw.text((635, 333), "<<extends>>", fill=NAVY2, font=f_class_stereo)
+    draw.text((635, 333), "<<extends>>", fill=COLOR_BLACK, font=f_class_stereo)
 
     # C) Reserva ASOCIA con Cliente y Recurso
-    # De Reserva (top: x=1550, y=380) a Cliente (bottom: x=1550, y=300)
     draw.line([(1550, 380), (1550, 300)], fill=LINE_COLOR, width=2)
-    draw.text((1560, 310), "1", fill=NAVY, font=f_text_bold)
-    draw.text((1560, 360), "0..*", fill=NAVY, font=f_text_bold)
-    draw.text((1560, 335), "solicita", fill=NAVY2, font=f_class_stereo)
+    draw.text((1560, 310), "1", fill=COLOR_BLACK, font=f_text_bold)
+    draw.text((1560, 360), "0..*", fill=COLOR_BLACK, font=f_text_bold)
+    draw.text((1560, 335), "solicita", fill=COLOR_BLACK, font=f_class_stereo)
 
-    # De Reserva (left: x=1290, y=420) a Recurso (bottom right: via linea a x=810, y=210)
     draw.line([(1290, 420), (1240, 420)], fill=LINE_COLOR, width=2)
     draw.line([(1240, 420), (1240, 210)], fill=LINE_COLOR, width=2)
     draw.line([(1240, 210), (810, 210)], fill=LINE_COLOR, width=2)
-    draw.text((820, 190), "1", fill=NAVY, font=f_text_bold)
-    draw.text((1250, 425), "0..*", fill=NAVY, font=f_text_bold)
-    draw.text((1050, 190), "asigna recurso", fill=NAVY2, font=f_class_stereo)
+    draw.text((820, 190), "1", fill=COLOR_BLACK, font=f_text_bold)
+    draw.text((1250, 425), "0..*", fill=COLOR_BLACK, font=f_text_bold)
+    draw.text((1050, 190), "asigna recurso", fill=COLOR_BLACK, font=f_class_stereo)
 
-    # D) GestoraCoworking AGREGA Reservas (Agregación: rombo hueco en Gestora)
-    # De GestoraCoworking (x=1290, y=680) a Reserva (x=1350, y=600)
-    # Rombo en (1290, 680)
+    # D) GestoraCoworking AGREGA Reservas
     draw.line([(1350, 680), (1350, 600)], fill=LINE_COLOR, width=2)
-    # Rombo hueco en (1350, 680)
     pts_diamond = [(1350, 666), (1358, 674), (1350, 682), (1342, 674)]
     draw.polygon(pts_diamond, fill=(255, 255, 255), outline=LINE_COLOR)
-    draw.text((1360, 640), "1..* en memoria", fill=NAVY2, font=f_class_stereo)
+    draw.text((1360, 640), "1..* en memoria", fill=COLOR_BLACK, font=f_class_stereo)
 
-    # E) GestorDAO USA Conexion (Dependencia: flecha discontinua hacia Conexion)
-    # De GestorDAO (left: x=455, y=745) a Conexion (right: x=410, y=745)
+    # E) GestorDAO USA Conexion
     cur_x = 455
     target_x = 410 + 10
     y_pos = 745
     while cur_x > target_x:
         draw.line([(cur_x, y_pos), (max(cur_x - step, target_x), y_pos)], fill=LINE_COLOR, width=2)
         cur_x -= step * 2
-    # Flecha abierta
     draw.line([(410, 745), (420, 740)], fill=LINE_COLOR, width=2)
     draw.line([(410, 745), (420, 750)], fill=LINE_COLOR, width=2)
-    draw.text((415, 725), "<<uses>>", fill=NAVY2, font=f_class_stereo)
+    draw.text((415, 725), "<<uses>>", fill=COLOR_BLACK, font=f_class_stereo)
 
-    # Pie de pagina técnico del diagrama
-    draw.rectangle([(0, H - 45), (W, H)], fill=(245, 248, 252))
+    # Pie de pagina
+    draw.rectangle([(0, H - 45), (W, H)], fill=(245, 245, 245))
     draw.line([(0, H - 45), (W, H - 45)], fill=BORDER_COLOR, width=1)
-    footer_text = "Algoritmos II · Trabajo Práctico Final 2026 · Instituto Argentino de la Empresa · Tullo, Jonathan Lester — Ortega, David Samuel — Scollo, Maximiliano"
+    footer_text = "Algoritmos II - Trabajo Practico Final 2026 - Instituto Argentino de la Empresa - Tullo, Jonathan Lester / Ortega, David Samuel / Scollo, Maximiliano"
     f_ft = ImageFont.truetype("arial.ttf", 12)
-    draw.text((35, H - 32), footer_text, fill=NAVY2, font=f_ft)
+    draw.text((35, H - 32), footer_text, fill=COLOR_BLACK, font=f_ft)
 
     img.save(output_path, dpi=(300, 300))
-    print(f"Diagrama UML generado con éxito en: {output_path}")
+    print(f"Diagrama UML en escala de grises generado con exito en: {output_path}")
 
 if __name__ == "__main__":
     create_uml_diagram()
