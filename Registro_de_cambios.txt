@@ -143,3 +143,23 @@ a continuación:
     - terminar la funcionabilidad de las solapas de GESTION.
     - Confirmar de qué manera se agregarán los Clientes y Recursos
     - Hacer que la logica de los formularios se conecte con las clases, y Bdd.
+
+
+
+==================================== MAXI ==============================================================
+
+Paso 3.0 
+- Implementación de la capa DAO (GestorDAO.cs):
+    - Se creó la clase GestorDAO dentro de la carpeta Gestoras para centralizar el acceso y la persistencia en MySQL.
+    - Se crearon los métodos para Clientes: AgregarCliente, ModificarCliente, EliminarCliente y ListarClientes.
+    - Se definieron de forma parametrizada (recibiendo tipos primitivos como string e int directamente desde los TextBox y grillas del formulario, sin requerir la creación previa de objetos).
+    - Se vincularon directamente con los procedimientos almacenados de DB_TPFinal.sql:
+        * sp_alta_cliente: para dar de alta clientes con p_nombre, p_apellido, p_telefono y p_mail.
+        * sp_modificar_cliente: para actualizar los datos del cliente por p_id_cliente.
+        * EliminarCliente: mediante consulta DELETE parametrizada por id_cliente.
+    - Se añadieron también los métodos parametrizados para Recursos (sp_alta_recurso, sp_modificar_recurso, EliminarRecurso, ListarRecursos) y Reservas (sp_alta_reserva, sp_cancelar_reserva, fn_verificar_disponibilidad, sp_calcular_total_recaudado_cursor, ListarDetalleReservas y ListarResumenRecursos).
+    - Se actualizó el archivo de proyecto SistemaDeGestion.csproj para incluir GestorDAO.cs en la compilación.
+
+a continuación:
+    - Conectar los eventos de los botones del formulario FrmPrincipal (btnCrearUsuario, btnModificarUsuario, btnEliminarUsuario) con los métodos de GestorDAO.
+    - Cargar el DataGridView (dgvClientes y dgvRecursos) utilizando ListarClientes() y ListarRecursos().
