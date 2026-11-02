@@ -262,4 +262,131 @@ a continuación:
     - Cargar los DataGridView (dgvClientes y dgvRecursos) con ListarClientes()
       y ListarRecursos().
 
-=
+================================== JONATHAN ====================================
+
+Correcciones en la Base de Datos (DB_TPFinal.sql):
+
+- Arreglo del problema de solapamiento de horarios (superposición):
+Revisando cómo estábamos manejando las reservas encontré un error crítico.
+Nuestra función fn_verificar_disponibilidad solo hacía un count con
+fecha_reserva = p_fecha. O sea, si una sala estaba reservada de
+10:00 a 13:00 (3 horas) y otro cliente pedía la misma sala a las 11:00,
+la función buscaba si había una reserva que empiece exactamente a las
+11:00:00. Como no había ninguna a las 11 en punto, devolvía 1 (libre)
+y dejaba meter la reserva. ¡Nos quedaban dos personas en la misma sala
+al mismo tiempo! El profe nos iba a bochar de una porque las consignas
+piden que no se puedan superponer reservas para un mismo recurso.
+
+Para arreglarlo, modifiqué fn_verificar_disponibilidad para que reciba
+también la duración en horas (p_id_recurso, p_fecha, p_horas).
+Con DATE_ADD calcula a qué hora termina y evalúa la fórmula matemática
+de choque de intervalos:
+(nuevo_inicio < fin_existente) AND (nuevo_fin > inicio_existente)
+contra todas las reservas confirmadas. Si se superpone aunque sea un
+minuto, devuelve 0 (ocupado).
+
+Por si me preguntan en la defensa:
+'¿Cómo garantizás que no se pisen las reservas si tienen distinta hora
+de inicio o duraciones distintas?':
+Le respondo que la función fn_verificar_disponibilidad calcula el
+intervalo temporal completo con DATE_ADD y evalúa la intersección
+de rangos horarios entre la nueva solicitud y las reservas confirmadas
+existentes en la tabla, impidiendo cualquier solapamiento parcial o total.
+
+- Validaciones con SIGNAL 45000 en los Procedimientos Almacenados:
+1. sp_alta_reserva:
+Le agregué validaciones antes de hacer el insert:
+- Si mandan horas <= 0 o un total negativo, corta con SIGNAL 45000
+  avisando que la duración debe ser > 0 y el importe no negativo.
+- Verifica si el cliente y el recurso existen de verdad en sus
+  tablas antes de insertar.
+- Llama a fn_verificar_disponibilidad pasándole las horas. Si hay
+  colisión de horario, tira:
+  SIGNAL SQLSTATE '45000'
+  SET MESSAGE_TEXT = 'El recurso ya se encuentra reservado...';
+
+2. sp_modificar_reserva:
+Como las consignas piden poder modificar reservas y no lo teníamos,
+creé este SP para reprogramar fecha y horas de una reserva ya hecha,
+validando que no choque contra OTRA reserva confirmada
+(usando id_reserva != p_id_reserva para que no colisione consigo misma).
+
+3. sp_cancelar_reserva:
+Si alguien intenta cancelar una reserva que ya estaba cancelada,
+ahora salta con SIGNAL 45000 avisando que ya fue dada de baja.
+
+Diagrama DER oficial en Workbench:
+- Como David y Maxi habían sumado para las clases hijas los 3 campos
+  específicos en recursos (mobiliario_incluido, cantidad_sillas y
+  nro_categoria), abrí el modelo en Workbench (Diagrama_Editable.mwb)
+  y actualicé la tabla recursos con sus 9 columnas completas,
+  regenerando Diagrama_DER.png para que coincida 100% con DB_TPFinal.sql.
+
+Documentación del proyecto (Word y PDF):
+- Pasé en limpio y completé los 3 documentos oficiales
+  (Documentacion_Desarrollo, Diccionario_de_Datos y Manual_de_Usuario).
+- Armé un script en Python (generar_documentos_separados.py) para
+  generar automáticamente las versiones en .docx y .pdf sin que
+  se desacomoden los formatos.
+- Corregí el pie de página en Word: dividí el documento en 2 secciones
+  para que la carátula quede 100% limpia sin pie ni encabezado,
+  y el cuerpo arranque con el pie abajo a la derecha bien paginado.
+- Armé el logo con letras oscuras (Logo_coWorking_para_fondo_blanco.png)
+  para que en las hojas impresas quede legible y nítido.
+- En el manual y en la docu dejamos asentados los canales de contacto
+  de soporte (el WhatsApp +54 9 223 301-4626 y los correos de los 3).
+
+Adecuación final a las Pautas de Presentación de la Cátedra (Noviembre 2026):
+- Revisamos con el checklist institucional de la cátedra y completamos
+  lo que faltaba:
+  * Portada obligatoria con todos los datos académicos (Instituto
+    Argentino de la Empresa, carrera, Algoritmos II, docente Lic. Adrián
+    Aroca, 2º año, fecha de entrega y los 3 integrantes).
+  * Generamos el Diagrama de Clases simplificado en UML
+    (DB/Diagrama_Clases_UML.png) con atributos, métodos y herencia.
+  * Agregamos la justificación formal del Polimorfismo en CalcularCosto(horas)
+    en la documentación técnica, explicando el enlace dinámico y el
+    principio Abierto/Cerrado (OCP) de SOLID.
+  * Dejamos fundamentada la separación en capas y el patrón DAO
+    (GestoraCoworking con LINQ vs GestorDAO) bajo el principio de
+    responsabilidad única (SRP).
+  * Formateamos todos los fragmentos de código con tipografía monospace
+    (Consolas) y cajas técnicas según las pautas.
+  * Incorporamos la sección final de Referencias Bibliográficas con
+    normas APA 7.ª edición y el checklist de control previo a la entrega.
+  * Generamos el entregable único del grupo en PDF:
+    TP_Final_AlgoritmosII_Grupo2.pdf (23 páginas numeradas y maquetadas en A4).
+
+Por si me preguntan en la defensa sobre Polimorfismo en CalcularCosto:
+- ¿Por qué es polimórfico? Porque el método base en Recurso es abstracto
+  y cada clase derivada (Sala, OficinaPrivada, PuestoTrabajo) lo
+  sobreescribe con override aplicando su propia fórmula de costo y recargos.
+- ¿Qué ventaja da? La pantalla o la gestora llaman a
+  recurso.CalcularCosto(horas) usando la referencia genérica Recurso sin
+  saber qué clase hija es en tiempo de compilación (enlace dinámico),
+  evitando switches o if encadenados. Si mañana sumamos otro recurso,
+  creamos una clase nueva y el cálculo sigue andando sin tocar una sola
+  línea del código existente (Principio Open/Closed).
+
+Por si el profe pregunta si el sistema ya está terminado:
+Le decimos la verdad con seguridad:
+'El proyecto se encuentra en una versión parcial funcional avanzada.
+La base de datos relacional con sus reglas e integridad está 100%
+terminada y blindada contra solapamientos; el modelo de clases en C#
+con herencia y polimorfismo está listo; y la interfaz gráfica en
+Windows Forms está maquetada con login y navegación por solapas.
+Actualmente estamos en la etapa de integración, programando GestorDAO
+para que las grillas y botones de pantalla dejen de usar listas en
+memoria y consuman directamente los procedimientos almacenados de
+MySQL, para luego incorporar los módulos de JSON y configuración
+externa en las próximas clases.'
+
+Lo que nos queda hacer ahora entre los tres:
+- Terminar de programar los métodos de GestorDAO.cs (abrir conexión
+  con using, invocar sp_alta_reserva, sp_cancelar_reserva, poblar
+  DataGridViews desde vw_detalle_reservas).
+- Capturar en los formularios el bloque catch (MySqlException ex)
+  cuando ex.SqlState == '45000' para mostrar el mensaje de negocio
+  en un MessageBox.Show().
+- Preparar la exportación e importación a JSON cuando lo veamos en clase.
+- Pasar la cadena de conexión de Conexion.cs a App.config.
