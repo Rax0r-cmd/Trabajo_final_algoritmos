@@ -350,8 +350,12 @@ Adecuación final a las Pautas de Presentación de la Cátedra (Noviembre 2026):
   * Dejamos fundamentada la separación en capas y el patrón DAO
     (GestoraCoworking con LINQ vs GestorDAO) bajo el principio de
     responsabilidad única (SRP).
-  * Formateamos todos los fragmentos de código con tipografía monospace
-    (Consolas) y cajas técnicas según las pautas.
+  * Formateamos los fragmentos de código con tipografía monospace Consolas
+    bien indentados y sin cajas raras para que quede prolijo y legible.
+  * Mejoramos el Diagrama de Clases UML con letras más grandes y sin cortes
+    en los bordes, separando bien GestoraCoworking de GestorDAO.
+  * Acomodamos la portada separando carrera y materia en renglones distintos,
+    y ajustamos los puntos y números del índice alineados a la derecha.
   * Incorporamos la sección final de Referencias Bibliográficas con
     normas APA 7.ª edición y el checklist de control previo a la entrega.
   * Generamos el entregable único del grupo en PDF:
