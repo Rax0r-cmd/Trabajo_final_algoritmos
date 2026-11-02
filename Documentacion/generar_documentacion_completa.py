@@ -13,7 +13,7 @@ import win32com.client
 import docx
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.enum.section import WD_SECTION_START
 from docx.oxml import parse_xml
@@ -291,7 +291,7 @@ def add_institutional_cover(doc, doc_specific_title=None, doc_subtitle=None):
         r_v.font.color.rgb = COLOR_TEXT_BLACK
 
 def add_toc(doc, items):
-    """Índice de contenidos con tabulación exacta a 9029 dxa y puntos guía, texto negro."""
+    """Índice de contenidos con tabulación derecha y puntos guía reglamentarios APA 7, texto negro."""
     p_head = doc.add_paragraph()
     p_head.paragraph_format.page_break_before = False
     p_head.paragraph_format.space_before = Pt(14)
@@ -309,6 +309,9 @@ def add_toc(doc, items):
     r_div = p_div.add_run("—" * 40)
     r_div.font.color.rgb = COLOR_TEXT_BLACK
 
+    # Posición objetivo común en el margen derecho: 6.00 pulgadas (432 pt, perfectamente dentro del margen útil)
+    target_right = Inches(6.00)
+
     for title, page_num, level in items:
         p = doc.add_paragraph()
         p.paragraph_format.space_before = Pt(2.5 if level == 1 else 1.5)
@@ -316,14 +319,20 @@ def add_toc(doc, items):
         p.paragraph_format.line_spacing = 1.15
         p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
-        pPr = p._p.get_or_add_pPr()
-        tabs_xml = f'<w:tabs {nsdecls("w")}><w:tab w:val="right" w:leader="dot" w:pos="9029"/></w:tabs>'
-        pPr.append(parse_xml(tabs_xml))
-
+        indent = Inches(0)
         if level == 2:
-            p.paragraph_format.left_indent = Inches(0.22)
+            indent = Inches(0.22)
+            p.paragraph_format.left_indent = indent
         elif level == 3:
-            p.paragraph_format.left_indent = Inches(0.44)
+            indent = Inches(0.44)
+            p.paragraph_format.left_indent = indent
+
+        # Tab stop nativo de python-docx: esquema OpenXML válido con puntos guía continuos
+        p.paragraph_format.tab_stops.add_tab_stop(
+            target_right + indent,
+            WD_TAB_ALIGNMENT.RIGHT,
+            WD_TAB_LEADER.DOTS
+        )
 
         r1 = p.add_run(title)
         r1.font.name = 'Arial'

@@ -3,7 +3,7 @@ import subprocess
 import docx
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.enum.section import WD_SECTION_START
 from docx.oxml import parse_xml
@@ -220,6 +220,7 @@ def add_toc_header(doc):
 
 def add_toc(doc, items):
     add_toc_header(doc)
+    target_right = Inches(6.00)
     for title, page_num, level in items:
         p = doc.add_paragraph()
         p.paragraph_format.space_before = Pt(2.5 if level == 1 else 1.5)
@@ -227,13 +228,17 @@ def add_toc(doc, items):
         p.paragraph_format.line_spacing = 1.15
         p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
-        # Tabulación derecha en 9029 dxa (margen derecho exacto de A4) con línea de puntos guía
-        pPr = p._p.get_or_add_pPr()
-        tabs_xml = f'<w:tabs {nsdecls("w")}><w:tab w:val="right" w:leader="dot" w:pos="9029"/></w:tabs>'
-        pPr.append(parse_xml(tabs_xml))
-
+        indent = Inches(0)
         if level == 2:
-            p.paragraph_format.left_indent = Inches(0.22)
+            indent = Inches(0.22)
+            p.paragraph_format.left_indent = indent
+
+        # Tab stop nativo de python-docx con alineación derecha y puntos guía continuos
+        p.paragraph_format.tab_stops.add_tab_stop(
+            target_right + indent,
+            WD_TAB_ALIGNMENT.RIGHT,
+            WD_TAB_LEADER.DOTS
+        )
 
         r1 = p.add_run(title)
         r1.font.name = 'Arial'
