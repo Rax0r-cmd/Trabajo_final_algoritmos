@@ -38,31 +38,31 @@ El software adopta una **arquitectura en capas** con separación estricta de res
 
 ```mermaid
 graph TD
-    subgraph UI ["Capa de Presentación (Windows Forms)"]
+    subgraph UI ["Capa de Presentación - Windows Forms"]
         direction TB
-        Login["FrmLogin<br/>• Autenticación de Administradores<br/>• Asistencia directa vía WhatsApp (+54 9 223 301-4626)"]
-        Principal["FrmPrincipal (Navegación por Solapas)<br/>• Solapa CONTROL: Registro operativo y cálculo de tarifas<br/>• Solapa RESERVAS: Grilla DataGridView de turnos vigentes<br/>• Solapa GESTIÓN: Módulo administrativo de Clientes y Recursos"]
+        Login["FrmLogin<br/>• Autenticación de Administradores<br/>• Asistencia directa vía WhatsApp: +54 9 223 301-4626"]
+        Principal["FrmPrincipal - Navegación por Solapas<br/>• Solapa CONTROL: Registro operativo y tarifas<br/>• Solapa RESERVAS: Grilla DataGridView de turnos vigentes<br/>• Solapa GESTIÓN: Módulo de Clientes y Recursos"]
     end
 
-    subgraph BLL ["Capa de Negocio y Dominio (POO C#)"]
+    subgraph BLL ["Capa de Negocio y Dominio - POO C#"]
         direction TB
-        Gestora["GestoraCoworking<br/>• Colecciones en memoria List(Reserva)<br/>• Consultas y filtrado dinámico con LINQ"]
-        Modelos["Modelos del Dominio<br/>• IReservable (Interfaz formal de reserva)<br/>• Recurso (Abstracta) ➔ Sala, OficinaPrivada, PuestoTrabajo<br/>• Polimorfismo en CalcularCosto(horas)<br/>• Cliente · Reserva · EstadoReserva (Enum)"]
+        Gestora["GestoraCoworking<br/>• Colecciones en memoria List de Reservas<br/>• Consultas y filtrado dinámico con LINQ"]
+        Modelos["Modelos del Dominio<br/>• IReservable: Interfaz formal de reserva<br/>• Recurso abstracta -> Sala, OficinaPrivada, PuestoTrabajo<br/>• Polimorfismo en método CalcularCosto<br/>• Cliente, Reserva, EstadoReserva"]
     end
 
-    subgraph DAL ["Capa de Acceso a Datos y Conexión (DAO)"]
+    subgraph DAL ["Capa de Acceso a Datos y Conexión - DAO"]
         direction TB
         DAO["GestorDAO<br/>• Mapeo objeto-relacional y comandos parametrizados<br/>• Consumo de Stored Procedures<br/>• Captura controlada de error SIGNAL 45000"]
-        Conexion["Conexion.cs<br/>• Conexión centralizada MySqlConnection<br/>• Gestión segura de recursos con bloques using<br/>• Migración a App.config"]
+        Conexion["Conexion.cs<br/>• Conexión centralizada MySqlConnection<br/>• Gestión segura con bloques using<br/>• Cadena en App.config"]
     end
 
-    subgraph DB ["Motor de Base de Datos MySQL (XAMPP - tp_final_db)"]
+    subgraph DB ["Motor de Base de Datos MySQL - XAMPP"]
         direction TB
         SP["Stored Procedures<br/>sp_alta_reserva · sp_cancelar_reserva<br/>sp_alta_cliente · sp_modificar_reserva"]
-        Fn["fn_verificar_disponibilidad<br/>(Validación matemática de intervalos horarios)"]
-        Signal["SIGNAL SQLSTATE '45000'<br/>(Rechazo controlado por superposición)"]
-        Insert["INSERT INTO reservas<br/>(Transacción confirmada - Estado: Confirmada)"]
-        Trigger["trg_auditoria_reservas<br/>(Trigger AFTER UPDATE a tabla auditoria_reservas)"]
+        Fn["fn_verificar_disponibilidad<br/>Validación matemática de intervalos horarios"]
+        Signal["SIGNAL SQLSTATE 45000<br/>Rechazo controlado por superposición"]
+        Insert["INSERT INTO reservas<br/>Transacción confirmada - Estado Confirmada"]
+        Trigger["trg_auditoria_reservas<br/>Trigger AFTER UPDATE a tabla auditoria_reservas"]
         Vistas["Vistas Analíticas<br/>vw_detalle_reservas · vw_resumen_recursos"]
     end
 
@@ -77,7 +77,7 @@ graph TD
     Fn -->|Intervalo Ocupado| Signal
     Fn -->|Intervalo Libre| Insert
 
-    Signal -->|MySqlException capturada (Error 1644)| Principal
+    Signal -->|MySqlException capturada - Error 1644| Principal
     Insert -->|Refresca grilla interactiva| Vistas
     Vistas -->|Puebla DataGridView| Principal
     SP -->|Al registrar cancelación| Trigger
