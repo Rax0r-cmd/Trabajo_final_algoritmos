@@ -36,44 +36,30 @@ El sistema administra integralmente las operaciones de un espacio de trabajo col
 
 El software adopta una **arquitectura en capas** con separación estricta de responsabilidades (SoC), desacoplando la interfaz visual, la lógica de negocio en memoria, el acceso a datos y el motor relacional:
 
+<p align="center">
+  <img src="DB/Diagrama_Arquitectura.png" alt="Arquitectura del Sistema" width="100%" />
+</p>
+
+<details>
+<summary><b>Hacer clic para ver el código del diagrama en Mermaid</b></summary>
+
 ```mermaid
-flowchart LR
-    subgraph UI ["1. Capa de Presentación (UI)"]
-        direction TB
-        Login["<b>FrmLogin</b><br/>• Autenticación de Administradores<br/>• Asistencia directa vía WhatsApp"]
-        Principal["<b>FrmPrincipal</b><br/>• Control: Tarifas y turnos<br/>• Reservas: DataGridView activo<br/>• Gestión: Clientes y Recursos"]
-    end
+flowchart TD
+    UI["<b>1. Capa de Presentación (Windows Forms)</b><br/>• FrmLogin: Autenticación de Administradores y enlace a WhatsApp<br/>• FrmPrincipal: Navegación por Solapas (Control, Reservas y Gestión)<br/>• Grillas interactivas DataGridView para turnos y catálogos"]
 
-    subgraph BLL ["2. Capa de Negocio y Dominio (POO)"]
-        direction TB
-        Gestora["<b>GestoraCoworking</b><br/>• Colecciones List en memoria<br/>• Filtrado y consultas LINQ"]
-        Modelos["<b>Modelos del Dominio</b><br/>• Recurso abstracta -> Sala, Oficina, Puesto<br/>• Polimorfismo en CalcularCosto()<br/>• Interfaz IReservable · Cliente · Reserva"]
-    end
+    BLL["<b>2. Capa de Negocio y Dominio (POO)</b><br/>• GestoraCoworking: Colecciones en memoria y filtros LINQ<br/>• Recurso (Abstracta) -> Sala, OficinaPrivada, PuestoTrabajo<br/>• Polimorfismo en método CalcularCosto(horas)<br/>• Contrato formal IReservable · Cliente · Reserva · Estados"]
 
-    subgraph DAL ["3. Capa de Acceso a Datos (DAO)"]
-        direction TB
-        DAO["<b>GestorDAO</b><br/>• Mapeo objeto-relacional parametrizado<br/>• Ejecución de Stored Procedures<br/>• Tratamiento de error SIGNAL 45000"]
-        Conexion["<b>Conexion.cs</b><br/>• Centralización MySqlConnection<br/>• Ciclo de vida con bloques using<br/>• Cadena de conexión en App.config"]
-    end
+    DAL["<b>3. Capa de Acceso a Datos (DAO)</b><br/>• GestorDAO: Mapeo relacional y comandos parametrizados<br/>• Conexion.cs: Conexión MySqlConnection central con using<br/>• Cadena de conexión externalizada en App.config<br/>• Tratamiento de excepción SIGNAL 45000 (Error 1644)"]
 
-    subgraph DB ["4. Base de Datos Relacional (MySQL)"]
-        direction TB
-        SP["<b>Procedimientos y Funciones</b><br/>• sp_alta_reserva · sp_cancelar_reserva<br/>• fn_verificar_disponibilidad"]
-        Reglas["<b>Reglas y Auditoría</b><br/>• SIGNAL 45000 ante solapamientos<br/>• Trigger trg_auditoria_reservas"]
-        Vistas["<b>Vistas SQL</b><br/>• vw_detalle_reservas<br/>• vw_resumen_recursos"]
-    end
+    DB["<b>4. Base de Datos Relacional (MySQL - tp_final_db)</b><br/>• Stored Procedures: sp_alta_reserva, sp_cancelar_reserva, sp_alta_cliente<br/>• Regla Anti-solapamiento: fn_verificar_disponibilidad y SIGNAL 45000<br/>• Vistas analíticas: vw_detalle_reservas y vw_resumen_recursos<br/>• Trigger inmutable de auditoría: trg_auditoria_reservas"]
 
-    Login -->|Credenciales OK| Principal
-    Principal -->|Consultas LINQ| Gestora
-    Gestora -->|Manipula entidades| Modelos
-    Principal -->|Operaciones CRUD| DAO
-    DAO -->|Solicita conexión| Conexion
-    DAO -->|Ejecuta SP| SP
-    SP -->|Conflicto de horario| Reglas
-    Reglas -->|SIGNAL 45000 - Error 1644| DAO
-    Vistas -->|Lectura de grillas| DAO
-    DAO -->|Puebla DataGridView| Principal
+    UI -->|Consultas y filtrado en memoria| BLL
+    UI -->|Persistencia transaccional y carga de grillas| DAL
+    BLL -->|Entidades del dominio a persistir| DB
+    DAL -->|Ejecución de SP y lectura de vistas SQL| DB
 ```
+
+</details>
 
 ---
 
@@ -126,6 +112,7 @@ git clone git@github.com:Rax0r-cmd/Trabajo_final_algoritmos.git
 │   ├── DB_TPFinal.sql          (Script SQL completo: tablas, vistas, SPs con SIGNAL 45000, función y trigger)
 │   ├── Diagrama_DER.png        (Diagrama Entidad-Relación exportado de MySQL Workbench)
 │   ├── Diagrama_Clases_UML.png (Diagrama de clases simplificado del dominio POO de alta legibilidad)
+│   ├── Diagrama_Arquitectura.png (Diagrama visual de arquitectura en capas del sistema)
 │   └── Diagrama_Editable.mwb   (Modelo editable de MySQL Workbench)
 ├── Documentacion/              (Documentación institucional y académica reglamentaria)
 │   ├── TP_Final_AlgoritmosII_Grupo2.docx  (Documento Word integrador oficial según normas institucionales)
