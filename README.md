@@ -37,50 +37,42 @@ El sistema administra integralmente las operaciones de un espacio de trabajo col
 El software adopta una **arquitectura en capas** con separación estricta de responsabilidades (SoC), desacoplando la interfaz visual, la lógica de negocio en memoria, el acceso a datos y el motor relacional:
 
 ```mermaid
-graph TD
-    subgraph UI ["Capa de Presentación - Windows Forms"]
+flowchart LR
+    subgraph UI ["1. Capa de Presentación (UI)"]
         direction TB
-        Login["FrmLogin<br/>• Autenticación de Administradores<br/>• Asistencia directa vía WhatsApp: +54 9 223 301-4626"]
-        Principal["FrmPrincipal - Navegación por Solapas<br/>• Solapa CONTROL: Registro operativo y tarifas<br/>• Solapa RESERVAS: Grilla DataGridView de turnos vigentes<br/>• Solapa GESTIÓN: Módulo de Clientes y Recursos"]
+        Login["<b>FrmLogin</b><br/>• Autenticación de Administradores<br/>• Asistencia directa vía WhatsApp"]
+        Principal["<b>FrmPrincipal</b><br/>• Control: Tarifas y turnos<br/>• Reservas: DataGridView activo<br/>• Gestión: Clientes y Recursos"]
     end
 
-    subgraph BLL ["Capa de Negocio y Dominio - POO C#"]
+    subgraph BLL ["2. Capa de Negocio y Dominio (POO)"]
         direction TB
-        Gestora["GestoraCoworking<br/>• Colecciones en memoria List de Reservas<br/>• Consultas y filtrado dinámico con LINQ"]
-        Modelos["Modelos del Dominio<br/>• IReservable: Interfaz formal de reserva<br/>• Recurso abstracta -> Sala, OficinaPrivada, PuestoTrabajo<br/>• Polimorfismo en método CalcularCosto<br/>• Cliente, Reserva, EstadoReserva"]
+        Gestora["<b>GestoraCoworking</b><br/>• Colecciones List en memoria<br/>• Filtrado y consultas LINQ"]
+        Modelos["<b>Modelos del Dominio</b><br/>• Recurso abstracta -> Sala, Oficina, Puesto<br/>• Polimorfismo en CalcularCosto()<br/>• Interfaz IReservable · Cliente · Reserva"]
     end
 
-    subgraph DAL ["Capa de Acceso a Datos y Conexión - DAO"]
+    subgraph DAL ["3. Capa de Acceso a Datos (DAO)"]
         direction TB
-        DAO["GestorDAO<br/>• Mapeo objeto-relacional y comandos parametrizados<br/>• Consumo de Stored Procedures<br/>• Captura controlada de error SIGNAL 45000"]
-        Conexion["Conexion.cs<br/>• Conexión centralizada MySqlConnection<br/>• Gestión segura con bloques using<br/>• Cadena en App.config"]
+        DAO["<b>GestorDAO</b><br/>• Mapeo objeto-relacional parametrizado<br/>• Ejecución de Stored Procedures<br/>• Tratamiento de error SIGNAL 45000"]
+        Conexion["<b>Conexion.cs</b><br/>• Centralización MySqlConnection<br/>• Ciclo de vida con bloques using<br/>• Cadena de conexión en App.config"]
     end
 
-    subgraph DB ["Motor de Base de Datos MySQL - XAMPP"]
+    subgraph DB ["4. Base de Datos Relacional (MySQL)"]
         direction TB
-        SP["Stored Procedures<br/>sp_alta_reserva · sp_cancelar_reserva<br/>sp_alta_cliente · sp_modificar_reserva"]
-        Fn["fn_verificar_disponibilidad<br/>Validación matemática de intervalos horarios"]
-        Signal["SIGNAL SQLSTATE 45000<br/>Rechazo controlado por superposición"]
-        Insert["INSERT INTO reservas<br/>Transacción confirmada - Estado Confirmada"]
-        Trigger["trg_auditoria_reservas<br/>Trigger AFTER UPDATE a tabla auditoria_reservas"]
-        Vistas["Vistas Analíticas<br/>vw_detalle_reservas · vw_resumen_recursos"]
+        SP["<b>Procedimientos y Funciones</b><br/>• sp_alta_reserva · sp_cancelar_reserva<br/>• fn_verificar_disponibilidad"]
+        Reglas["<b>Reglas y Auditoría</b><br/>• SIGNAL 45000 ante solapamientos<br/>• Trigger trg_auditoria_reservas"]
+        Vistas["<b>Vistas SQL</b><br/>• vw_detalle_reservas<br/>• vw_resumen_recursos"]
     end
 
-    Login -->|Credenciales validadas| Principal
-    Principal -->|Consultas y filtros en memoria| Gestora
-    Gestora -->|Manipula entidades polimórficas| Modelos
-    Principal -->|Persistencia transaccional| DAO
+    Login -->|Credenciales OK| Principal
+    Principal -->|Consultas LINQ| Gestora
+    Gestora -->|Manipula entidades| Modelos
+    Principal -->|Operaciones CRUD| DAO
     DAO -->|Solicita conexión| Conexion
-    Conexion -->|Ejecuta procedimientos| SP
-
-    SP -->|Evalúa superposición horaria| Fn
-    Fn -->|Intervalo Ocupado| Signal
-    Fn -->|Intervalo Libre| Insert
-
-    Signal -->|MySqlException capturada - Error 1644| Principal
-    Insert -->|Refresca grilla interactiva| Vistas
-    Vistas -->|Puebla DataGridView| Principal
-    SP -->|Al registrar cancelación| Trigger
+    DAO -->|Ejecuta SP| SP
+    SP -->|Conflicto de horario| Reglas
+    Reglas -->|SIGNAL 45000 - Error 1644| DAO
+    Vistas -->|Lectura de grillas| DAO
+    DAO -->|Puebla DataGridView| Principal
 ```
 
 ---
