@@ -1,3 +1,11 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="src/Img/Logo/Logo_coWorking_con_lema_turquesa_y_blanco.png">
+    <source media="(prefers-color-scheme: light)" srcset="src/Img/Logo/Logo_coWorking_para_fondo_blanco.png">
+    <img alt="Logo Coworking" src="src/Img/Logo/Logo_coWorking_para_fondo_blanco.png" width="450" />
+  </picture>
+</p>
+
 # Sistema de Gestión de Coworking y Reservas
 
 <p align="left">
