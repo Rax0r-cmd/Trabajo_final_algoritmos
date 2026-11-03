@@ -36,30 +36,21 @@ El sistema administra integralmente las operaciones de un espacio de trabajo col
 
 El software adopta una **arquitectura en capas** con separación estricta de responsabilidades (SoC), desacoplando la interfaz visual, la lógica de negocio en memoria, el acceso a datos y el motor relacional:
 
-<p align="center">
-  <img src="DB/Diagrama_Arquitectura.png" alt="Arquitectura del Sistema" width="100%" />
-</p>
-
-<details>
-<summary><b>Hacer clic para ver el código del diagrama en Mermaid</b></summary>
-
 ```mermaid
 flowchart TD
-    UI["<b>1. Capa de Presentación (Windows Forms)</b><br/>• FrmLogin: Autenticación de Administradores y enlace a WhatsApp<br/>• FrmPrincipal: Navegación por Solapas (Control, Reservas y Gestión)<br/>• Grillas interactivas DataGridView para turnos y catálogos"]
+    UI["<div style='min-width:380px;text-align:left;padding:6px;'><b>1. Capa de Presentación (Windows Forms)</b><br/>• FrmLogin: Autenticación de Administradores y enlace a WhatsApp<br/>• FrmPrincipal: Navegación por Solapas (Control, Reservas y Gestión)<br/>• Grillas interactivas DataGridView para turnos y catálogos</div>"]
 
-    BLL["<b>2. Capa de Negocio y Dominio (POO)</b><br/>• GestoraCoworking: Colecciones en memoria y filtros LINQ<br/>• Recurso (Abstracta) -> Sala, OficinaPrivada, PuestoTrabajo<br/>• Polimorfismo en método CalcularCosto(horas)<br/>• Contrato formal IReservable · Cliente · Reserva · Estados"]
+    BLL["<div style='min-width:340px;text-align:left;padding:6px;'><b>2. Capa de Negocio y Dominio (POO)</b><br/>• GestoraCoworking: Colecciones en memoria y filtros LINQ<br/>• Recurso (Abstracta) -> Sala, OficinaPrivada, PuestoTrabajo<br/>• Polimorfismo en método CalcularCosto(horas)<br/>• Contrato formal IReservable · Cliente · Reserva · Estados</div>"]
 
-    DAL["<b>3. Capa de Acceso a Datos (DAO)</b><br/>• GestorDAO: Mapeo relacional y comandos parametrizados<br/>• Conexion.cs: Conexión MySqlConnection central con using<br/>• Cadena de conexión externalizada en App.config<br/>• Tratamiento de excepción SIGNAL 45000 (Error 1644)"]
+    DAL["<div style='min-width:340px;text-align:left;padding:6px;'><b>3. Capa de Acceso a Datos (DAO)</b><br/>• GestorDAO: Mapeo relacional y comandos parametrizados<br/>• Conexion.cs: Conexión MySqlConnection central con using<br/>• Cadena de conexión externalizada en App.config<br/>• Tratamiento de excepción SIGNAL 45000 (Error 1644)</div>"]
 
-    DB["<b>4. Base de Datos Relacional (MySQL - tp_final_db)</b><br/>• Stored Procedures: sp_alta_reserva, sp_cancelar_reserva, sp_alta_cliente<br/>• Regla Anti-solapamiento: fn_verificar_disponibilidad y SIGNAL 45000<br/>• Vistas analíticas: vw_detalle_reservas y vw_resumen_recursos<br/>• Trigger inmutable de auditoría: trg_auditoria_reservas"]
+    DB["<div style='min-width:380px;text-align:left;padding:6px;'><b>4. Base de Datos Relacional (MySQL - tp_final_db)</b><br/>• Stored Procedures: sp_alta_reserva, sp_cancelar_reserva, sp_alta_cliente<br/>• Regla Anti-solapamiento: fn_verificar_disponibilidad y SIGNAL 45000<br/>• Vistas analíticas: vw_detalle_reservas y vw_resumen_recursos<br/>• Trigger inmutable de auditoría: trg_auditoria_reservas</div>"]
 
     UI -->|Consultas y filtrado en memoria| BLL
     UI -->|Persistencia transaccional y carga de grillas| DAL
     BLL -->|Entidades del dominio a persistir| DB
     DAL -->|Ejecución de SP y lectura de vistas SQL| DB
 ```
-
-</details>
 
 ---
 
@@ -112,7 +103,6 @@ git clone git@github.com:Rax0r-cmd/Trabajo_final_algoritmos.git
 │   ├── DB_TPFinal.sql          (Script SQL completo: tablas, vistas, SPs con SIGNAL 45000, función y trigger)
 │   ├── Diagrama_DER.png        (Diagrama Entidad-Relación exportado de MySQL Workbench)
 │   ├── Diagrama_Clases_UML.png (Diagrama de clases simplificado del dominio POO de alta legibilidad)
-│   ├── Diagrama_Arquitectura.png (Diagrama visual de arquitectura en capas del sistema)
 │   └── Diagrama_Editable.mwb   (Modelo editable de MySQL Workbench)
 ├── Documentacion/              (Documentación institucional y académica reglamentaria)
 │   ├── TP_Final_AlgoritmosII_Grupo2.docx  (Documento Word integrador oficial según normas institucionales)
