@@ -356,6 +356,8 @@ Adecuación final a las Pautas de Presentación de la Cátedra (Noviembre 2026):
     en los bordes, separando bien GestoraCoworking de GestorDAO.
   * Acomodamos la portada separando carrera y materia en renglones distintos,
     y ajustamos los puntos y números del índice alineados a la derecha.
+  * Actualizamos el README del repositorio con el diagrama Mermaid de
+    arquitectura completo (capas UI, BLL, DAO, MySQL con SIGNAL 45000).
   * Incorporamos la sección final de Referencias Bibliográficas con
     normas APA 7.ª edición y el checklist de control previo a la entrega.
   * Generamos el entregable único del grupo en PDF:
