@@ -30,15 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPrincipal));
             this.tabPageGestion = new System.Windows.Forms.TabPage();
-            this.rbRecursos = new System.Windows.Forms.RadioButton();
-            this.rbUsuario = new System.Windows.Forms.RadioButton();
             this.lblGestionTitulo = new System.Windows.Forms.Label();
             this.btnEliminarUsuario = new System.Windows.Forms.Button();
             this.btnModificarUsuario = new System.Windows.Forms.Button();
             this.btnCrearUsuario = new System.Windows.Forms.Button();
             this.dgvClientes = new System.Windows.Forms.DataGridView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.dgvRecursos = new System.Windows.Forms.DataGridView();
             this.TbpDashboard = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -65,10 +62,11 @@
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ingresarComoAdministradorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cerrarSesionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.dgvRecursos = new System.Windows.Forms.DataGridView();
             this.tabPageGestion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).BeginInit();
             this.TbpDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.PnlBotones.SuspendLayout();
@@ -78,53 +76,27 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPageGestion
             // 
             this.tabPageGestion.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPageGestion.BackgroundImage")));
             this.tabPageGestion.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.tabPageGestion.Controls.Add(this.rbRecursos);
-            this.tabPageGestion.Controls.Add(this.rbUsuario);
             this.tabPageGestion.Controls.Add(this.lblGestionTitulo);
             this.tabPageGestion.Controls.Add(this.btnEliminarUsuario);
             this.tabPageGestion.Controls.Add(this.btnModificarUsuario);
             this.tabPageGestion.Controls.Add(this.btnCrearUsuario);
             this.tabPageGestion.Controls.Add(this.dgvClientes);
             this.tabPageGestion.Controls.Add(this.pictureBox1);
-            this.tabPageGestion.Controls.Add(this.dgvRecursos);
             this.tabPageGestion.Location = new System.Drawing.Point(4, 27);
             this.tabPageGestion.Name = "tabPageGestion";
             this.tabPageGestion.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageGestion.Size = new System.Drawing.Size(1022, 596);
             this.tabPageGestion.TabIndex = 1;
-            this.tabPageGestion.Text = "GESTION";
+            this.tabPageGestion.Text = "CLIENTES";
             this.tabPageGestion.UseVisualStyleBackColor = true;
-            // 
-            // rbRecursos
-            // 
-            this.rbRecursos.AutoSize = true;
-            this.rbRecursos.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rbRecursos.Location = new System.Drawing.Point(127, 45);
-            this.rbRecursos.Name = "rbRecursos";
-            this.rbRecursos.Size = new System.Drawing.Size(88, 22);
-            this.rbRecursos.TabIndex = 16;
-            this.rbRecursos.TabStop = true;
-            this.rbRecursos.Text = "Recursos";
-            this.rbRecursos.UseVisualStyleBackColor = true;
-            this.rbRecursos.CheckedChanged += new System.EventHandler(this.rbRecursos_CheckedChanged);
-            // 
-            // rbUsuario
-            // 
-            this.rbUsuario.AutoSize = true;
-            this.rbUsuario.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rbUsuario.Location = new System.Drawing.Point(24, 45);
-            this.rbUsuario.Name = "rbUsuario";
-            this.rbUsuario.Size = new System.Drawing.Size(84, 22);
-            this.rbUsuario.TabIndex = 15;
-            this.rbUsuario.TabStop = true;
-            this.rbUsuario.Text = "Usuarios";
-            this.rbUsuario.UseVisualStyleBackColor = true;
             // 
             // lblGestionTitulo
             // 
@@ -166,6 +138,7 @@
             this.btnCrearUsuario.TabIndex = 11;
             this.btnCrearUsuario.Text = "Crear Usuario";
             this.btnCrearUsuario.UseVisualStyleBackColor = true;
+            this.btnCrearUsuario.Click += new System.EventHandler(this.btnCrearUsuario_Click);
             // 
             // dgvClientes
             // 
@@ -173,7 +146,7 @@
             this.dgvClientes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvClientes.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.dgvClientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvClientes.Location = new System.Drawing.Point(24, 91);
+            this.dgvClientes.Location = new System.Drawing.Point(24, 90);
             this.dgvClientes.MultiSelect = false;
             this.dgvClientes.Name = "dgvClientes";
             this.dgvClientes.ReadOnly = true;
@@ -193,23 +166,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
-            // 
-            // dgvRecursos
-            // 
-            this.dgvRecursos.AllowUserToAddRows = false;
-            this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvRecursos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvRecursos.Location = new System.Drawing.Point(24, 91);
-            this.dgvRecursos.MultiSelect = false;
-            this.dgvRecursos.Name = "dgvRecursos";
-            this.dgvRecursos.ReadOnly = true;
-            this.dgvRecursos.RowHeadersWidth = 51;
-            this.dgvRecursos.RowTemplate.Height = 24;
-            this.dgvRecursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvRecursos.Size = new System.Drawing.Size(974, 387);
-            this.dgvRecursos.TabIndex = 17;
-            this.dgvRecursos.Visible = false;
             // 
             // TbpDashboard
             // 
@@ -389,6 +345,7 @@
             this.tabControl1.Controls.Add(this.TbpDashboard);
             this.tabControl1.Controls.Add(this.tabPageGestion);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
             this.tabControl1.Name = "tabControl1";
@@ -491,6 +448,34 @@
             this.cerrarSesionToolStripMenuItem.Text = "Cerrar sesión";
             this.cerrarSesionToolStripMenuItem.Click += new System.EventHandler(this.cerrarSesionToolStripMenuItem_Click);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.dgvRecursos);
+            this.tabPage1.Location = new System.Drawing.Point(4, 27);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1022, 596);
+            this.tabPage1.TabIndex = 4;
+            this.tabPage1.Text = "RECURSOS";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // dgvRecursos
+            // 
+            this.dgvRecursos.AllowUserToAddRows = false;
+            this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvRecursos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvRecursos.Location = new System.Drawing.Point(24, 105);
+            this.dgvRecursos.MultiSelect = false;
+            this.dgvRecursos.Name = "dgvRecursos";
+            this.dgvRecursos.ReadOnly = true;
+            this.dgvRecursos.RowHeadersWidth = 51;
+            this.dgvRecursos.RowTemplate.Height = 24;
+            this.dgvRecursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvRecursos.Size = new System.Drawing.Size(974, 387);
+            this.dgvRecursos.TabIndex = 18;
+            this.dgvRecursos.Visible = false;
+            // 
             // FrmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -509,10 +494,8 @@
             this.Text = "CoWorking - DASHBOARD";
             this.Load += new System.EventHandler(this.FrmPrincipal_Load);
             this.tabPageGestion.ResumeLayout(false);
-            this.tabPageGestion.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).EndInit();
             this.TbpDashboard.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.PnlBotones.ResumeLayout(false);
@@ -523,6 +506,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -558,12 +543,11 @@
         private System.Windows.Forms.Button btnCancelar;
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Label lblGestionTitulo;
-        private System.Windows.Forms.RadioButton rbRecursos;
-        private System.Windows.Forms.RadioButton rbUsuario;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnCancelarReserva;
         private System.Windows.Forms.Button btnModificarReserva;
+        private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.DataGridView dgvRecursos;
     }
 }

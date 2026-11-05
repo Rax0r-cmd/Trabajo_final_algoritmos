@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using MySql.Data.Types;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,6 +30,13 @@ namespace SistemaDeGestion.Formularios
             Configuraciones();
         }
 
+        //=============================================================
+        //Conexion con DAO
+        //=============================================================
+
+        //=============================================================
+        //ToolStrip, configuración de solapas con el Login de Admin
+        //=============================================================
         private void ingresarComoAdministradorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (FrmLogin login = new FrmLogin())
@@ -38,6 +47,18 @@ namespace SistemaDeGestion.Formularios
                 }
             }
         }
+        private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult confirmacion = MessageBox.Show("Desea cerrar sesión?", "aviso...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmacion == DialogResult.Yes)
+            {
+                OcultarSolapasAdmin();
+            }
+        }
+
+        //=============================================================
+        //Configuraciónes generales
+        //=============================================================
         public void MostrarSolapasAdmin()
         {
             // Si no está la solapa "Gestión", la agrega entre las solapas del tabIndex
@@ -58,34 +79,11 @@ namespace SistemaDeGestion.Formularios
         public void Configuraciones()
         {
             OcultarSolapasAdmin();
-
-            rbUsuario.Checked = true;
         }
 
-        private void rbRecursos_CheckedChanged(object sender, EventArgs e)
+        private void btnCrearUsuario_Click(object sender, EventArgs e)
         {
-            // el if hace que el DGV de clientes y recursos se intercalen cuando uno modifica
-            if (rbRecursos.Checked == true)
-            {
-                lblGestionTitulo.Text = "Recursos";
-                dgvRecursos.Visible = true;
-                dgvClientes.Visible = false;
-            }
-            else
-            {
-                lblGestionTitulo.Text = "Usuarios";
-                dgvRecursos.Visible = false;
-                dgvClientes.Visible = true;
-            }
-        }
 
-        private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult confirmacion = MessageBox.Show("Desea cerrar sesión?", "aviso...", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if(confirmacion == DialogResult.Yes)
-            {
-                OcultarSolapasAdmin();
-            }
         }
     }
 }
