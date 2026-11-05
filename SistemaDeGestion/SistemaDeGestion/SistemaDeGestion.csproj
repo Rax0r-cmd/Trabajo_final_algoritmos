@@ -120,6 +120,7 @@
     <Compile Include="Modelos\Cliente.cs" />
     <Compile Include="Modelos\Reserva.cs" />
     <Compile Include="Gestoras\GestoraCoworking.cs" />
+    <Compile Include="Gestoras\GestorDAO.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

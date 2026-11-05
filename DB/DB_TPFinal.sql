@@ -148,36 +148,51 @@ group by rec.id_recurso, rec.nombre, t.nombre_tipo, rec.precio_por_hora;
 
 
 -- --------------------------------------------------
--- FUNCION: Para saber si un lugar esta libre
+-- FUNCION: Para saber si un lugar esta libre (calcula solapamiento de horarios)
 -- --------------------------------------------------
 
 delimiter //
 
 create function fn_verificar_disponibilidad(
     p_id_recurso int,
-    p_fecha datetime
+    p_fecha datetime,
+    p_horas int
 ) 
 returns int
 deterministic
 reads sql data
 begin
     declare v_cantidad int default 0;
+    declare v_duracion int;
+    declare v_fecha_fin datetime;
     
-    select
-		  count(*) into v_cantidad
-    from 
-		reservas
-    where id_recurso = p_id_recurso and fecha_reserva = p_fecha and estado = 'Confirmada';
+    -- si mandan horas nulas o <= 0, asumimos 1 hora por defecto
+    if p_horas is null or p_horas <= 0 then
+        set v_duracion = 1;
+    else
+        set v_duracion = p_horas;
+    end if;
+
+    set v_fecha_fin = date_add(p_fecha, interval v_duracion hour);
+    
+    -- Chequeo matematico de superposicion de intervalos:
+    -- (nuevo_inicio < fin_existente) AND (nuevo_fin > inicio_existente)
+    select count(*) into v_cantidad
+    from reservas
+    where id_recurso = p_id_recurso 
+      and estado = 'Confirmada'
+      and p_fecha < date_add(fecha_reserva, interval horas hour)
+      and v_fecha_fin > fecha_reserva;
       
     if v_cantidad = 0 then
-        return 1;
+        return 1; -- 1: Libre
     else
-        return 0;
+        return 0; -- 0: Ocupado (hay solapamiento)
     end if;
 end //
 
 delimiter ;
--- la funcion se fija si hay reservas en ese horario, si no hay devuelve 1 (libre) y si hay devuelve 0 (ocupado) ENTENDE VO?
+-- la funcion se fija si hay reservas que se superpongan en ese rango de horas: 1 (libre), 0 (ocupado)
 
 
 -- --------------------------------------------------
@@ -260,7 +275,7 @@ begin
 end //
 -- busca un recurso por su id y le cambia los datos o el precio
 
--- para guardar una reserva nueva, si el lugar ya esta ocupado no te deja y tira cartel de error
+-- para guardar una reserva nueva validando datos y disponibilidad sin solapamientos
 create procedure sp_alta_reserva(
     in p_id_cliente int,
     in p_id_recurso int,
@@ -277,34 +292,114 @@ begin
         resignal;
     end;
 
-    -- nos fijamos si esta libre llamando a la funcion
-    set v_disponible = fn_verificar_disponibilidad(p_id_recurso, p_fecha);
+    -- Validacion 1: Cantidad de horas valida
+    if p_horas is null or p_horas <= 0 then
+        signal sqlstate '45000'
+            set message_text = 'La cantidad de horas de la reserva debe ser mayor a 0.';
+    end if;
 
-    -- si da 0 significa que no se puede reservar ese dia y hora
+    -- Validacion 2: Total valido
+    if p_total is null or p_total < 0 then
+        signal sqlstate '45000'
+            set message_text = 'El importe total de la reserva no puede ser negativo.';
+    end if;
+
+    -- Validacion 3: Chequear que el cliente exista
+    if not exists (select 1 from clientes where id_cliente = p_id_cliente) then
+        signal sqlstate '45000'
+            set message_text = 'El cliente especificado no existe en el sistema.';
+    end if;
+
+    -- Validacion 4: Chequear que el recurso exista
+    if not exists (select 1 from recursos where id_recurso = p_id_recurso) then
+        signal sqlstate '45000'
+            set message_text = 'El recurso especificado no existe en el sistema.';
+    end if;
+
+    -- nos fijamos si esta libre en todo el intervalo llamando a la funcion con p_horas
+    set v_disponible = fn_verificar_disponibilidad(p_id_recurso, p_fecha, p_horas);
+
+    -- si da 0 significa que se superpone con otra reserva confirmada
     if v_disponible = 0 then
         signal sqlstate '45000'
-            set message_text = 'El recurso ya se encuentra reservado en ese dia y horario.';
+            set message_text = 'El recurso ya se encuentra reservado u ocupado en ese intervalo de horario.';
     else
         insert into reservas (id_cliente, id_recurso, fecha_reserva, horas, total, estado)
         values (p_id_cliente, p_id_recurso, p_fecha, p_horas, p_total, 'Confirmada');
     end if;
 end //
--- chequea si el lugar esta libre con la funcion, si esta libre guarda la reserva y si esta ocupado tira error 45000
+-- chequea si el lugar esta libre en todo el intervalo; si esta libre inserta, si hay choque tira error 45000
+
+-- para modificar fecha u horario de una reserva existente verificando disponibilidad
+create procedure sp_modificar_reserva(
+    in p_id_reserva int,
+    in p_fecha datetime,
+    in p_horas int,
+    in p_total decimal(10,2)
+)
+begin
+    declare v_id_recurso int;
+    declare v_colision int default 0;
+    declare v_fecha_fin datetime;
+
+    -- chequeamos que la reserva exista y obtenemos su recurso
+    select id_recurso into v_id_recurso from reservas where id_reserva = p_id_reserva;
+
+    if v_id_recurso is null then
+        signal sqlstate '45000'
+            set message_text = 'La reserva que intentas modificar no existe.';
+    end if;
+
+    if p_horas is null or p_horas <= 0 then
+        signal sqlstate '45000'
+            set message_text = 'La cantidad de horas debe ser mayor a 0.';
+    end if;
+
+    if p_total is null or p_total < 0 then
+        signal sqlstate '45000'
+            set message_text = 'El importe total no puede ser negativo.';
+    end if;
+
+    set v_fecha_fin = date_add(p_fecha, interval p_horas hour);
+
+    -- verificar colision con OTRA reserva confirmada (excluyendo la misma reserva que editamos)
+    select count(*) into v_colision
+    from reservas
+    where id_recurso = v_id_recurso
+      and id_reserva != p_id_reserva
+      and estado = 'Confirmada'
+      and p_fecha < date_add(fecha_reserva, interval horas hour)
+      and v_fecha_fin > fecha_reserva;
+
+    if v_colision > 0 then
+        signal sqlstate '45000'
+            set message_text = 'No se puede modificar la reserva: el recurso ya se encuentra ocupado en ese nuevo horario.';
+    else
+        update reservas
+        set fecha_reserva = p_fecha,
+            horas = p_horas,
+            total = p_total
+        where id_reserva = p_id_reserva;
+    end if;
+end //
+-- modifica la reserva validando que el nuevo horario no choque con otras reservas
 
 -- para cancelar una reserva que estaba hecha
 create procedure sp_cancelar_reserva(
     in p_id_reserva int
 )
 begin
-    declare v_existe int default 0;
+    declare v_estado varchar(20);
 
-    -- chequeamos que la reserva exista
-    select
-		count(*) into v_existe from reservas where id_reserva = p_id_reserva;
+    -- chequeamos que la reserva exista y su estado actual
+    select estado into v_estado from reservas where id_reserva = p_id_reserva;
 
-    if v_existe = 0 then
+    if v_estado is null then
         signal sqlstate '45000'
             set message_text = 'La reserva que intentas cancelar no existe.';
+    elseif v_estado = 'Cancelada' then
+        signal sqlstate '45000'
+            set message_text = 'La reserva seleccionada ya fue cancelada previamente.';
     else
         update reservas
         set estado = 'Cancelada'
