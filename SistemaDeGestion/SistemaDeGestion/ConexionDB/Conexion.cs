@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +20,16 @@ namespace SistemaDeGestion.ConexionDB
         "pwd=";
 
         //Este metodo lo que hace es devolver el objeto mysqlconnection listo para usar.
-        //Aca es donde se crea la conexion, pero se abre  con .Open() donde lo necesitemos usar en cualquier parte del proyecto.
+        //Aca es donde se crea la conexion, pero se abre con .Open() donde lo necesitemos usar en cualquier parte del proyecto.
         public static MySqlConnection CrearConexion()
         {
-            return new MySqlConnection(cadenaConexion);
-
+            // Lee automáticamente el connectionString definido en el App.config con fallback a cadenaConexion
+            string cadena = ConfigurationManager.ConnectionStrings["ConexionDB"]?.ConnectionString;
+            if (string.IsNullOrEmpty(cadena))
+            {
+                cadena = cadenaConexion;
+            }
+            return new MySqlConnection(cadena);
         }
     }
 

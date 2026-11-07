@@ -257,6 +257,14 @@ Paso 3.0: Implementación de la capa DAO (GestorDAO.cs)
   ListarResumenRecursos).
 - Se incluyó GestorDAO.cs en el proyecto SistemaDeGestion.csproj.
 
+Paso 3.1: Modularización de la capa DAO (ClienteDAO, RecursoDAO, ReservaDAO)
+- Se modularizó la persistencia separando las consultas en clases DAO dedicadas dentro de la carpeta DAO/ respetando el Principio de Responsabilidad Única (SRP):
+    * ClienteDAO.cs: Altas (sp_alta_cliente), modificaciones (sp_modificar_cliente), bajas parametrizadas y listado (ListarClientes). Incluye sobrecargas para tipos primitivos y objetos Cliente, además de búsqueda por ID (ObtenerPorId).
+    * RecursoDAO.cs: Altas (sp_alta_recurso), modificaciones (sp_modificar_recurso), bajas y listados con INNER JOIN (ListarRecursos y ListarTiposRecurso). Mapeo polimórfico para instanciar Sala, OficinaPrivada o PuestoTrabajo.
+    * ReservaDAO.cs: Altas con validación de solapamiento (sp_alta_reserva), modificaciones (sp_modificar_reserva), cancelaciones con trigger de auditoría (sp_cancelar_reserva), vistas (vw_detalle_reservas, vw_resumen_recursos), cursor de recaudación (sp_calcular_total_recaudado_cursor) y función de disponibilidad (fn_verificar_disponibilidad).
+- Se refactorizó GestorDAO.cs bajo el patrón Fachada (Facade), delegando en las nuevas clases especializadas para garantizar retrocompatibilidad total con el código existente.
+- Se agregaron ClienteDAO.cs, RecursoDAO.cs y ReservaDAO.cs al archivo de proyecto SistemaDeGestion.csproj.
+
 a continuación:
     - Conectar los botones del FrmPrincipal con los métodos de GestorDAO.
     - Cargar los DataGridView (dgvClientes y dgvRecursos) con ListarClientes()

@@ -121,6 +121,9 @@
     <Compile Include="Modelos\Reserva.cs" />
     <Compile Include="Gestoras\GestoraCoworking.cs" />
     <Compile Include="Gestoras\GestorDAO.cs" />
+    <Compile Include="DAO\ClienteDAO.cs" />
+    <Compile Include="DAO\RecursoDAO.cs" />
+    <Compile Include="DAO\ReservaDAO.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
