@@ -6,11 +6,6 @@ using SistemaDeGestion.Modelos;
 
 namespace SistemaDeGestion.DAO
 {
-    /// <summary>
-    /// Capa de acceso a datos (DAO - Data Access Object) para los recursos físicos del coworking.
-    /// Centraliza las operaciones sobre las tablas 'recursos' y 'tipo_recursos',
-    /// invocando los procedimientos 'sp_alta_recurso' y 'sp_modificar_recurso'.
-    /// </summary>
     public class RecursoDAO
     {
         public RecursoDAO()
@@ -21,20 +16,6 @@ namespace SistemaDeGestion.DAO
         // ALTAS (Procedimiento: sp_alta_recurso)
         // =========================================================================
 
-        /// <summary>
-        /// Agrega un recurso (sala de reuniones, oficina privada o puesto de trabajo)
-        /// ejecutando el procedimiento almacenado 'sp_alta_recurso'.
-        /// Los campos específicos (mobiliario, sillas, categoría) admiten valores nulos según el tipo de recurso.
-        /// </summary>
-        /// <param name="nombre">Nombre identificatorio del recurso.</param>
-        /// <param name="descripcion">Descripción detallada o equipamiento.</param>
-        /// <param name="ubicacion">Ubicación física (piso, sector, box).</param>
-        /// <param name="precio">Tarifa por hora del recurso.</param>
-        /// <param name="mobiliarioIncluido">Aplica a Oficina Privada (true/false) o null.</param>
-        /// <param name="cantidadSillas">Aplica a Sala de Reuniones o null.</param>
-        /// <param name="nroCategoria">Aplica a Puesto de Trabajo (1, 2 o 3) o null.</param>
-        /// <param name="idTipoRecurso">1: Sala de Reuniones, 2: Oficina Privada, 3: Puesto de Trabajo.</param>
-        /// <returns>True si se insertó con éxito, False en caso contrario.</returns>
         public bool AgregarRecurso(string nombre, string descripcion, string ubicacion, decimal precio,
                                    bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
@@ -58,11 +39,7 @@ namespace SistemaDeGestion.DAO
             }
         }
 
-        /// <summary>
-        /// Sobrecarga polimórfica que permite agregar cualquier subtipo de Recurso (Sala, OficinaPrivada, PuestoTrabajo).
-        /// </summary>
-        /// <param name="recurso">Instancia polimórfica derivada de Recurso.</param>
-        /// <returns>True si se insertó con éxito, False en caso contrario.</returns>
+        
         public bool AgregarRecurso(Recurso recurso)
         {
             if (recurso == null) throw new ArgumentNullException(nameof(recurso));
@@ -88,18 +65,14 @@ namespace SistemaDeGestion.DAO
                                   mobiliario, sillas, categoria, recurso.IdTipoRecurso);
         }
 
-        /// <summary>
-        /// Alias abreviado de AgregarRecurso.
-        /// </summary>
+        
         public bool Agregar(string nombre, string descripcion, string ubicacion, decimal precio,
                             bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
             return AgregarRecurso(nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
         }
 
-        /// <summary>
-        /// Alias abreviado de AgregarRecurso con modelo.
-        /// </summary>
+        
         public bool Agregar(Recurso recurso)
         {
             return AgregarRecurso(recurso);
@@ -109,10 +82,8 @@ namespace SistemaDeGestion.DAO
         // MODIFICACIONES (Procedimiento: sp_modificar_recurso)
         // =========================================================================
 
-        /// <summary>
-        /// Modifica un recurso existente ejecutando el procedimiento almacenado 'sp_modificar_recurso'.
-        /// </summary>
-        public bool ModificarRecurso(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precio,
+        
+        public bool ModificarRecurso(string nombre, string descripcion, string ubicacion, decimal precio,
                                      bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
             using (MySqlConnection conexion = Conexion.CrearConexion())
@@ -121,7 +92,7 @@ namespace SistemaDeGestion.DAO
                 using (MySqlCommand cmd = new MySqlCommand("sp_modificar_recurso", conexion))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("p_id_recurso", idRecurso);
+
                     cmd.Parameters.AddWithValue("p_nombre", nombre);
                     cmd.Parameters.AddWithValue("p_descripcion", (object)descripcion ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("p_ubicacion", ubicacion);
@@ -137,9 +108,7 @@ namespace SistemaDeGestion.DAO
             }
         }
 
-        /// <summary>
-        /// Sobrecarga polimórfica que permite modificar cualquier subtipo de Recurso.
-        /// </summary>
+        
         public bool ModificarRecurso(Recurso recurso)
         {
             if (recurso == null) throw new ArgumentNullException(nameof(recurso));
@@ -161,22 +130,18 @@ namespace SistemaDeGestion.DAO
                 categoria = puesto.NroCategoria;
             }
 
-            return ModificarRecurso(recurso.IdRecurso, recurso.Nombre, recurso.Descripcion, recurso.Ubicacion, recurso.PrecioPorHora,
+            return ModificarRecurso(recurso.Nombre, recurso.Descripcion, recurso.Ubicacion, recurso.PrecioPorHora,
                                     mobiliario, sillas, categoria, recurso.IdTipoRecurso);
         }
 
-        /// <summary>
-        /// Alias abreviado de ModificarRecurso.
-        /// </summary>
-        public bool Modificar(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precio,
+        
+        public bool Modificar(string nombre, string descripcion, string ubicacion, decimal precio,
                               bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
-            return ModificarRecurso(idRecurso, nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
+            return ModificarRecurso(nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
         }
 
-        /// <summary>
-        /// Alias abreviado de ModificarRecurso con modelo.
-        /// </summary>
+        
         public bool Modificar(Recurso recurso)
         {
             return ModificarRecurso(recurso);
@@ -186,11 +151,7 @@ namespace SistemaDeGestion.DAO
         // BAJAS (Consulta SQL parametrizada)
         // =========================================================================
 
-        /// <summary>
-        /// Elimina un recurso por su ID mediante consulta parametrizada.
-        /// </summary>
-        /// <param name="idRecurso">ID del recurso a eliminar.</param>
-        /// <returns>True si se eliminó, False en caso contrario.</returns>
+        
         public bool EliminarRecurso(int idRecurso)
         {
             using (MySqlConnection conexion = Conexion.CrearConexion())
@@ -206,9 +167,7 @@ namespace SistemaDeGestion.DAO
             }
         }
 
-        /// <summary>
-        /// Alias abreviado de EliminarRecurso.
-        /// </summary>
+        
         public bool Eliminar(int idRecurso)
         {
             return EliminarRecurso(idRecurso);
@@ -218,10 +177,7 @@ namespace SistemaDeGestion.DAO
         // CONSULTAS Y LISTADOS
         // =========================================================================
 
-        /// <summary>
-        /// Retorna un DataTable con todos los recursos registrados para el DataGridView (dgvRecursos).
-        /// Incluye el nombre descriptivo del tipo de recurso mediante un INNER JOIN con 'tipo_recursos'.
-        /// </summary>
+        
         public DataTable ListarRecursos()
         {
             DataTable tabla = new DataTable();
@@ -254,17 +210,13 @@ namespace SistemaDeGestion.DAO
             return tabla;
         }
 
-        /// <summary>
-        /// Alias genérico para listar recursos.
-        /// </summary>
+        
         public DataTable Listar()
         {
             return ListarRecursos();
         }
 
-        /// <summary>
-        /// Retorna el catálogo de tipos de recursos (Salas, Oficinas, Puestos) para poblar ComboBoxes.
-        /// </summary>
+        
         public DataTable ListarTiposRecurso()
         {
             DataTable tabla = new DataTable();
@@ -286,11 +238,7 @@ namespace SistemaDeGestion.DAO
             return tabla;
         }
 
-        /// <summary>
-        /// Obtiene una instancia polimórfica de Recurso (Sala, OficinaPrivada o PuestoTrabajo) según su ID.
-        /// </summary>
-        /// <param name="idRecurso">ID del recurso.</param>
-        /// <returns>Instancia de Recurso correspondiente o null si no se encuentra.</returns>
+        /*
         public Recurso ObtenerPorId(int idRecurso)
         {
             using (MySqlConnection conexion = Conexion.CrearConexion())
@@ -298,7 +246,7 @@ namespace SistemaDeGestion.DAO
                 conexion.Open();
                 string query = "SELECT id_recurso, nombre, descripcion, ubicacion, precio_por_hora, " +
                                "mobiliario_incluido, cantidad_sillas, nro_categoria, id_tipo_recurso " +
-                               "FROM recursos WHERE id_recurso = @id_recurso";
+                               "FROM recursos WHERE id_recurso = p_id_recurso";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, conexion))
                 {
@@ -338,5 +286,6 @@ namespace SistemaDeGestion.DAO
 
             return null;
         }
+        */
     }
 }

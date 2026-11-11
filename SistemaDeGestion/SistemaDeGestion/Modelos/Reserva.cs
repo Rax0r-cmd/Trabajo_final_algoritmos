@@ -8,7 +8,6 @@ namespace SistemaDeGestion.Modelos
 {
     public class Reserva
     {
-        public int IdReserva { get; set; }
         public int IdCliente { get; set; }
         public int IdRecurso { get; set; }
         public DateTime Fecha { get; set; }
@@ -20,9 +19,8 @@ namespace SistemaDeGestion.Modelos
         {
         }
 
-        public Reserva(int idReserva, int idCliente, int idRecurso, DateTime fecha, int horas, decimal total, EstadoReserva estadoReserva)
+        public Reserva(int idCliente, int idRecurso, DateTime fecha, int horas, decimal total, EstadoReserva estadoReserva)
         {
-            IdReserva = idReserva;
             IdCliente = idCliente;
             IdRecurso = idRecurso;
             Fecha = fecha;
@@ -32,7 +30,7 @@ namespace SistemaDeGestion.Modelos
         }
         // Constructor que no recibe EstadoReserva y pasa "Confirmada" por defecto
         public Reserva(int idReserva, int idCliente, int idRecurso, DateTime fecha, int horas, decimal total)
-            : this(idReserva, idCliente, idRecurso, fecha, horas, total, EstadoReserva.Confirmada)
+            : this(idCliente, idRecurso, fecha, horas, total, EstadoReserva.Confirmada)
         {
         }
     }

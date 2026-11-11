@@ -1,4 +1,4 @@
-﻿namespace SistemaDeGestion.Formularios
+namespace SistemaDeGestion.Formularios
 {
     partial class FrmPrincipal
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPrincipal));
-            this.tabPageGestion = new System.Windows.Forms.TabPage();
+            this.tabPageClientes = new System.Windows.Forms.TabPage();
             this.lblGestionTitulo = new System.Windows.Forms.Label();
             this.btnEliminarUsuario = new System.Windows.Forms.Button();
             this.btnModificarUsuario = new System.Windows.Forms.Button();
@@ -49,22 +49,29 @@
             this.CmbClientes = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.PnlBotones = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label9 = new System.Windows.Forms.Label();
             this.btnCancelarReserva = new System.Windows.Forms.Button();
             this.btnModificarReserva = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvReservas = new System.Windows.Forms.DataGridView();
+            this.tabPageRecursos = new System.Windows.Forms.TabPage();
+            this.btnEliminarRecurso = new System.Windows.Forms.Button();
+            this.btnModificarRecurso = new System.Windows.Forms.Button();
+            this.btnCrearRecurso = new System.Windows.Forms.Button();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.dgvRecursos = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ingresarComoAdministradorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cerrarSesionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.dgvRecursos = new System.Windows.Forms.DataGridView();
-            this.tabPageGestion.SuspendLayout();
+            this.tabPageClientes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.TbpDashboard.SuspendLayout();
@@ -74,34 +81,34 @@
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.menuStrip1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReservas)).BeginInit();
+            this.tabPageRecursos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabPageGestion
+            // tabPageClientes
             // 
-            this.tabPageGestion.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPageGestion.BackgroundImage")));
-            this.tabPageGestion.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.tabPageGestion.Controls.Add(this.lblGestionTitulo);
-            this.tabPageGestion.Controls.Add(this.btnEliminarUsuario);
-            this.tabPageGestion.Controls.Add(this.btnModificarUsuario);
-            this.tabPageGestion.Controls.Add(this.btnCrearUsuario);
-            this.tabPageGestion.Controls.Add(this.dgvClientes);
-            this.tabPageGestion.Controls.Add(this.pictureBox1);
-            this.tabPageGestion.Location = new System.Drawing.Point(4, 27);
-            this.tabPageGestion.Name = "tabPageGestion";
-            this.tabPageGestion.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGestion.Size = new System.Drawing.Size(1022, 596);
-            this.tabPageGestion.TabIndex = 1;
-            this.tabPageGestion.Text = "CLIENTES";
-            this.tabPageGestion.UseVisualStyleBackColor = true;
+            this.tabPageClientes.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPageClientes.BackgroundImage")));
+            this.tabPageClientes.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.tabPageClientes.Controls.Add(this.lblGestionTitulo);
+            this.tabPageClientes.Controls.Add(this.btnEliminarUsuario);
+            this.tabPageClientes.Controls.Add(this.btnModificarUsuario);
+            this.tabPageClientes.Controls.Add(this.btnCrearUsuario);
+            this.tabPageClientes.Controls.Add(this.dgvClientes);
+            this.tabPageClientes.Controls.Add(this.pictureBox1);
+            this.tabPageClientes.Location = new System.Drawing.Point(4, 27);
+            this.tabPageClientes.Name = "tabPageClientes";
+            this.tabPageClientes.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageClientes.Size = new System.Drawing.Size(1022, 596);
+            this.tabPageClientes.TabIndex = 1;
+            this.tabPageClientes.Text = "CLIENTES";
+            this.tabPageClientes.UseVisualStyleBackColor = true;
             // 
             // lblGestionTitulo
             // 
             this.lblGestionTitulo.BackColor = System.Drawing.Color.Transparent;
-            this.lblGestionTitulo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblGestionTitulo.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblGestionTitulo.Font = new System.Drawing.Font("Myanmar Text", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblGestionTitulo.ForeColor = System.Drawing.SystemColors.ControlLightLight;
@@ -109,34 +116,36 @@
             this.lblGestionTitulo.Name = "lblGestionTitulo";
             this.lblGestionTitulo.Size = new System.Drawing.Size(192, 35);
             this.lblGestionTitulo.TabIndex = 14;
-            this.lblGestionTitulo.Text = "Usuarios";
+            this.lblGestionTitulo.Text = "Clientes";
             this.lblGestionTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnEliminarUsuario
             // 
-            this.btnEliminarUsuario.Location = new System.Drawing.Point(825, 505);
+            this.btnEliminarUsuario.Location = new System.Drawing.Point(825, 510);
             this.btnEliminarUsuario.Name = "btnEliminarUsuario";
             this.btnEliminarUsuario.Size = new System.Drawing.Size(173, 44);
             this.btnEliminarUsuario.TabIndex = 13;
-            this.btnEliminarUsuario.Text = "Ejecutar Usuario";
+            this.btnEliminarUsuario.Text = "Eliminar Cliente";
             this.btnEliminarUsuario.UseVisualStyleBackColor = true;
+            this.btnEliminarUsuario.Click += new System.EventHandler(this.btnEliminarUsuario_Click);
             // 
             // btnModificarUsuario
             // 
-            this.btnModificarUsuario.Location = new System.Drawing.Point(222, 505);
+            this.btnModificarUsuario.Location = new System.Drawing.Point(222, 510);
             this.btnModificarUsuario.Name = "btnModificarUsuario";
             this.btnModificarUsuario.Size = new System.Drawing.Size(173, 44);
             this.btnModificarUsuario.TabIndex = 12;
-            this.btnModificarUsuario.Text = "Modificar Usuario";
+            this.btnModificarUsuario.Text = "Modificar Cliente";
             this.btnModificarUsuario.UseVisualStyleBackColor = true;
+            this.btnModificarUsuario.Click += new System.EventHandler(this.btnModificarUsuario_Click);
             // 
             // btnCrearUsuario
             // 
-            this.btnCrearUsuario.Location = new System.Drawing.Point(24, 505);
+            this.btnCrearUsuario.Location = new System.Drawing.Point(24, 510);
             this.btnCrearUsuario.Name = "btnCrearUsuario";
             this.btnCrearUsuario.Size = new System.Drawing.Size(173, 44);
             this.btnCrearUsuario.TabIndex = 11;
-            this.btnCrearUsuario.Text = "Crear Usuario";
+            this.btnCrearUsuario.Text = "Crear Cliente";
             this.btnCrearUsuario.UseVisualStyleBackColor = true;
             this.btnCrearUsuario.Click += new System.EventHandler(this.btnCrearUsuario_Click);
             // 
@@ -198,9 +207,9 @@
             this.label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label7.Font = new System.Drawing.Font("Myanmar Text", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label7.Location = new System.Drawing.Point(27, 385);
+            this.label7.Location = new System.Drawing.Point(40, 371);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(283, 34);
+            this.label7.Size = new System.Drawing.Size(283, 41);
             this.label7.TabIndex = 20;
             // 
             // label6
@@ -208,9 +217,9 @@
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Font = new System.Drawing.Font("Myanmar Text", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label6.Location = new System.Drawing.Point(29, 361);
+            this.label6.Location = new System.Drawing.Point(35, 347);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(123, 24);
+            this.label6.Size = new System.Drawing.Size(48, 24);
             this.label6.TabIndex = 19;
             this.label6.Text = "Total";
             // 
@@ -219,17 +228,17 @@
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Myanmar Text", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label5.Location = new System.Drawing.Point(29, 238);
+            this.label5.Location = new System.Drawing.Point(35, 238);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(123, 24);
             this.label5.TabIndex = 18;
-            this.label5.Text = "Horas";
+            this.label5.Text = "Horas de uso";
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(34, 265);
+            this.numericUpDown1.Location = new System.Drawing.Point(40, 265);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(207, 26);
+            this.numericUpDown1.Size = new System.Drawing.Size(118, 26);
             this.numericUpDown1.TabIndex = 17;
             // 
             // label4
@@ -237,7 +246,7 @@
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Myanmar Text", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(734, 113);
+            this.label4.Location = new System.Drawing.Point(775, 111);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(123, 24);
             this.label4.TabIndex = 16;
@@ -246,17 +255,19 @@
             // dateTimePicker1
             // 
             this.dateTimePicker1.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(739, 138);
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePicker1.Location = new System.Drawing.Point(780, 138);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(207, 28);
             this.dateTimePicker1.TabIndex = 15;
             // 
             // CmbTipoRecurso
             // 
+            this.CmbTipoRecurso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CmbTipoRecurso.FormattingEnabled = true;
-            this.CmbTipoRecurso.Location = new System.Drawing.Point(385, 140);
+            this.CmbTipoRecurso.Location = new System.Drawing.Point(399, 143);
             this.CmbTipoRecurso.Name = "CmbTipoRecurso";
-            this.CmbTipoRecurso.Size = new System.Drawing.Size(207, 26);
+            this.CmbTipoRecurso.Size = new System.Drawing.Size(276, 26);
             this.CmbTipoRecurso.TabIndex = 14;
             // 
             // label3
@@ -264,7 +275,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Myanmar Text", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(380, 113);
+            this.label3.Location = new System.Drawing.Point(394, 113);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(123, 24);
             this.label3.TabIndex = 13;
@@ -275,7 +286,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Myanmar Text", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(29, 113);
+            this.label1.Location = new System.Drawing.Point(35, 113);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 24);
             this.label1.TabIndex = 12;
@@ -283,26 +294,29 @@
             // 
             // CmbClientes
             // 
+            this.CmbClientes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CmbClientes.FormattingEnabled = true;
-            this.CmbClientes.Location = new System.Drawing.Point(34, 140);
+            this.CmbClientes.Location = new System.Drawing.Point(40, 143);
             this.CmbClientes.Name = "CmbClientes";
-            this.CmbClientes.Size = new System.Drawing.Size(207, 26);
+            this.CmbClientes.Size = new System.Drawing.Size(276, 26);
             this.CmbClientes.TabIndex = 11;
             // 
             // label2
             // 
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("Myanmar Text", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Myanmar Text", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(441, 40);
+            this.label2.Location = new System.Drawing.Point(431, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(140, 29);
+            this.label2.Size = new System.Drawing.Size(160, 29);
             this.label2.TabIndex = 10;
             this.label2.Text = "Crear reserva";
             // 
             // PnlBotones
             // 
+            this.PnlBotones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.PnlBotones.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PnlBotones.Controls.Add(this.button1);
             this.PnlBotones.Controls.Add(this.btnCancelar);
             this.PnlBotones.Controls.Add(this.btnAgregar);
             this.PnlBotones.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -311,9 +325,18 @@
             this.PnlBotones.Size = new System.Drawing.Size(1016, 137);
             this.PnlBotones.TabIndex = 9;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(257, 45);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(173, 44);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "Limpiar campos";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(326, 45);
+            this.btnCancelar.Location = new System.Drawing.Point(810, 45);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(173, 44);
             this.btnCancelar.TabIndex = 1;
@@ -322,7 +345,7 @@
             // 
             // btnAgregar
             // 
-            this.btnAgregar.Location = new System.Drawing.Point(30, 45);
+            this.btnAgregar.Location = new System.Drawing.Point(36, 45);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(173, 44);
             this.btnAgregar.TabIndex = 0;
@@ -343,9 +366,9 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.TbpDashboard);
-            this.tabControl1.Controls.Add(this.tabPageGestion);
+            this.tabControl1.Controls.Add(this.tabPageClientes);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPageRecursos);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 28);
             this.tabControl1.Name = "tabControl1";
@@ -356,10 +379,11 @@
             // tabPage3
             // 
             this.tabPage3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPage3.BackgroundImage")));
+            this.tabPage3.Controls.Add(this.label9);
             this.tabPage3.Controls.Add(this.btnCancelarReserva);
             this.tabPage3.Controls.Add(this.btnModificarReserva);
             this.tabPage3.Controls.Add(this.pictureBox3);
-            this.tabPage3.Controls.Add(this.dataGridView1);
+            this.tabPage3.Controls.Add(this.dgvReservas);
             this.tabPage3.Location = new System.Drawing.Point(4, 27);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -367,6 +391,19 @@
             this.tabPage3.TabIndex = 3;
             this.tabPage3.Text = "RESERVAS";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.BackColor = System.Drawing.Color.Transparent;
+            this.label9.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label9.Font = new System.Drawing.Font("Myanmar Text", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label9.Location = new System.Drawing.Point(415, 34);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(192, 35);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Reservas";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnCancelarReserva
             // 
@@ -397,21 +434,108 @@
             this.pictureBox3.TabIndex = 12;
             this.pictureBox3.TabStop = false;
             // 
-            // dataGridView1
+            // dgvReservas
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(24, 75);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(974, 409);
-            this.dataGridView1.TabIndex = 11;
+            this.dgvReservas.AllowUserToAddRows = false;
+            this.dgvReservas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvReservas.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.dgvReservas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvReservas.Location = new System.Drawing.Point(24, 91);
+            this.dgvReservas.MultiSelect = false;
+            this.dgvReservas.Name = "dgvReservas";
+            this.dgvReservas.ReadOnly = true;
+            this.dgvReservas.RowHeadersWidth = 51;
+            this.dgvReservas.RowTemplate.Height = 24;
+            this.dgvReservas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvReservas.Size = new System.Drawing.Size(974, 393);
+            this.dgvReservas.TabIndex = 11;
+            // 
+            // tabPageRecursos
+            // 
+            this.tabPageRecursos.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPageRecursos.BackgroundImage")));
+            this.tabPageRecursos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.tabPageRecursos.Controls.Add(this.btnEliminarRecurso);
+            this.tabPageRecursos.Controls.Add(this.btnModificarRecurso);
+            this.tabPageRecursos.Controls.Add(this.btnCrearRecurso);
+            this.tabPageRecursos.Controls.Add(this.pictureBox4);
+            this.tabPageRecursos.Controls.Add(this.label8);
+            this.tabPageRecursos.Controls.Add(this.dgvRecursos);
+            this.tabPageRecursos.Location = new System.Drawing.Point(4, 27);
+            this.tabPageRecursos.Name = "tabPageRecursos";
+            this.tabPageRecursos.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageRecursos.Size = new System.Drawing.Size(1022, 596);
+            this.tabPageRecursos.TabIndex = 4;
+            this.tabPageRecursos.Text = "RECURSOS";
+            this.tabPageRecursos.UseVisualStyleBackColor = true;
+            // 
+            // btnEliminarRecurso
+            // 
+            this.btnEliminarRecurso.Location = new System.Drawing.Point(825, 513);
+            this.btnEliminarRecurso.Name = "btnEliminarRecurso";
+            this.btnEliminarRecurso.Size = new System.Drawing.Size(173, 44);
+            this.btnEliminarRecurso.TabIndex = 23;
+            this.btnEliminarRecurso.Text = "Eliminar Recurso";
+            this.btnEliminarRecurso.UseVisualStyleBackColor = true;
+            // 
+            // btnModificarRecurso
+            // 
+            this.btnModificarRecurso.Location = new System.Drawing.Point(222, 513);
+            this.btnModificarRecurso.Name = "btnModificarRecurso";
+            this.btnModificarRecurso.Size = new System.Drawing.Size(173, 44);
+            this.btnModificarRecurso.TabIndex = 22;
+            this.btnModificarRecurso.Text = "Modificar Recurso";
+            this.btnModificarRecurso.UseVisualStyleBackColor = true;
+            // 
+            // btnCrearRecurso
+            // 
+            this.btnCrearRecurso.Location = new System.Drawing.Point(24, 513);
+            this.btnCrearRecurso.Name = "btnCrearRecurso";
+            this.btnCrearRecurso.Size = new System.Drawing.Size(173, 44);
+            this.btnCrearRecurso.TabIndex = 21;
+            this.btnCrearRecurso.Text = "Crear Recurso";
+            this.btnCrearRecurso.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(801, 0);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(221, 69);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox4.TabIndex = 20;
+            this.pictureBox4.TabStop = false;
+            // 
+            // label8
+            // 
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.Cursor = System.Windows.Forms.Cursors.Default;
+            this.label8.Font = new System.Drawing.Font("Myanmar Text", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label8.Location = new System.Drawing.Point(415, 34);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(192, 35);
+            this.label8.TabIndex = 19;
+            this.label8.Text = "Recursos";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // dgvRecursos
+            // 
+            this.dgvRecursos.AllowUserToAddRows = false;
+            this.dgvRecursos.AllowUserToDeleteRows = false;
+            this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvRecursos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvRecursos.Location = new System.Drawing.Point(24, 90);
+            this.dgvRecursos.MultiSelect = false;
+            this.dgvRecursos.Name = "dgvRecursos";
+            this.dgvRecursos.ReadOnly = true;
+            this.dgvRecursos.RowHeadersWidth = 51;
+            this.dgvRecursos.RowTemplate.Height = 24;
+            this.dgvRecursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvRecursos.Size = new System.Drawing.Size(974, 387);
+            this.dgvRecursos.TabIndex = 18;
+            this.dgvRecursos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRecursos_CellContentClick);
             // 
             // menuStrip1
             // 
@@ -448,34 +572,6 @@
             this.cerrarSesionToolStripMenuItem.Text = "Cerrar sesión";
             this.cerrarSesionToolStripMenuItem.Click += new System.EventHandler(this.cerrarSesionToolStripMenuItem_Click);
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.dgvRecursos);
-            this.tabPage1.Location = new System.Drawing.Point(4, 27);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1022, 596);
-            this.tabPage1.TabIndex = 4;
-            this.tabPage1.Text = "RECURSOS";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // dgvRecursos
-            // 
-            this.dgvRecursos.AllowUserToAddRows = false;
-            this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvRecursos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvRecursos.Location = new System.Drawing.Point(24, 105);
-            this.dgvRecursos.MultiSelect = false;
-            this.dgvRecursos.Name = "dgvRecursos";
-            this.dgvRecursos.ReadOnly = true;
-            this.dgvRecursos.RowHeadersWidth = 51;
-            this.dgvRecursos.RowTemplate.Height = 24;
-            this.dgvRecursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvRecursos.Size = new System.Drawing.Size(974, 387);
-            this.dgvRecursos.TabIndex = 18;
-            this.dgvRecursos.Visible = false;
-            // 
             // FrmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -493,7 +589,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CoWorking - DASHBOARD";
             this.Load += new System.EventHandler(this.FrmPrincipal_Load);
-            this.tabPageGestion.ResumeLayout(false);
+            this.tabPageClientes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.TbpDashboard.ResumeLayout(false);
@@ -503,18 +599,19 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReservas)).EndInit();
+            this.tabPageRecursos.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvRecursos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.TabPage tabPageGestion;
+        private System.Windows.Forms.TabPage tabPageClientes;
         private System.Windows.Forms.DataGridView dgvClientes;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TabPage TbpDashboard;
@@ -544,10 +641,17 @@
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Label lblGestionTitulo;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvReservas;
         private System.Windows.Forms.Button btnCancelarReserva;
         private System.Windows.Forms.Button btnModificarReserva;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPageRecursos;
         private System.Windows.Forms.DataGridView dgvRecursos;
+        private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnEliminarRecurso;
+        private System.Windows.Forms.Button btnModificarRecurso;
+        private System.Windows.Forms.Button btnCrearRecurso;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button button1;
     }
 }

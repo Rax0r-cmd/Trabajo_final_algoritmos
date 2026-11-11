@@ -8,7 +8,6 @@ namespace SistemaDeGestion.Modelos
     public abstract class Recurso : IReservable
     {
         // Propiedades que comparten todos los lugares
-        public int IdRecurso { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public string Ubicacion { get; set; }
@@ -21,9 +20,8 @@ namespace SistemaDeGestion.Modelos
         }
 
         // Constructor con datos para cuando traemos la info cargada
-        public Recurso(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precioPorHora, int idTipoRecurso)
+        public Recurso(string nombre, string descripcion, string ubicacion, decimal precioPorHora, int idTipoRecurso)
         {
-            IdRecurso = idRecurso;
             Nombre = nombre;
             Descripcion = descripcion;
             Ubicacion = ubicacion;

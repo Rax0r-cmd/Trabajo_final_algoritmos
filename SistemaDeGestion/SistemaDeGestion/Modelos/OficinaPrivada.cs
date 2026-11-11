@@ -18,8 +18,8 @@ namespace SistemaDeGestion.Modelos
         }
 
         // Constructor con datos para cuando traemos la info cargada
-        public OficinaPrivada(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precioPorHora, bool mobiliarioIncluido, int idTipoRecurso = 2)
-            : base(idRecurso, nombre, descripcion, ubicacion, precioPorHora, idTipoRecurso)
+        public OficinaPrivada(string nombre, string descripcion, string ubicacion, decimal precioPorHora, bool mobiliarioIncluido, int idTipoRecurso = 2)
+            : base(nombre, descripcion, ubicacion, precioPorHora, idTipoRecurso)
         {
             MobiliarioIncluido = mobiliarioIncluido;
         }
@@ -58,7 +58,7 @@ namespace SistemaDeGestion.Modelos
                 {
                     // Si la fecha de reserva es la misma que la consultada pero el id recurso es el mismo o esta confirmada
                     // Devuelve false 
-                    if(reserva.Fecha == fecha && reserva.IdRecurso == IdRecurso && reserva.EstadoReserva == EstadoReserva.Confirmada)
+                    if(reserva.Fecha == fecha && reserva.EstadoReserva == EstadoReserva.Confirmada)
                     {
                         return false;
                     }

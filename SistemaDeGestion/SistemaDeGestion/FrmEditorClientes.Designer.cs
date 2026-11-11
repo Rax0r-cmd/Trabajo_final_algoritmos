@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmEditorClientes));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -35,11 +36,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtCNombre = new System.Windows.Forms.TextBox();
+            this.txtCApellido = new System.Windows.Forms.TextBox();
+            this.txtCTelefono = new System.Windows.Forms.TextBox();
+            this.txtCMail = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -69,7 +72,7 @@
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Myanmar Text", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(390, 128);
+            this.label3.Location = new System.Drawing.Point(416, 128);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(70, 24);
             this.label3.TabIndex = 14;
@@ -88,53 +91,58 @@
             // 
             // btnAgregar
             // 
-            this.btnAgregar.Location = new System.Drawing.Point(47, 401);
+            this.btnAgregar.Location = new System.Drawing.Point(47, 408);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(173, 44);
             this.btnAgregar.TabIndex = 16;
-            this.btnAgregar.Text = "Agregar";
+            this.btnAgregar.Text = "Guardar cliente";
             this.btnAgregar.UseVisualStyleBackColor = true;
+            this.btnAgregar.Click += new System.EventHandler(this.btnAgregar_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(548, 401);
+            this.button1.Location = new System.Drawing.Point(548, 408);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(173, 44);
             this.button1.TabIndex = 17;
             this.button1.Text = "Cancelar";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtCNombre
             // 
-            this.textBox1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(134, 126);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(229, 26);
-            this.textBox1.TabIndex = 18;
+            this.txtCNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCNombre.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCNombre.Location = new System.Drawing.Point(134, 126);
+            this.txtCNombre.Name = "txtCNombre";
+            this.txtCNombre.Size = new System.Drawing.Size(229, 26);
+            this.txtCNombre.TabIndex = 18;
             // 
-            // textBox2
+            // txtCApellido
             // 
-            this.textBox2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(492, 126);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(229, 26);
-            this.textBox2.TabIndex = 19;
+            this.txtCApellido.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCApellido.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCApellido.Location = new System.Drawing.Point(492, 126);
+            this.txtCApellido.Name = "txtCApellido";
+            this.txtCApellido.Size = new System.Drawing.Size(229, 26);
+            this.txtCApellido.TabIndex = 19;
             // 
-            // textBox3
+            // txtCTelefono
             // 
-            this.textBox3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(134, 204);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(229, 26);
-            this.textBox3.TabIndex = 20;
+            this.txtCTelefono.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCTelefono.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCTelefono.Location = new System.Drawing.Point(134, 204);
+            this.txtCTelefono.Name = "txtCTelefono";
+            this.txtCTelefono.Size = new System.Drawing.Size(229, 26);
+            this.txtCTelefono.TabIndex = 20;
             // 
-            // textBox4
+            // txtCMail
             // 
-            this.textBox4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(134, 286);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(417, 26);
-            this.textBox4.TabIndex = 21;
+            this.txtCMail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCMail.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCMail.Location = new System.Drawing.Point(134, 286);
+            this.txtCMail.Name = "txtCMail";
+            this.txtCMail.Size = new System.Drawing.Size(417, 26);
+            this.txtCMail.TabIndex = 21;
             // 
             // label5
             // 
@@ -147,7 +155,11 @@
             this.label5.TabIndex = 22;
             this.label5.Text = "Nuevo Cliente";
             // 
-            // FrmGestorDatos
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // FrmEditorClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -155,10 +167,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(769, 482);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtCMail);
+            this.Controls.Add(this.txtCTelefono);
+            this.Controls.Add(this.txtCApellido);
+            this.Controls.Add(this.txtCNombre);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.label4);
@@ -166,8 +178,11 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FrmGestorDatos";
+            this.MaximizeBox = false;
+            this.Name = "FrmEditorClientes";
             this.Text = "Editor de Datos";
+            this.Load += new System.EventHandler(this.FrmEditorClientes_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,10 +196,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtCNombre;
+        private System.Windows.Forms.TextBox txtCApellido;
+        private System.Windows.Forms.TextBox txtCTelefono;
+        private System.Windows.Forms.TextBox txtCMail;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

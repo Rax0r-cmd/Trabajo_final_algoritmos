@@ -16,5 +16,10 @@ namespace SistemaDeGestion
         {
             InitializeComponent();
         }
+
+        private void FrmEditorRecursos_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

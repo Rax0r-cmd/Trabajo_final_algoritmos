@@ -8,7 +8,6 @@ namespace SistemaDeGestion.Modelos
 {
     public class Cliente
     {
-        public int IdCliente { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Telefono { get; set; }
@@ -19,9 +18,8 @@ namespace SistemaDeGestion.Modelos
         {
         }
 
-        public Cliente(int idCliente, string nombre, string apellido, string telefono, string mail, DateTime fechaRegistro)
+        public Cliente(string nombre, string apellido, string telefono, string mail, DateTime fechaRegistro)
         {
-            IdCliente = idCliente;
             Nombre = nombre;
             Apellido = apellido;
             Telefono = telefono;

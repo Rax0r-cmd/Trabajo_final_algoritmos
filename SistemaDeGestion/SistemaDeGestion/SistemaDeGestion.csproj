@@ -119,7 +119,6 @@
     <Compile Include="Modelos\PuestoTrabajo.cs" />
     <Compile Include="Modelos\Cliente.cs" />
     <Compile Include="Modelos\Reserva.cs" />
-    <Compile Include="Gestoras\GestoraCoworking.cs" />
     <Compile Include="Gestoras\GestorDAO.cs" />
     <Compile Include="DAO\ClienteDAO.cs" />
     <Compile Include="DAO\RecursoDAO.cs" />
