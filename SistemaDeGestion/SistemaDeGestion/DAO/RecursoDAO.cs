@@ -39,7 +39,8 @@ namespace SistemaDeGestion.DAO
             }
         }
 
-        
+        // Sobrecarga para agregar un recurso pasando un objeto Recurso 
+
         public bool AgregarRecurso(Recurso recurso)
         {
             if (recurso == null) throw new ArgumentNullException(nameof(recurso));
@@ -72,7 +73,10 @@ namespace SistemaDeGestion.DAO
             return AgregarRecurso(nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
         }
 
-        
+
+
+        // Sobrecarga para agregar un recurso pasando un objeto Recurso 
+
         public bool Agregar(Recurso recurso)
         {
             return AgregarRecurso(recurso);

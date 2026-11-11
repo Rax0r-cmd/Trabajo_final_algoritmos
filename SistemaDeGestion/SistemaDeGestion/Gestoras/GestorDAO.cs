@@ -1,6 +1,7 @@
+using SistemaDeGestion.DAO;
+using SistemaDeGestion.Modelos;
 using System;
 using System.Data;
-using SistemaDeGestion.DAO;
 
 namespace SistemaDeGestion.Gestoras
 {
@@ -63,27 +64,56 @@ namespace SistemaDeGestion.Gestoras
         }
 
         // RECURSOS
+
+
+
         public bool AgregarRecurso(string nombre, string descripcion, string ubicacion, decimal precio,
                                    bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
             return _recursoDAO.AgregarRecurso(nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
         }
 
+        
         public bool ModificarRecurso(string nombre, string descripcion, string ubicacion, decimal precio,
                                      bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
             return _recursoDAO.ModificarRecurso(nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
         }
 
+        public bool Modificar(string nombre, string descripcion, string ubicacion, decimal precio,
+                              bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
+        {
+            return _recursoDAO.Modificar(nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
+        }
+
+      
         public bool EliminarRecurso(int idRecurso)
         {
             return _recursoDAO.EliminarRecurso(idRecurso);
         }
 
+
         public DataTable ListarRecursos()
         {
             return _recursoDAO.ListarRecursos();
         }
+
+        // Sobrecargas  para recibir objetos Recurso de la factory
+        public bool AgregarRecurso(Recurso recurso)
+        {
+            return _recursoDAO.AgregarRecurso(recurso);
+        }
+
+        public bool ModificarRecurso(Recurso recurso)
+        {
+            return _recursoDAO.ModificarRecurso(recurso);
+        }
+
+        public bool Modificar(Recurso recurso)
+        {
+            return _recursoDAO.Modificar(recurso);
+        }
+
 
         // RESERVAS
         public bool AgregarReserva(int idCliente, int idRecurso, DateTime fecha, int horas, decimal total)
