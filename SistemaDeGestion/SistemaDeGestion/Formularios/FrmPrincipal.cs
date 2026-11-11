@@ -96,7 +96,7 @@ namespace SistemaDeGestion.Formularios
                 {
                     this.dgvRecursos.DataSource = null;
                     this.dgvRecursos.DataSource = _gestorDAO.ListarRecursos();
-                    FormatearGrillaRecursos();
+                    //FormatearGrillaRecursos();
                 }
             }
             catch (MySqlException ex)
@@ -108,7 +108,7 @@ namespace SistemaDeGestion.Formularios
                 Console.WriteLine("Error al poblar grilla de recursos: " + ex.Message);
             }
         }
-
+        /*
         private void FormatearGrillaRecursos()
         {
             if (dgvRecursos == null || dgvRecursos.Columns.Count == 0) return;
@@ -162,6 +162,7 @@ namespace SistemaDeGestion.Formularios
                 dgvRecursos.Columns["Categoría"].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
         }
+        */
 
         //=============================================================
         // ToolStrip, configuración de solapas con el Login de Admin
@@ -216,8 +217,79 @@ namespace SistemaDeGestion.Formularios
         public void Configuraciones()
         {
             OcultarSolapasAdmin();
+            CargarCboClientes();
+            CargarCboRecursos();
+            //Reservas
+            btnModificarReserva.Enabled = false;
+            btnEliminarReserva.Enabled = false;
+
+
+            //Recursos
+            btnModificarRecurso.Enabled = false;
+            btnEliminarRecurso.Enabled = false;
+
+            //Cliente
+            btnModificarUsuario.Enabled = false;
+            btnEliminarUsuario.Enabled = false;
         }
 
+        public void CargarCboClientes()
+        {
+            try
+            {
+                if (CmbClientes != null)
+                {
+                    CmbClientes.DataSource = null;
+                    CmbClientes.DataSource = _gestorDAO.ListarClientes();
+                    CmbClientes.DisplayMember = "Nombre";
+                    CmbClientes.ValueMember = "ID";
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error al conectar con MySQL para clientes: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cargar el ComboBox de clientes: " + ex.Message);
+            }
+        }
+
+        public void CargarCboRecursos()
+        {
+            try
+            {
+                if (CmbTipoRecurso != null)
+                {
+                    CmbTipoRecurso.DataSource = null;
+                    CmbTipoRecurso.DataSource = _gestorDAO.ListarRecursos();
+                    CmbTipoRecurso.DisplayMember = "Nombre";
+                    CmbTipoRecurso.ValueMember = "ID";
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error al conectar con MySQL para recursos: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cargar el ComboBox de recursos: " + ex.Message);
+            }
+        }
+        private void btnLimpiarCampos_Click(object sender, EventArgs e)
+        {
+            //limpiar los campos del formulario
+
+            CmbClientes.SelectedIndex = -1;
+            CmbTipoRecurso.SelectedIndex = -1;
+            dtpFechaReserva.Value = DateTime.Now;
+            nudHoras.Value = 0;
+            CmbClientes.Focus();
+        }
+
+        //=============================================================
+        // Controles de Clientes
+        //=============================================================
         private void btnCrearUsuario_Click(object sender, EventArgs e)
         {
             using (FrmEditorClientes editorClientes = new FrmEditorClientes())
@@ -229,16 +301,46 @@ namespace SistemaDeGestion.Formularios
 
         private void btnModificarUsuario_Click(object sender, EventArgs e)
         {
-            using (FrmEditorClientes editorClientes = new FrmEditorClientes())
+            if(dgvClientes.SelectedRows.Count > 0)
             {
-                editorClientes.ShowDialog();
-                CargarClientes();
+                using (FrmEditorClientes editorClientes = new FrmEditorClientes())
+                {
+                    editorClientes.ShowDialog();
+                    CargarClientes();
+                }
             }
         }
 
         private void btnEliminarUsuario_Click(object sender, EventArgs e)
         {
             
+        }
+
+        //=============================================================
+        // Controles de Clientes
+        //=============================================================
+
+        private void btnCrearRecurso_Click(object sender, EventArgs e)
+        {
+            //metodo para abrir el formulario de creacion de recursos
+            using (FrmEditorRecursos editorRecursos = new FrmEditorRecursos())
+            {
+                editorRecursos.ShowDialog();
+                CargarRecursos();
+            }
+        }
+
+        private void btnModificarRecurso_Click(object sender, EventArgs e)
+        {
+            //metodo para abrir el formulario de edicion de recursos si hay una fila seleccionada en dgvRecursos
+            if (dgvRecursos.SelectedRows.Count > 0)
+            {
+                using (FrmEditorRecursos editorRecursos = new FrmEditorRecursos())
+                {
+                    editorRecursos.ShowDialog();
+                    CargarRecursos();
+                }
+            }
         }
 
         private void dgvRecursos_CellContentClick(object sender, DataGridViewCellEventArgs e)

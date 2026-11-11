@@ -83,7 +83,7 @@ insert into tipo_recursos (nombre_tipo) values
 ('Puesto de Trabajo');
 
 insert into recursos (nombre, descripcion, ubicacion, precio_por_hora, mobiliario_incluido, cantidad_sillas, nro_categoria, id_tipo_recurso) values 
-('Sala Innovación', 'Proyector y pizarra para 10 personas', 'Piso 1 - Sector A', 3500.00, null, 40, null, 1),
+('Sala Innovacion', 'Proyector y pizarra para 10 personas', 'Piso 1 - Sector A', 3500.00, null, 40, null, 1),
 ('Sala Creativa', 'Mesa para 6 personas con TV', 'Piso 1 - Sector B', 2500.00, null, 70, null, 1),
 ('Oficina Ejecutiva 1', 'Oficina privada para 2 personas', 'Piso 2 - Of. 201', 4500.00, true, null, null, 2),
 ('Oficina Individual 2', 'Oficina privada individual', 'Piso 2 - Of. 202', 3000.00, false, null, null, 2),

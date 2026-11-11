@@ -37,26 +37,26 @@ namespace SistemaDeGestion.Formularios
             this.dgvClientes = new System.Windows.Forms.DataGridView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.TbpDashboard = new System.Windows.Forms.TabPage();
-            this.label7 = new System.Windows.Forms.Label();
+            this.lblTotal = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.nudHoras = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dtpFechaReserva = new System.Windows.Forms.DateTimePicker();
             this.CmbTipoRecurso = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.CmbClientes = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.PnlBotones = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLimpiarCampos = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label9 = new System.Windows.Forms.Label();
-            this.btnCancelarReserva = new System.Windows.Forms.Button();
+            this.btnEliminarReserva = new System.Windows.Forms.Button();
             this.btnModificarReserva = new System.Windows.Forms.Button();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.dgvReservas = new System.Windows.Forms.DataGridView();
@@ -75,7 +75,7 @@ namespace SistemaDeGestion.Formularios
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.TbpDashboard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHoras)).BeginInit();
             this.PnlBotones.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -180,12 +180,12 @@ namespace SistemaDeGestion.Formularios
             // 
             this.TbpDashboard.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("TbpDashboard.BackgroundImage")));
             this.TbpDashboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.TbpDashboard.Controls.Add(this.label7);
+            this.TbpDashboard.Controls.Add(this.lblTotal);
             this.TbpDashboard.Controls.Add(this.label6);
             this.TbpDashboard.Controls.Add(this.label5);
-            this.TbpDashboard.Controls.Add(this.numericUpDown1);
+            this.TbpDashboard.Controls.Add(this.nudHoras);
             this.TbpDashboard.Controls.Add(this.label4);
-            this.TbpDashboard.Controls.Add(this.dateTimePicker1);
+            this.TbpDashboard.Controls.Add(this.dtpFechaReserva);
             this.TbpDashboard.Controls.Add(this.CmbTipoRecurso);
             this.TbpDashboard.Controls.Add(this.label3);
             this.TbpDashboard.Controls.Add(this.label1);
@@ -201,16 +201,16 @@ namespace SistemaDeGestion.Formularios
             this.TbpDashboard.Text = "CONTROL";
             this.TbpDashboard.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // lblTotal
             // 
-            this.label7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label7.Font = new System.Drawing.Font("Myanmar Text", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label7.Location = new System.Drawing.Point(40, 371);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(283, 41);
-            this.label7.TabIndex = 20;
+            this.lblTotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblTotal.Font = new System.Drawing.Font("Myanmar Text", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotal.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblTotal.Location = new System.Drawing.Point(40, 371);
+            this.lblTotal.Name = "lblTotal";
+            this.lblTotal.Size = new System.Drawing.Size(283, 41);
+            this.lblTotal.TabIndex = 20;
             // 
             // label6
             // 
@@ -234,12 +234,12 @@ namespace SistemaDeGestion.Formularios
             this.label5.TabIndex = 18;
             this.label5.Text = "Horas de uso";
             // 
-            // numericUpDown1
+            // nudHoras
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(40, 265);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(118, 26);
-            this.numericUpDown1.TabIndex = 17;
+            this.nudHoras.Location = new System.Drawing.Point(40, 265);
+            this.nudHoras.Name = "nudHoras";
+            this.nudHoras.Size = new System.Drawing.Size(118, 26);
+            this.nudHoras.TabIndex = 17;
             // 
             // label4
             // 
@@ -252,14 +252,14 @@ namespace SistemaDeGestion.Formularios
             this.label4.TabIndex = 16;
             this.label4.Text = "Fecha";
             // 
-            // dateTimePicker1
+            // dtpFechaReserva
             // 
-            this.dateTimePicker1.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(780, 138);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(207, 28);
-            this.dateTimePicker1.TabIndex = 15;
+            this.dtpFechaReserva.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpFechaReserva.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpFechaReserva.Location = new System.Drawing.Point(780, 138);
+            this.dtpFechaReserva.Name = "dtpFechaReserva";
+            this.dtpFechaReserva.Size = new System.Drawing.Size(207, 28);
+            this.dtpFechaReserva.TabIndex = 15;
             // 
             // CmbTipoRecurso
             // 
@@ -316,7 +316,7 @@ namespace SistemaDeGestion.Formularios
             // 
             this.PnlBotones.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.PnlBotones.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PnlBotones.Controls.Add(this.button1);
+            this.PnlBotones.Controls.Add(this.btnLimpiarCampos);
             this.PnlBotones.Controls.Add(this.btnCancelar);
             this.PnlBotones.Controls.Add(this.btnAgregar);
             this.PnlBotones.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -325,14 +325,15 @@ namespace SistemaDeGestion.Formularios
             this.PnlBotones.Size = new System.Drawing.Size(1016, 137);
             this.PnlBotones.TabIndex = 9;
             // 
-            // button1
+            // btnLimpiarCampos
             // 
-            this.button1.Location = new System.Drawing.Point(257, 45);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(173, 44);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Limpiar campos";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnLimpiarCampos.Location = new System.Drawing.Point(257, 45);
+            this.btnLimpiarCampos.Name = "btnLimpiarCampos";
+            this.btnLimpiarCampos.Size = new System.Drawing.Size(173, 44);
+            this.btnLimpiarCampos.TabIndex = 2;
+            this.btnLimpiarCampos.Text = "Limpiar campos";
+            this.btnLimpiarCampos.UseVisualStyleBackColor = true;
+            this.btnLimpiarCampos.Click += new System.EventHandler(this.btnLimpiarCampos_Click);
             // 
             // btnCancelar
             // 
@@ -380,7 +381,7 @@ namespace SistemaDeGestion.Formularios
             // 
             this.tabPage3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPage3.BackgroundImage")));
             this.tabPage3.Controls.Add(this.label9);
-            this.tabPage3.Controls.Add(this.btnCancelarReserva);
+            this.tabPage3.Controls.Add(this.btnEliminarReserva);
             this.tabPage3.Controls.Add(this.btnModificarReserva);
             this.tabPage3.Controls.Add(this.pictureBox3);
             this.tabPage3.Controls.Add(this.dgvReservas);
@@ -405,14 +406,14 @@ namespace SistemaDeGestion.Formularios
             this.label9.Text = "Reservas";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btnCancelarReserva
+            // btnEliminarReserva
             // 
-            this.btnCancelarReserva.Location = new System.Drawing.Point(229, 516);
-            this.btnCancelarReserva.Name = "btnCancelarReserva";
-            this.btnCancelarReserva.Size = new System.Drawing.Size(173, 44);
-            this.btnCancelarReserva.TabIndex = 14;
-            this.btnCancelarReserva.Text = "Eliminar Reserva";
-            this.btnCancelarReserva.UseVisualStyleBackColor = true;
+            this.btnEliminarReserva.Location = new System.Drawing.Point(229, 516);
+            this.btnEliminarReserva.Name = "btnEliminarReserva";
+            this.btnEliminarReserva.Size = new System.Drawing.Size(173, 44);
+            this.btnEliminarReserva.TabIndex = 14;
+            this.btnEliminarReserva.Text = "Eliminar Reserva";
+            this.btnEliminarReserva.UseVisualStyleBackColor = true;
             // 
             // btnModificarReserva
             // 
@@ -437,6 +438,8 @@ namespace SistemaDeGestion.Formularios
             // dgvReservas
             // 
             this.dgvReservas.AllowUserToAddRows = false;
+            this.dgvReservas.AllowUserToResizeColumns = false;
+            this.dgvReservas.AllowUserToResizeRows = false;
             this.dgvReservas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvReservas.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.dgvReservas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -444,6 +447,7 @@ namespace SistemaDeGestion.Formularios
             this.dgvReservas.MultiSelect = false;
             this.dgvReservas.Name = "dgvReservas";
             this.dgvReservas.ReadOnly = true;
+            this.dgvReservas.RowHeadersVisible = false;
             this.dgvReservas.RowHeadersWidth = 51;
             this.dgvReservas.RowTemplate.Height = 24;
             this.dgvReservas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -485,6 +489,7 @@ namespace SistemaDeGestion.Formularios
             this.btnModificarRecurso.TabIndex = 22;
             this.btnModificarRecurso.Text = "Modificar Recurso";
             this.btnModificarRecurso.UseVisualStyleBackColor = true;
+            this.btnModificarRecurso.Click += new System.EventHandler(this.btnModificarRecurso_Click);
             // 
             // btnCrearRecurso
             // 
@@ -494,6 +499,7 @@ namespace SistemaDeGestion.Formularios
             this.btnCrearRecurso.TabIndex = 21;
             this.btnCrearRecurso.Text = "Crear Recurso";
             this.btnCrearRecurso.UseVisualStyleBackColor = true;
+            this.btnCrearRecurso.Click += new System.EventHandler(this.btnCrearRecurso_Click);
             // 
             // pictureBox4
             // 
@@ -523,7 +529,7 @@ namespace SistemaDeGestion.Formularios
             // 
             this.dgvRecursos.AllowUserToAddRows = false;
             this.dgvRecursos.AllowUserToDeleteRows = false;
-            this.dgvRecursos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvRecursos.AllowUserToResizeColumns = false;
             this.dgvRecursos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.dgvRecursos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRecursos.Location = new System.Drawing.Point(24, 90);
@@ -593,7 +599,7 @@ namespace SistemaDeGestion.Formularios
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.TbpDashboard.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHoras)).EndInit();
             this.PnlBotones.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.tabControl1.ResumeLayout(false);
@@ -628,11 +634,11 @@ namespace SistemaDeGestion.Formularios
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown nudHoras;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dtpFechaReserva;
         private System.Windows.Forms.ComboBox CmbTipoRecurso;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblTotal;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnEliminarUsuario;
         private System.Windows.Forms.Button btnModificarUsuario;
@@ -642,7 +648,7 @@ namespace SistemaDeGestion.Formularios
         private System.Windows.Forms.Label lblGestionTitulo;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.DataGridView dgvReservas;
-        private System.Windows.Forms.Button btnCancelarReserva;
+        private System.Windows.Forms.Button btnEliminarReserva;
         private System.Windows.Forms.Button btnModificarReserva;
         private System.Windows.Forms.TabPage tabPageRecursos;
         private System.Windows.Forms.DataGridView dgvRecursos;
@@ -652,6 +658,6 @@ namespace SistemaDeGestion.Formularios
         private System.Windows.Forms.Button btnModificarRecurso;
         private System.Windows.Forms.Button btnCrearRecurso;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLimpiarCampos;
     }
 }
