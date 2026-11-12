@@ -33,6 +33,11 @@ namespace SistemaDeGestion.Gestoras
             return _clienteDAO.AgregarClientes(nombre, apellido, telefono, mail);
         }
 
+        public bool ModificarCliente(int idCliente, string nombre, string apellido, string telefono, string mail)
+        {
+            return _clienteDAO.ModificarCliente(idCliente, nombre, apellido, telefono, mail);
+        }
+
         public bool ModificarCliente(string nombre, string apellido, string telefono, string mail)
         {
             return _clienteDAO.ModificarCliente(nombre, apellido, telefono, mail);
@@ -74,6 +79,12 @@ namespace SistemaDeGestion.Gestoras
         }
 
         
+        public bool ModificarRecurso(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precio,
+                                     bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
+        {
+            return _recursoDAO.ModificarRecurso(idRecurso, nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
+        }
+
         public bool ModificarRecurso(string nombre, string descripcion, string ubicacion, decimal precio,
                                      bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
@@ -119,6 +130,11 @@ namespace SistemaDeGestion.Gestoras
         public bool AgregarReserva(int idCliente, int idRecurso, DateTime fecha, int horas, decimal total)
         {
             return _reservaDAO.AgregarReserva(idCliente, idRecurso, fecha, horas, total);
+        }
+
+        public bool ModificarReserva(int idReserva, DateTime fecha, int horas, decimal total)
+        {
+            return _reservaDAO.ModificarReserva(idReserva, fecha, horas, total);
         }
 
         public bool CancelarReserva(int idReserva)

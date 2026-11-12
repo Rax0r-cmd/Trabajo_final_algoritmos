@@ -60,8 +60,7 @@ namespace SistemaDeGestion.DAO
         // MODIFICACIONES (Procedimiento: sp_modificar_reserva)
         // =========================================================================
 
-        
-        public bool ModificarReserva(DateTime fecha, int horas, decimal total)
+        public bool ModificarReserva(int idReserva, DateTime fecha, int horas, decimal total)
         {
             using (MySqlConnection conexion = Conexion.CrearConexion())
             {
@@ -70,6 +69,7 @@ namespace SistemaDeGestion.DAO
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     
+                    cmd.Parameters.AddWithValue("p_id_reserva", idReserva);
                     cmd.Parameters.AddWithValue("p_fecha", fecha);
                     cmd.Parameters.AddWithValue("p_horas", horas);
                     cmd.Parameters.AddWithValue("p_total", total);
@@ -80,17 +80,16 @@ namespace SistemaDeGestion.DAO
             }
         }
 
-        
         public bool ModificarReserva(Reserva reserva)
         {
             if (reserva == null) throw new ArgumentNullException(nameof(reserva));
-            return ModificarReserva(reserva.Fecha, reserva.Horas, reserva.Total);
+            return ModificarReserva(reserva.IdReserva, reserva.Fecha, reserva.Horas, reserva.Total);
         }
 
         
-        public bool Modificar(DateTime fecha, int horas, decimal total)
+        public bool Modificar(int idReserva, DateTime fecha, int horas, decimal total)
         {
-            return ModificarReserva(fecha, horas, total);
+            return ModificarReserva(idReserva, fecha, horas, total);
         }
 
         // =========================================================================

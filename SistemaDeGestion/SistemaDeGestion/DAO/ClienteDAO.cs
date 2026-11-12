@@ -65,8 +65,7 @@ namespace SistemaDeGestion.DAO
         // MODIFICACIONES (Procedimiento: sp_modificar_cliente)
         // =========================================================================
 
-        
-        public bool ModificarCliente(string nombre, string apellido, string telefono, string mail)
+        public bool ModificarCliente(int idCliente, string nombre, string apellido, string telefono, string mail)
         {
             using (MySqlConnection conexion = Conexion.CrearConexion())
             {
@@ -75,6 +74,7 @@ namespace SistemaDeGestion.DAO
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.AddWithValue("p_id_cliente", idCliente);
                     cmd.Parameters.AddWithValue("p_nombre", nombre);
                     cmd.Parameters.AddWithValue("p_apellido", apellido);
                     cmd.Parameters.AddWithValue("p_telefono", telefono);
@@ -84,6 +84,11 @@ namespace SistemaDeGestion.DAO
                     return filasAfectadas >= 0;
                 }
             }
+        }
+
+        public bool ModificarCliente(string nombre, string apellido, string telefono, string mail)
+        {
+            return ModificarCliente(0, nombre, apellido, telefono, mail);
         }
 
         

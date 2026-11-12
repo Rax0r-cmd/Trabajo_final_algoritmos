@@ -395,12 +395,139 @@ memoria y consuman directamente los procedimientos almacenados de
 MySQL, para luego incorporar los módulos de JSON y configuración
 externa en las próximas clases.'
 
+Paso 8: Integración de pantallas con GestorDAO, validaciones, patrón Factory y reglas de UI
+En esta etapa integramos las pantallas de Windows Forms con la base de datos a través de GestorDAO:
+- Integramos el panel de control de reservas:
+  * El botón 'Agregar' toma el cliente, el recurso, la fecha y las horas ingresadas.
+  * Validación de fecha pasada: bloqueamos el DateTimePicker (MinDate = DateTime.Today) y agregamos
+    la comprobación por código para que el usuario no pueda ingresar reservas con fechas anteriores a hoy.
+  * Límite de horas de uso (1 a 24 hs): configuramos nudHoras.Maximum = 24 y agregamos la validación
+    para impedir valores mayores a 24 horas por turno, actualizando además el visor de Total en tiempo real.
+  * Selector de clientes y recursos con prompt inicial: los combos inician en '-- Seleccione un cliente --'
+    y '-- Seleccione un recurso --'. El desplegable de clientes ahora muestra 'Nombre y Apellido'
+    (ej: Lucas Gómez, Rocío Cisneros) para evitar confusiones de homónimos.
+  * Selector de Horario de inicio en el panel de control: agregamos debajo de Fecha el desplegable
+    'Horario de inicio' (desde las 07:00 hasta las 22:30 hs) para que el usuario pueda indicar la hora
+    exacta del turno. Al guardar, se combina la fecha con el horario y se envía a MySQL, permitiendo
+    reservar en distintos bloques horarios y testeando correctamente las colisiones de sp_alta_reserva (SIGNAL 45000).
+  * Horarios ocupados en color rojo: acomodamos la distancia visual para que quede pegado a Fecha,
+    y mediante el evento DrawItem pintamos en color rojo los turnos que ya están reservados para ese
+    recurso y fecha '(Ocupado)', bloqueando su selección de forma sencilla y directa.
+  * Ocultamiento de horarios pasados del día actual: si el usuario selecciona el día de hoy, el desplegable
+    filtra y no muestra ninguna hora anterior a la hora actual (DateTime.Now), mostrando únicamente
+    los turnos futuros disponibles o por venir.
+  * Integración de controles en el Diseñador de Visual Studio: incorporamos formalmente lblHorario
+    y cboHorarioInicio en FrmPrincipal.Designer.cs para que aparezcan visualmente en la pestaña [Diseño]
+    y puedan arrastrarse, alinearse o moverse manualmente con el mouse desde el entorno de VS.
+  * Botones de gestión de reservas exclusivos para el Administrador: 'Modificar Reserva' y 'Eliminar Reserva'
+    permanecen completamente invisibles para usuarios invitados y solo se muestran tras iniciar sesión como Admin.
+  * Funcionalidad completa de Modificar Reserva: implementamos la ventana modal de edición para el Admin,
+    permitiendo reprogramar fecha y horas (1 a 24 hs) con recálculo automático y persistencia en MySQL
+    a través del procedimiento almacenado sp_modificar_reserva y control de colisiones con SIGNAL 45000.
+  * Cálculo de Total en tiempo real garantizado: conectamos ValueChanged y KeyUp en nudHoras para que
+    al escribir o cambiar las horas con las flechas, el visor de total se actualice al instante.
+  * Calcula el total utilizando el método polimórfico CalcularCosto(horas) de las clases hijas.
+  * Llama a _gestorDAO.AgregarReserva(...) que ejecuta el stored procedure sp_alta_reserva en MySQL.
+  * Manejo defensivo: si la base detecta un solapamiento de turnos, dispara el SIGNAL 45000
+    y la pantalla lo atrapa en el catch (MySqlException ex) mostrando un MessageBox amigable:
+    'El recurso ya se encuentra reservado u ocupado en ese intervalo de horario.'.
+  * Al confirmar la reserva, la grilla de reservas se recarga sola automáticamente y limpia los campos.
+- Implementamos el patrón de diseño Factory (RecursoFactory.cs):
+  * Creamos la clase estática RecursoFactory para encapsular la instanciación de las subclases
+    (Sala, OficinaPrivada, PuestoTrabajo) según el id de tipo elegido en pantalla.
+  * En FrmEditorRecursos, al apretar 'Guardar recurso', le mandamos los datos a la fábrica,
+    ésta crea el objeto correspondiente y se lo envía a _gestorDAO.AgregarRecurso(recurso).
+- Editor dinámico de recursos (FrmEditorRecursos):
+  * El ComboBox de tipo de recurso carga las opciones desde MySQL.
+  * Según el tipo seleccionado, muestra u oculta los campos exclusivos:
+    - Si es Sala de Reuniones: muestra Cantidad de sillas (nudCantSillas) y oculta el resto.
+    - Si es Oficina Privada: muestra Mobiliario incluido (ckMobiliarioIncluido) y oculta el resto.
+    - Si es Puesto de Trabajo: muestra Categoría de puesto (nudCatPuesto) y oculta el resto.
+  * Valida con ErrorProvider que nombre, ubicación y precio por hora no queden vacíos ni en cero.
+- Editor de clientes (FrmEditorClientes):
+  * Valida que nombre, apellido y teléfono no estén vacíos, y que el correo contenga '@' y '.'.
+  * Al guardar, envía los datos a _gestorDAO.AgregarCliente(...) persistiendo directo en MySQL.
+- Reglas de interfaz en la pantalla principal (FrmPrincipal):
+  * Los botones 'Crear Usuario' y 'Crear Recurso' permanecen siempre activos.
+  * Los botones 'Modificar' y 'Eliminar' de clientes, recursos y reservas arrancan desactivados
+    (Enabled = false) y se activan únicamente cuando el usuario selecciona una fila en la grilla.
+  * Al agregar o eliminar un cliente, recurso o reserva, las grillas y los desplegables
+    se refrescan automáticamente consumiendo la última información de la base.
+
+Paso 9: Formateo visual amigable de grillas y centrado de formularios modales
+- En FrmPrincipal.cs implementamos FormatearGrillaReservas():
+  * Ocultamos las columnas técnicas 'id_reserva' y 'mail_cliente' (Visible = false) para mejorar la privacidad y estética visual frente al cliente.
+  * Limpiamos los nombres de las columnas sacando los guiones bajos técnicos de la base de datos: 'Cliente', 'Recurso', 'Tipo de Espacio', 'Fecha y Horario', 'Horas', 'Total ($)', 'Estado'.
+  * Formateamos la fecha a 'dd/MM/yyyy HH:mm' y el total a moneda 'N2' con alineaciones prolijas (centrado y derecha para importes).
+  * Las celdas internas de id_reserva siguen estando disponibles en memoria para que modificar y cancelar reservas funcione sin inconvenientes.
+- Centrado de ventanas: FrmEditorRecursos y FrmEditorClientes ahora inician con StartPosition = CenterScreen y se abren con ShowDialog(this) para que siempre aparezcan centradas en la pantalla.
+- Corrección de etiquetas cortadas y validaciones de entrada en formularios modales:
+  * En FrmEditorClientes y FrmEditorRecursos configuramos las etiquetas (Nombre, Apellido, Teléfono, Ubicación, Tipo de recurso, Cant. Sillas, etc.) con fuente Tahoma y AutoSize = true para que nunca más se recorten como 'Nombr' o 'Apellid'.
+  * En FrmEditorClientes agregamos eventos KeyPress para validar en tiempo real:
+    - Nombre y Apellido: solo permiten letras (con tildes y eñes), espacios y teclas de control, bloqueando números y símbolos.
+    - Teléfono: solo permite números, signos telefónicos (+, -) y teclas de control, bloqueando letras.
+    - Mail: bloquea espacios y valida formato con @ y punto.
+  * En FrmEditorRecursos agregamos KeyPress en precio por hora para admitir exclusivamente dígitos y una sola coma o punto decimal.
+- Modo edición completo en Clientes y Recursos:
+  * En FrmEditorClientes y FrmEditorRecursos añadimos constructores con sobrecarga para modo modificación que precargan automáticamente los datos de la fila seleccionada en pantalla, cambian el título a 'Modificar...' y el botón a 'Guardar cambios'.
+  * Al guardar en modo modificación, ejecutan ModificarCliente y ModificarRecurso pasando el ID al stored procedure correspondiente de MySQL.
+- Blindaje de seguridad en FrmLogin:
+  * TxtUsuario solo permite letras en tiempo real (bloquea números, símbolos como #$% y comillas de inyección SQL).
+  * TxtContrasenia solo permite dígitos numéricos (bloquea letras y caracteres especiales).
+  * La autenticación opera en memoria en C# y toda la base utiliza Stored Procedures con parámetros tipados AddWithValue, garantizando inmunidad total contra SQL Injection.
+
+Paso 10: Manuales de usuario y administración en PDF e integración en Menú Ayuda
+- Creamos la carpeta separada Manuales_Sistema/ con dos documentos comerciales independientes (sin referencias a 'Trabajo Práctico Final', 'Algoritmos' o nombres de materias) replicando el formato visual minimalista original (fuente Arial, texto en negro justificado, separadores sutiles y el logo oficial Logo_coWorking_para_fondo_blanco.png centrado en la portada):
+  * Manual_Usuario_Cliente.pdf: Orientado 100% al cliente, con portada de CoWorking y el logo para fondo blanco, explicando cómo reservar paso a paso (cliente, recurso, fecha, horario disponible en negro/ocupado en rojo, horas de uso 1 a 24 hs, cálculo del total en tiempo real) y cómo consultar sus reservas en la solapa Reservas.
+  * Manual_Administrador.pdf: Guía completa para el operador, con la misma identidad visual y logo oficial, credenciales de acceso (Admin / 123456), gestión de clientes (altas, modificaciones con precarga y bajas), administración del catálogo de recursos con campos dinámicos, reprogramación y cancelación lógica de reservas.
+- En FrmPrincipal (Menú superior) agregamos el ítem dinámico 'Ayuda - Manual de Usuario':
+  * Cuando el sistema está en modo cliente, abre directamente 'Manual_Usuario_Cliente.pdf'.
+  * Cuando el administrador inicia sesión, el ítem pasa a llamarse 'Ayuda - Manual del Administrador' y abre 'Manual_Administrador.pdf'.
+- Confirmación de salida: agregamos confirmación obligatoria al presionar la 'X' de la ventana principal o 'Menú -> Salir' para evitar cierres accidentales.
+
+Paso 11: Implementación de Exportación e Importación JSON (Etapa 6 de la Cátedra)
+- Desarrollamos la clase GestorJson (en Gestoras/GestorJson.cs) utilizando JavaScriptSerializer (System.Web.Extensions) nativo del framework:
+  * Exportar Recursos a JSON: extrae el catálogo completo de espacios (salas de reunión, oficinas privadas y puestos de trabajo) con sus propiedades específicas (precio, ubicación, mobiliario, sillas, categoría) y genera un archivo JSON indentado y formateado prolijamente.
+  * Importar Recursos desde JSON: lee un archivo JSON estructurado, valida la integridad de los datos mínimos y los instancia a través del patrón Factory (RecursoFactory) para persistirlos de forma polimórfica en la base de datos MySQL mediante Stored Procedures.
+  * Exportar Reservas a JSON: genera un reporte completo de reservas registradas con cliente, recurso, tipo de espacio, fecha/hora, duración, importe total y estado.
+- Integramos las opciones en el menú principal ('Menú -> Exportar Recursos (JSON)...', 'Importar Recursos (JSON)...', 'Exportar Reservas (JSON)...'), visibles exclusivamente con la sesión de Administrador activa para garantizar control y seguridad.
+- Generamos los archivos de prueba para la entrega requeridos por la consigna: recursos_ejemplo.json y reservas_ejemplo.json.
+
 Lo que nos queda hacer ahora entre los tres:
-- Terminar de programar los métodos de GestorDAO.cs (abrir conexión
-  con using, invocar sp_alta_reserva, sp_cancelar_reserva, poblar
-  DataGridViews desde vw_detalle_reservas).
-- Capturar en los formularios el bloque catch (MySqlException ex)
-  cuando ex.SqlState == '45000' para mostrar el mensaje de negocio
-  en un MessageBox.Show().
-- Preparar la exportación e importación a JSON cuando lo veamos en clase.
-- Pasar la cadena de conexión de Conexion.cs a App.config.
+- Pasar la cadena de conexión de Conexion.cs a App.config si el profesor lo solicita.
+
+--- 2026-11-11 22:41 ---
+[FrmPrincipal.cs]
+- Se descoment� y restaur� el m�todo FormatearGrillaRecursos() (estaba dentro de un bloque /* */ sin uso)
+- Se descoment� la llamada FormatearGrillaRecursos() despu�s de CargarRecursos()
+- La columna 'Categor�a' ahora usa AutoSizeMode=Fill para absorber el espacio sobrante
+  y eliminar la banda gris vac�a a la derecha de la grilla de Recursos
+
+[Manuales_Sistema/Manual_Administrador.docx/.pdf]
+- Secci�n 2.3: agregados 3 emails de soporte (reservas@, soporte@, admin@ coworking.com)
+- PDFs regenerados y sincronizados en bin\Debug\Manuales_Sistema\
+
+[Manuales_Sistema/Manual_Usuario_Cliente.docx/.pdf]
+- Secci�n de asistencia t�cnica: agregados 3 emails de soporte (reservas@, soporte@, admin@ coworking.com)
+- PDFs regenerados y sincronizados en bin\Debug\Manuales_Sistema\
+
+--- 2026-11-11 23:22 ---
+[Documentacion/TP_Final_AlgoritmosII_Grupo2.docx/.pdf]
+- Se elimin� la secci�n 10 ("Checklist Institucional de Control Previo a la Entrega") y su entrada en el �ndice de Contenidos. El documento concluye formalmente en la secci�n 9 (Referencias Bibliogr�ficas APA 7.� ed.).
+- Se corrigi� el p�rrafo de Cliente/Reserva dividi�ndolo en 2 p�rrafos est�ndar para erradicar el salto de l�nea interno (<w:br/>) que provocaba justificaci�n forzada.
+- En la secci�n 7.2 (Autenticaci�n y Soporte), los correos de los 3 integrantes se estructuraron en vi�etas con alineaci�n izquierda (left), eliminando el espaciado extendido entre palabras.
+- PDF regenerado con Microsoft Word COM (22 p�ginas).
+
+[Documentacion/Manual_de_Usuario.docx/.pdf]
+- Se reestructuraron los correos de soporte t�cnico en vi�etas con alineaci�n izquierda, eliminando la justificaci�n excesiva.
+- PDF regenerado con Microsoft Word COM.
+
+[Manuales_Sistema/Manual_Administrador.docx/.pdf]
+- Se purgaron las direcciones temporales ficticias (@coworking.com).
+- Se preservan �nicamente las casillas oficiales de los 3 autores (Tullo, Ortega, Scollo) bajo vi�etas alineadas a la izquierda.
+- PDF regenerado y sincronizado en bin\Debug\Manuales_Sistema\.
+
+[Manuales_Sistema/Manual_Usuario_Cliente.docx/.pdf]
+- Se purgaron las referencias temporales a @coworking.com en la portada y cuerpo.
+- Se mantienen exclusivamente los correos reales de los autores formateados correctamente.
+- PDF regenerado y sincronizado en bin\Debug\Manuales_Sistema\.

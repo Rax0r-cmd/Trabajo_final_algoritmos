@@ -1,4 +1,4 @@
-﻿using SistemaDeGestion.Formularios;
+using SistemaDeGestion.Formularios;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +17,33 @@ namespace SistemaDeGestion
         public FrmLogin()
         {
             InitializeComponent();
+
+            // Bloqueo de caracteres sospechosos, simbolos y SQL en tiempo real:
+            // Usuario solo letras (ej: Admin), Password solo numeros (ej: 123456)
+            this.TxtUsuario.KeyPress += new KeyPressEventHandler(TxtUsuario_KeyPress);
+            this.TxtContrasenia.KeyPress += new KeyPressEventHandler(TxtContrasenia_KeyPress);
+        }
+
+        // Permite unicamente letras y teclas de control; bloquea numeros, simbolos (#, $, %) y comillas
+        private void TxtUsuario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar)) return;
+
+            if (!char.IsLetter(e.KeyChar))
+            {
+                e.Handled = true; // Bloquea cualquier caracter que no sea letra
+            }
+        }
+
+        // Permite unicamente digitos numericos y teclas de control; bloquea letras y simbolos
+        private void TxtContrasenia_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar)) return;
+
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // Bloquea letras y simbolos especiales
+            }
         }
 
         private void LbltituloCw_Click(object sender, EventArgs e)

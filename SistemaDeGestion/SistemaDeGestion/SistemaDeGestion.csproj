@@ -48,7 +48,7 @@
     <Reference Include="K4os.Hash.xxHash, Version=1.0.8.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
       <HintPath>..\packages\K4os.Hash.xxHash.1.0.8\lib\net462\K4os.Hash.xxHash.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=26.10.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+    <Reference Include="MySql.Data">
       <HintPath>..\packages\MySql.Data.26.10.0\lib\net462\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -85,6 +85,7 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="ZstdSharp, Version=0.8.8.0, Culture=neutral, PublicKeyToken=8d151af33a4ad5cf, processorArchitecture=MSIL">
@@ -119,7 +120,9 @@
     <Compile Include="Modelos\PuestoTrabajo.cs" />
     <Compile Include="Modelos\Cliente.cs" />
     <Compile Include="Modelos\Reserva.cs" />
+    <Compile Include="Modelos\RecursoFactory.cs" />
     <Compile Include="Gestoras\GestorDAO.cs" />
+    <Compile Include="Gestoras\GestorJson.cs" />
     <Compile Include="DAO\ClienteDAO.cs" />
     <Compile Include="DAO\RecursoDAO.cs" />
     <Compile Include="DAO\ReservaDAO.cs" />

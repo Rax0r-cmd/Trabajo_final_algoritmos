@@ -86,8 +86,7 @@ namespace SistemaDeGestion.DAO
         // MODIFICACIONES (Procedimiento: sp_modificar_recurso)
         // =========================================================================
 
-        
-        public bool ModificarRecurso(string nombre, string descripcion, string ubicacion, decimal precio,
+        public bool ModificarRecurso(int idRecurso, string nombre, string descripcion, string ubicacion, decimal precio,
                                      bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
         {
             using (MySqlConnection conexion = Conexion.CrearConexion())
@@ -97,6 +96,7 @@ namespace SistemaDeGestion.DAO
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.AddWithValue("p_id_recurso", idRecurso);
                     cmd.Parameters.AddWithValue("p_nombre", nombre);
                     cmd.Parameters.AddWithValue("p_descripcion", (object)descripcion ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("p_ubicacion", ubicacion);
@@ -110,6 +110,12 @@ namespace SistemaDeGestion.DAO
                     return filasAfectadas >= 0;
                 }
             }
+        }
+
+        public bool ModificarRecurso(string nombre, string descripcion, string ubicacion, decimal precio,
+                                     bool? mobiliarioIncluido, int? cantidadSillas, int? nroCategoria, int idTipoRecurso)
+        {
+            return ModificarRecurso(0, nombre, descripcion, ubicacion, precio, mobiliarioIncluido, cantidadSillas, nroCategoria, idTipoRecurso);
         }
 
         

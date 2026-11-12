@@ -43,6 +43,8 @@ namespace SistemaDeGestion.Formularios
             this.nudHoras = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.dtpFechaReserva = new System.Windows.Forms.DateTimePicker();
+            this.lblHorario = new System.Windows.Forms.Label();
+            this.cboHorarioInicio = new System.Windows.Forms.ComboBox();
             this.CmbTipoRecurso = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -71,6 +73,14 @@ namespace SistemaDeGestion.Formularios
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ingresarComoAdministradorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cerrarSesionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorJson = new System.Windows.Forms.ToolStripSeparator();
+            this.exportarCatalogoJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importarRecursosJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportarReservasJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorMenu = new System.Windows.Forms.ToolStripSeparator();
+            this.ayudaManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorSalir = new System.Windows.Forms.ToolStripSeparator();
+            this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageClientes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -186,6 +196,8 @@ namespace SistemaDeGestion.Formularios
             this.TbpDashboard.Controls.Add(this.nudHoras);
             this.TbpDashboard.Controls.Add(this.label4);
             this.TbpDashboard.Controls.Add(this.dtpFechaReserva);
+            this.TbpDashboard.Controls.Add(this.lblHorario);
+            this.TbpDashboard.Controls.Add(this.cboHorarioInicio);
             this.TbpDashboard.Controls.Add(this.CmbTipoRecurso);
             this.TbpDashboard.Controls.Add(this.label3);
             this.TbpDashboard.Controls.Add(this.label1);
@@ -209,7 +221,7 @@ namespace SistemaDeGestion.Formularios
             this.lblTotal.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblTotal.Location = new System.Drawing.Point(40, 371);
             this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(283, 41);
+            this.lblTotal.Size = new System.Drawing.Size(173, 41);
             this.lblTotal.TabIndex = 20;
             // 
             // label6
@@ -219,9 +231,9 @@ namespace SistemaDeGestion.Formularios
             this.label6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label6.Location = new System.Drawing.Point(35, 347);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(48, 24);
+            this.label6.Size = new System.Drawing.Size(117, 24);
             this.label6.TabIndex = 19;
-            this.label6.Text = "Total";
+            this.label6.Text = "Valor a abonar:";
             // 
             // label5
             // 
@@ -230,16 +242,18 @@ namespace SistemaDeGestion.Formularios
             this.label5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label5.Location = new System.Drawing.Point(35, 238);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(123, 24);
+            this.label5.Size = new System.Drawing.Size(178, 24);
             this.label5.TabIndex = 18;
-            this.label5.Text = "Horas de uso";
+            this.label5.Text = "Horas de uso (Max. 24hs)";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // nudHoras
             // 
             this.nudHoras.Location = new System.Drawing.Point(40, 265);
             this.nudHoras.Name = "nudHoras";
-            this.nudHoras.Size = new System.Drawing.Size(118, 26);
+            this.nudHoras.Size = new System.Drawing.Size(52, 26);
             this.nudHoras.TabIndex = 17;
+            this.nudHoras.ValueChanged += new System.EventHandler(this.nudHoras_ValueChanged);
             // 
             // label4
             // 
@@ -258,8 +272,29 @@ namespace SistemaDeGestion.Formularios
             this.dtpFechaReserva.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpFechaReserva.Location = new System.Drawing.Point(780, 138);
             this.dtpFechaReserva.Name = "dtpFechaReserva";
-            this.dtpFechaReserva.Size = new System.Drawing.Size(207, 28);
+            this.dtpFechaReserva.Size = new System.Drawing.Size(138, 28);
             this.dtpFechaReserva.TabIndex = 15;
+            // 
+            // lblHorario
+            // 
+            this.lblHorario.BackColor = System.Drawing.Color.Transparent;
+            this.lblHorario.Font = new System.Drawing.Font("Myanmar Text", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHorario.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblHorario.Location = new System.Drawing.Point(775, 178);
+            this.lblHorario.Name = "lblHorario";
+            this.lblHorario.Size = new System.Drawing.Size(143, 22);
+            this.lblHorario.TabIndex = 21;
+            this.lblHorario.Text = "Horario de inicio";
+            // 
+            // cboHorarioInicio
+            // 
+            this.cboHorarioInicio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboHorarioInicio.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboHorarioInicio.FormattingEnabled = true;
+            this.cboHorarioInicio.Location = new System.Drawing.Point(780, 202);
+            this.cboHorarioInicio.Name = "cboHorarioInicio";
+            this.cboHorarioInicio.Size = new System.Drawing.Size(138, 29);
+            this.cboHorarioInicio.TabIndex = 22;
             // 
             // CmbTipoRecurso
             // 
@@ -559,7 +594,15 @@ namespace SistemaDeGestion.Formularios
             // 
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ingresarComoAdministradorToolStripMenuItem,
-            this.cerrarSesionToolStripMenuItem});
+            this.cerrarSesionToolStripMenuItem,
+            this.toolStripSeparatorJson,
+            this.exportarCatalogoJsonToolStripMenuItem,
+            this.importarRecursosJsonToolStripMenuItem,
+            this.exportarReservasJsonToolStripMenuItem,
+            this.toolStripSeparatorMenu,
+            this.ayudaManualToolStripMenuItem,
+            this.toolStripSeparatorSalir,
+            this.salirToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             this.menuToolStripMenuItem.Size = new System.Drawing.Size(60, 24);
             this.menuToolStripMenuItem.Text = "Menu";
@@ -578,6 +621,56 @@ namespace SistemaDeGestion.Formularios
             this.cerrarSesionToolStripMenuItem.Text = "Cerrar sesión";
             this.cerrarSesionToolStripMenuItem.Click += new System.EventHandler(this.cerrarSesionToolStripMenuItem_Click);
             // 
+            // toolStripSeparatorJson
+            // 
+            this.toolStripSeparatorJson.Name = "toolStripSeparatorJson";
+            this.toolStripSeparatorJson.Size = new System.Drawing.Size(283, 6);
+            // 
+            // exportarCatalogoJsonToolStripMenuItem
+            // 
+            this.exportarCatalogoJsonToolStripMenuItem.Name = "exportarCatalogoJsonToolStripMenuItem";
+            this.exportarCatalogoJsonToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
+            this.exportarCatalogoJsonToolStripMenuItem.Text = "Exportar Recursos (JSON)...";
+            this.exportarCatalogoJsonToolStripMenuItem.Click += new System.EventHandler(this.exportarCatalogoJsonToolStripMenuItem_Click);
+            // 
+            // importarRecursosJsonToolStripMenuItem
+            // 
+            this.importarRecursosJsonToolStripMenuItem.Name = "importarRecursosJsonToolStripMenuItem";
+            this.importarRecursosJsonToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
+            this.importarRecursosJsonToolStripMenuItem.Text = "Importar Recursos (JSON)...";
+            this.importarRecursosJsonToolStripMenuItem.Click += new System.EventHandler(this.importarRecursosJsonToolStripMenuItem_Click);
+            // 
+            // exportarReservasJsonToolStripMenuItem
+            // 
+            this.exportarReservasJsonToolStripMenuItem.Name = "exportarReservasJsonToolStripMenuItem";
+            this.exportarReservasJsonToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
+            this.exportarReservasJsonToolStripMenuItem.Text = "Exportar Reservas (JSON)...";
+            this.exportarReservasJsonToolStripMenuItem.Click += new System.EventHandler(this.exportarReservasJsonToolStripMenuItem_Click);
+            // 
+            // toolStripSeparatorMenu
+            // 
+            this.toolStripSeparatorMenu.Name = "toolStripSeparatorMenu";
+            this.toolStripSeparatorMenu.Size = new System.Drawing.Size(283, 6);
+            // 
+            // ayudaManualToolStripMenuItem
+            // 
+            this.ayudaManualToolStripMenuItem.Name = "ayudaManualToolStripMenuItem";
+            this.ayudaManualToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
+            this.ayudaManualToolStripMenuItem.Text = "Ayuda - Manual de Usuario";
+            this.ayudaManualToolStripMenuItem.Click += new System.EventHandler(this.ayudaManualToolStripMenuItem_Click);
+            // 
+            // toolStripSeparatorSalir
+            // 
+            this.toolStripSeparatorSalir.Name = "toolStripSeparatorSalir";
+            this.toolStripSeparatorSalir.Size = new System.Drawing.Size(283, 6);
+            // 
+            // salirToolStripMenuItem
+            // 
+            this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
+            this.salirToolStripMenuItem.Text = "Salir";
+            this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
+            // 
             // FrmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
@@ -594,6 +687,7 @@ namespace SistemaDeGestion.Formularios
             this.Name = "FrmPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CoWorking - DASHBOARD";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmPrincipal_FormClosing);
             this.Load += new System.EventHandler(this.FrmPrincipal_Load);
             this.tabPageClientes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
@@ -628,6 +722,14 @@ namespace SistemaDeGestion.Formularios
         private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ingresarComoAdministradorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cerrarSesionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorJson;
+        private System.Windows.Forms.ToolStripMenuItem exportarCatalogoJsonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importarRecursosJsonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportarReservasJsonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorMenu;
+        private System.Windows.Forms.ToolStripMenuItem ayudaManualToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorSalir;
+        private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox CmbClientes;
@@ -659,5 +761,7 @@ namespace SistemaDeGestion.Formularios
         private System.Windows.Forms.Button btnCrearRecurso;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button btnLimpiarCampos;
+        private System.Windows.Forms.Label lblHorario;
+        private System.Windows.Forms.ComboBox cboHorarioInicio;
     }
 }

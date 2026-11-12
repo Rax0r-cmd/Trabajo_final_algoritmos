@@ -8,6 +8,7 @@ namespace SistemaDeGestion.Modelos
 {
     public class Reserva
     {
+        public int IdReserva { get; set; }
         public int IdCliente { get; set; }
         public int IdRecurso { get; set; }
         public DateTime Fecha { get; set; }
@@ -32,6 +33,7 @@ namespace SistemaDeGestion.Modelos
         public Reserva(int idReserva, int idCliente, int idRecurso, DateTime fecha, int horas, decimal total)
             : this(idCliente, idRecurso, fecha, horas, total, EstadoReserva.Confirmada)
         {
+            IdReserva = idReserva;
         }
     }
 }
