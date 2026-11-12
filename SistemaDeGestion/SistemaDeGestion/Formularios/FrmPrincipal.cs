@@ -260,28 +260,42 @@ namespace SistemaDeGestion.Formularios
             {
                 string archivoPdf = _esAdmin ? "Manual_Administrador.pdf" : "Manual_Usuario_Cliente.pdf";
 
-                // Buscamos el PDF en las posibles rutas de la carpeta nueva 'Manuales_Sistema'
-                string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Manuales_Sistema", archivoPdf);
-                if (!File.Exists(ruta))
+                // Busqueda generica y relativa del PDF para que funcione en cualquier computadora instalada
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string[] rutasCandidatas = new string[]
                 {
-                    ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Manuales_Sistema", archivoPdf);
-                }
-                if (!File.Exists(ruta))
+                    Path.Combine(baseDir, "Manuales_Sistema", archivoPdf),
+                    Path.Combine(baseDir, archivoPdf),
+                    Path.Combine(baseDir, "..", "Manuales_Sistema", archivoPdf),
+                    Path.Combine(baseDir, "..", "..", "Manuales_Sistema", archivoPdf),
+                    Path.Combine(baseDir, "..", "..", "..", "Manuales_Sistema", archivoPdf)
+                };
+
+                string rutaEncontrada = null;
+                foreach (string candidate in rutasCandidatas)
                 {
-                    ruta = Path.Combine(@"c:\xampp\htdocs\TP_FINAL_ALGORITMOS\Manuales_Sistema", archivoPdf);
+                    try
+                    {
+                        if (File.Exists(candidate))
+                        {
+                            rutaEncontrada = Path.GetFullPath(candidate);
+                            break;
+                        }
+                    }
+                    catch { }
                 }
 
-                if (File.Exists(ruta))
+                if (!string.IsNullOrEmpty(rutaEncontrada))
                 {
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = Path.GetFullPath(ruta),
+                        FileName = rutaEncontrada,
                         UseShellExecute = true
                     });
                 }
                 else
                 {
-                    MessageBox.Show($"No se encontró el manual '{archivoPdf}' en la carpeta 'Manuales_Sistema'.", "Archivo no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"No se encontró el manual '{archivoPdf}' en la carpeta 'Manuales_Sistema' ni en el directorio de la aplicación.", "Archivo no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
@@ -502,7 +516,8 @@ namespace SistemaDeGestion.Formularios
 
             // Engancho los clicks de los botones del panel y de bajas
             btnAgregar.Click += new EventHandler(btnAgregar_Click);
-            btnEliminarUsuario.Click += new EventHandler(btnEliminarUsuario_Click);
+            // btnEliminarUsuario_Click ya esta enganchado en el Designer (FrmPrincipal.Designer.cs linea 140)
+            // para no duplicar el evento ni disparar 2 veces el cuadro de confirmacion.
             btnEliminarRecurso.Click += new EventHandler(btnEliminarRecurso_Click);
             btnEliminarReserva.Click += new EventHandler(btnEliminarReserva_Click);
             btnModificarReserva.Click += new EventHandler(btnModificarReserva_Click);
