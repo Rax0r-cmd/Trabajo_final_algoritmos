@@ -14,8 +14,7 @@ namespace SistemaDeGestion
         {
             InitializeComponent();
 
-            // Aca engancho los eventos de los botones para no alterar el designer
-            this.btnAgregar.Click += new EventHandler(btnAgregar_Click);
+            // btnAgregar.Click ya esta enganchado en el Designer (FrmEditorClientes.Designer.cs linea 100)
             this.button1.Click += new EventHandler(btnCancelar_Click);
 
             // Validaciones de teclado en tiempo real (bloquea numeros en nombre y apellido, etc.)
