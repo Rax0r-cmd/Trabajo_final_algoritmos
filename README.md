@@ -64,61 +64,88 @@ flowchart TD
 
 ## Cómo usar / Instalación
 
-### 1. Clonar el repositorio
+El sistema ofrece dos modalidades de puesta en marcha:
+1. **Opción A (Recomendada para usuarios o evaluación rápida):** Instalación directa mediante el asistente oficial de Windows Installer (`setup.exe`).
+2. **Opción B (Para desarrolladores):** Compilación y ejecución desde el código fuente con Visual Studio 2022.
 
-Clonar con HTTPS:
-```bash
-git clone https://github.com/Rax0r-cmd/Trabajo_final_algoritmos.git
-```
+---
 
-Clonar con SSH:
-```bash
-git clone git@github.com:Rax0r-cmd/Trabajo_final_algoritmos.git
-```
+### Opción A: Instalación directa con el Instalador Oficial (Recomendada)
 
-### 2. Base de Datos (MySQL bajo XAMPP)
+No se requiere tener instalado Visual Studio para probar la aplicación:
 
-1. Iniciar el panel de control de **XAMPP** y encender el servicio **MySQL** (puerto predeterminado `3306`).
-2. Abrir **phpMyAdmin** (`http://localhost/phpmyadmin`) o **MySQL Workbench**.
-3. Abrir y ejecutar el script completo ubicado en:
-   ```text
-   DB/DB_TPFinal.sql
+1. **Requisitos previos:**
+   - Tener iniciado **MySQL** en el puerto `3306` (por ejemplo, encendiendo el servicio MySQL desde el panel de **XAMPP**).
+   - Cargar la base de datos por única vez: abrir phpMyAdmin (`http://localhost/phpmyadmin`) o MySQL Workbench y ejecutar el script `DB/DB_TPFinal.sql`.
+
+2. **Ejecutar el instalador:**
+   - Ir a la carpeta `Instalador/` del repositorio (o la carpeta del instalador copiada en un pendrive).
+   - Hacer doble clic en **`setup.exe`** (o en **`InstaladorCoWorking.msi`**).
+   - Seguir los pasos del asistente de instalación de Visual Studio Installer ("Siguiente" $\rightarrow$ "Instalar").
+   - El instalador creará automáticamente el acceso directo en el **Escritorio** y en el Menú Inicio.
+
+3. **Credenciales de acceso:**
+   - **Modo Cliente:** Acceso libre sin credenciales para consultar espacios y realizar reservas.
+   - **Modo Administrador:** Menú superior $\rightarrow$ *Ingresar como Administrador*:
+     - **Usuario:** `Admin`
+     - **Contraseña:** `123456`
+
+---
+
+### Opción B: Ejecución desde el código fuente en Visual Studio
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/Rax0r-cmd/Trabajo_final_algoritmos.git
    ```
-   Esto crea la base de datos `tp_final_db`, las 5 tablas normalizadas, las vistas analíticas, los procedimientos almacenados con control `SIGNAL 45000`, la función determinística de disponibilidad y el trigger de auditoría con datos de prueba.
 
-### 3. Ejecutar la aplicación en Visual Studio
+2. **Inicializar la Base de Datos:**
+   - Encender MySQL en **XAMPP** (puerto `3306`).
+   - Importar y ejecutar el script ubicado en:
+     ```text
+     DB/DB_TPFinal.sql
+     ```
+     Esto creará la base `tp_final_db` con todas las tablas normalizadas, vistas, triggers y procedimientos con `SIGNAL 45000`.
 
-1. Abrir la solución en **Visual Studio 2022**:
-   ```text
-   SistemaDeGestion/SistemaDeGestion.slnx
-   ```
-2. Hacer clic derecho sobre la solución y seleccionar **Restaurar paquetes NuGet** para garantizar la vinculación de `MySql.Data`.
-3. Seleccionar la configuración `Debug` / `AnyCPU` y presionar **F5** (o el botón *Iniciar*).
-4. Para acceder a las funciones administrativas en `FrmLogin`, ingresar las credenciales autorizadas:
-   - **Usuario:** `Admin`
-   - **Contraseña:** `123456`
+3. **Abrir y compilar la solución:**
+   - Abrir `SistemaDeGestion/SistemaDeGestion.sln` (o `.slnx`) en **Microsoft Visual Studio 2022**.
+   - Restaurar paquetes NuGet (para vincular `MySql.Data`).
+   - Seleccionar la configuración `Debug` o `Release` (`Any CPU`) y presionar **F5** (o botón *Iniciar*).
 
 ---
 
 ## Organización del Repositorio
 
 ```text
-├── SistemaDeGestion/           (Código fuente y solución C# Windows Forms .NET Framework 4.7.2)
-│   ├── Clases/                 (Modelos POO: Recurso, Sala, Oficina, Puesto, Cliente, Reserva, Gestora, GestorDAO, Conexion)
-│   ├── Forms/                  (Formularios: FrmLogin, FrmPrincipal con solapas Control, Reservas y Gestión)
-│   └── SistemaDeGestion.slnx   (Archivo de solución de Visual Studio 2022)
+├── Instalador/                 (Paquete de distribución oficial de Visual Studio Installer)
+│   ├── setup.exe               (Lanzador bootstrapper ejecutable con verificación de entorno)
+│   └── InstaladorCoWorking.msi (Paquete Windows Installer estándar con la aplicación completa)
+├── SistemaDeGestion/           (Código fuente y soluciones C# WinForms .NET Framework 4.7.2)
+│   ├── SistemaDeGestion/       (Proyecto principal de la aplicación de escritorio)
+│   │   ├── Modelos/            (Clases POO: Recurso, Sala, OficinaPrivada, PuestoTrabajo, Cliente, Reserva, RecursoFactory)
+│   │   ├── DAO/                (Patrón DAO: ClienteDAO, RecursoDAO, ReservaDAO)
+│   │   ├── Gestoras/           (GestorDAO, GestoraCoworking con LINQ y GestorJson para exportación/importación)
+│   │   ├── ConexionDB/         (Conexion.cs con gestión centralizada MySqlConnection y using)
+│   │   ├── Formularios/        (FrmPrincipal, FrmLogin y controles de navegación por pestañas)
+│   │   ├── Enum/               (EstadoReserva.cs tipado: Pendiente, Confirmada, Cancelada)
+│   │   └── App.config          (Cadena de conexión configurable a MySQL)
+│   ├── SistemaDeGestion.sln    (Solución estándar de Microsoft Visual Studio 2022)
+│   └── SistemaDeGestion.slnx   (Solución moderna XML de Visual Studio)
 ├── DB/                         (Persistencia relacional MySQL y diagramas de ingeniería)
 │   ├── DB_TPFinal.sql          (Script SQL completo: tablas, vistas, SPs con SIGNAL 45000, función y trigger)
 │   ├── Diagrama_DER.png        (Diagrama Entidad-Relación exportado de MySQL Workbench)
-│   ├── Diagrama_Clases_UML.png (Diagrama de clases simplificado del dominio POO de alta legibilidad)
-│   └── Diagrama_Editable.mwb   (Modelo editable de MySQL Workbench)
-├── Documentacion/              (Documentación institucional y académica reglamentaria)
-│   ├── TP_Final_AlgoritmosII_Grupo2.docx  (Documento Word integrador oficial según normas institucionales)
-│   ├── TP_Final_AlgoritmosII_Grupo2.pdf   (Entregable único oficial maquetado en A4 - 23 páginas)
-│   ├── Documentacion_Desarrollo.pdf       (Memoria técnica de POO, polimorfismo y capas)
-│   ├── Diccionario_de_Datos.pdf           (Diccionario relacional de datos y objetos MySQL)
-│   └── Manual_de_Usuario.pdf              (Guía de operación del sistema para usuario y administrador)
-└── src/                        (Recursos gráficos institucionales: logos vectoriales, fondos e iconos)
+│   ├── Diagrama_Clases_UML.png (Diagrama de clases del dominio POO según rúbrica académica)
+│   └── Diagrama_Editable.mwb   (Modelo editable en MySQL Workbench)
+├── Manuales_Sistema/           (Manuales operativos integrados y accesibles desde la app)
+│   ├── Manual_Usuario_Cliente.pdf (Guía de autogestión de turnos y catálogo para clientes)
+│   └── Manual_Administrador.pdf   (Manual de gestión de clientes, recursos y reportes para admin)
+├── Documentacion/              (Documentación institucional reglamentaria en DOCX y PDF)
+│   ├── TP_Final_AlgoritmosII_Grupo2.pdf  (Informe integrador único maquetado en A4 - 22 páginas)
+│   ├── Documentacion_Desarrollo.pdf      (Memoria técnica sobre POO, polimorfismo y capas)
+│   ├── Diccionario_de_Datos.pdf          (Diccionario relacional de tablas y objetos MySQL)
+│   └── Manual_de_Usuario.pdf             (Manual integral de usuario y administración)
+├── Registro_de_cambios.txt     (Historial cronológico detallado de evoluciones y correcciones)
+└── src/                        (Recursos gráficos: logotipos vectoriales, fondos e iconos)
 ```
 
 ---
