@@ -62,64 +62,64 @@ flowchart TD
 
 ---
 
-## Cómo usar / Instalación
+## Puesta en Marcha e Instalación
 
-El sistema ofrece dos modalidades de puesta en marcha:
-1. **Opción A (Recomendada para usuarios o evaluación rápida):** Instalación directa mediante el asistente oficial de Windows Installer (`setup.exe`).
-2. **Opción B (Para desarrolladores):** Compilación y ejecución desde el código fuente con Visual Studio 2022.
+### 1. Requisito Previo Obligatorio: Base de Datos en MySQL
 
----
+Antes de instalar o ejecutar la aplicación, es indispensable tener corriendo el motor de persistencia relacional con el esquema del sistema:
 
-### Opción A: Instalación directa con el Instalador Oficial (Recomendada)
-
-No se requiere tener instalado Visual Studio para probar la aplicación:
-
-1. **Requisitos previos:**
-   - Tener iniciado **MySQL** en el puerto `3306` (por ejemplo, encendiendo el servicio MySQL desde el panel de **XAMPP**).
-   - Cargar la base de datos por única vez: abrir phpMyAdmin (`http://localhost/phpmyadmin`) o MySQL Workbench y ejecutar el script `DB/DB_TPFinal.sql`.
-
-2. **Ejecutar el instalador:**
-   - Ir a la carpeta `Instalador/` del repositorio (o la carpeta del instalador copiada en un pendrive).
-   - Hacer doble clic en **`setup.exe`** (o en **`InstaladorCoWorking.msi`**).
-   - Seguir los pasos del asistente de instalación de Visual Studio Installer ("Siguiente" $\rightarrow$ "Instalar").
-   - El instalador creará automáticamente el acceso directo en el **Escritorio** y en el Menú Inicio.
-
-3. **Credenciales de acceso:**
-   - **Modo Cliente:** Acceso libre sin credenciales para consultar espacios y realizar reservas.
-   - **Modo Administrador:** Menú superior $\rightarrow$ *Ingresar como Administrador*:
-     - **Usuario:** `Admin`
-     - **Contraseña:** `123456`
+1. **Iniciar MySQL:** Abrir el panel de control de **XAMPP** y encender el servicio **MySQL** (verificar que quede en verde en el puerto predeterminado `3306`).
+2. **Cargar el Esquema:** Abrir **phpMyAdmin** (`http://localhost/phpmyadmin`) o **MySQL Workbench**, importar y ejecutar por única vez el archivo:
+   ```text
+   DB/DB_TPFinal.sql
+   ```
+   *Esto creará automáticamente la base `tp_final_db`, las 5 tablas normalizadas, las vistas analíticas, los procedimientos almacenados con validación `SIGNAL 45000`, la función de disponibilidad horaria y el trigger de auditoría con datos de prueba.*
 
 ---
 
-### Opción B: Ejecución desde el código fuente en Visual Studio
+### 2. Modos de Uso del Sistema
 
-1. **Clonar el repositorio:**
+Una vez que la base de datos está activa, podés elegir cualquiera de las siguientes opciones:
+
+#### Opción A: Instalación directa con el Instalador Oficial (Recomendada)
+
+No se requiere tener abierto ni instalado Visual Studio:
+
+1. Ir a la carpeta `Instalador/` del repositorio.
+2. Hacer doble clic directamente en el archivo **`InstaladorCoWorking.msi`**.
+3. Seguir los pasos del asistente de Windows Installer ("Siguiente" $\rightarrow$ "Instalar").
+4. El instalador creará automáticamente los accesos directos en el **Escritorio** y en el Menú Inicio.
+
+#### Opción B: Ejecución desde el código fuente en Visual Studio
+
+Para desarrolladores que deseen depurar o inspeccionar el código:
+
+1. Clonar el repositorio:
    ```bash
    git clone https://github.com/Rax0r-cmd/Trabajo_final_algoritmos.git
    ```
+2. Abrir la solución `SistemaDeGestion/SistemaDeGestion.sln` (o `.slnx`) en **Microsoft Visual Studio 2022**.
+3. Restaurar paquetes NuGet (para vincular `MySql.Data`).
+4. Seleccionar la configuración `Debug` o `Release` (`Any CPU`) y presionar **F5** (o botón *Iniciar*).
 
-2. **Inicializar la Base de Datos:**
-   - Encender MySQL en **XAMPP** (puerto `3306`).
-   - Importar y ejecutar el script ubicado en:
-     ```text
-     DB/DB_TPFinal.sql
-     ```
-     Esto creará la base `tp_final_db` con todas las tablas normalizadas, vistas, triggers y procedimientos con `SIGNAL 45000`.
+---
 
-3. **Abrir y compilar la solución:**
-   - Abrir `SistemaDeGestion/SistemaDeGestion.sln` (o `.slnx`) en **Microsoft Visual Studio 2022**.
-   - Restaurar paquetes NuGet (para vincular `MySql.Data`).
-   - Seleccionar la configuración `Debug` o `Release` (`Any CPU`) y presionar **F5** (o botón *Iniciar*).
+### 3. Credenciales de Acceso
+
+- **Modo Cliente (Autogestión):** Acceso libre sin credenciales para consultar catálogo de espacios y registrar reservas.
+- **Modo Administrador (Control Total):** Menú superior $\rightarrow$ *Ingresar como Administrador*:
+  - **Usuario:** `Admin`
+  - **Contraseña:** `123456`
+
+*(Al autenticarse como administrador se habilitan las solapas de Gestión de Clientes, Administración de Recursos físicos, reprogramación/cancelación de turnos y exportación/importación en formato JSON).*
 
 ---
 
 ## Organización del Repositorio
 
 ```text
-├── Instalador/                 (Paquete de distribución oficial de Visual Studio Installer)
-│   ├── setup.exe               (Lanzador bootstrapper ejecutable con verificación de entorno)
-│   └── InstaladorCoWorking.msi (Paquete Windows Installer estándar con la aplicación completa)
+├── Instalador/                 (Paquete de distribución oficial de Windows Installer)
+│   └── InstaladorCoWorking.msi (Paquete Windows Installer autónomo con la aplicación completa)
 ├── SistemaDeGestion/           (Código fuente y soluciones C# WinForms .NET Framework 4.7.2)
 │   ├── SistemaDeGestion/       (Proyecto principal de la aplicación de escritorio)
 │   │   ├── Modelos/            (Clases POO: Recurso, Sala, OficinaPrivada, PuestoTrabajo, Cliente, Reserva, RecursoFactory)
