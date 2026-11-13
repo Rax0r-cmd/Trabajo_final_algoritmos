@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 980" width="100%" height="100%" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#000000" />
+    </marker>
+  </defs>
+
+  <!-- CONTENEDOR 1: CAPA PRESENTACIÓN / FORMULARIOS -->
+  <rect x="20" y="20" width="960" height="330" rx="8" fill="#FAFAFA" stroke="#666666" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="35" y="45" font-size="13" font-weight="bold" fill="#000000" letter-spacing="1">1. CAPA DE PRESENTACIÓN (FORMULARIOS Y NAVEGACIÓN)</text>
+
+  <!-- FrmLogin -->
+  <rect x="50" y="70" width="220" height="70" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="160" y="98" text-anchor="middle" font-size="14" font-weight="bold" fill="#000000">FrmLogin</text>
+  <text x="160" y="118" text-anchor="middle" font-size="11" fill="#444444">Admin / 123456 • WhatsApp</text>
+
+  <!-- Flecha Login -> FrmPrincipal -->
+  <line x1="270" y1="105" x2="350" y2="105" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="310" y="97" text-anchor="middle" font-size="10" font-style="italic" fill="#000000">OK</text>
+
+  <!-- FrmPrincipal -->
+  <rect x="355" y="65" width="270" height="80" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+  <text x="490" y="95" text-anchor="middle" font-size="15" font-weight="bold" fill="#000000">FrmPrincipal</text>
+  <text x="490" y="115" text-anchor="middle" font-size="12" fill="#333333">Ventana Maestra (Solapas)</text>
+
+  <!-- Modales Emergentes (a la derecha) -->
+  <rect x="680" y="65" width="275" height="195" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="1.5"/>
+  <text x="817" y="88" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">FORMULARIOS MODALES (ShowDialog)</text>
+
+  <rect x="700" y="100" width="235" height="65" rx="5" fill="#F9F9F9" stroke="#000000" stroke-width="1.5"/>
+  <text x="817" y="125" text-anchor="middle" font-size="13" font-weight="bold" fill="#000000">FrmEditorClientes</text>
+  <text x="817" y="145" text-anchor="middle" font-size="11" fill="#444444">Alta / Modificación Cliente</text>
+
+  <rect x="700" y="180" width="235" height="65" rx="5" fill="#F9F9F9" stroke="#000000" stroke-width="1.5"/>
+  <text x="817" y="205" text-anchor="middle" font-size="13" font-weight="bold" fill="#000000">FrmEditorRecursos</text>
+  <text x="817" y="225" text-anchor="middle" font-size="11" fill="#444444">Alta / Modificación Espacio</text>
+
+  <!-- Solapas dentro de FrmPrincipal -->
+  <!-- Tab Clientes -->
+  <rect x="50" y="195" width="180" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="1.5"/>
+  <text x="140" y="220" text-anchor="middle" font-size="13" font-weight="bold" fill="#000000">Solapa Clientes</text>
+  <text x="140" y="240" text-anchor="middle" font-size="11" fill="#444444">Grilla de Padrón</text>
+
+  <!-- Tab Recursos -->
+  <rect x="250" y="195" width="180" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="1.5"/>
+  <text x="340" y="220" text-anchor="middle" font-size="13" font-weight="bold" fill="#000000">Solapa Recursos</text>
+  <text x="340" y="240" text-anchor="middle" font-size="11" fill="#444444">Salas / Oficinas / Puestos</text>
+
+  <!-- Tab Reservas (Central / Principal) -->
+  <rect x="450" y="185" width="200" height="85" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="550" y="212" text-anchor="middle" font-size="14" font-weight="bold" fill="#000000">Solapa Reservas</text>
+  <text x="550" y="232" text-anchor="middle" font-size="11" fill="#333333">Selección y Costo Dinámico</text>
+  <text x="550" y="250" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">[ Confirmar Reserva ]</text>
+
+  <!-- Flechas FrmPrincipal a sus Solapas -->
+  <path d="M 430 145 L 430 170 L 140 170 L 140 190" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 490 145 L 490 170 L 340 170 L 340 190" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="550" y1="145" x2="550" y2="180" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Flechas bidireccionales con Modales -->
+  <path d="M 230 225 L 695 132" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <path d="M 430 225 L 695 212" fill="none" stroke="#000000" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+  <!-- CONTENEDOR 2: CAPA LÓGICA / NEGOCIO (C# .NET) -->
+  <rect x="20" y="375" width="960" height="230" rx="8" fill="#FAFAFA" stroke="#666666" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="35" y="400" font-size="13" font-weight="bold" fill="#000000" letter-spacing="1">2. CAPA LÓGICA Y DOMINIO (C# .NET)</text>
+
+  <!-- FLECHA ACCION DESDE RESERVAS A GESTOR -->
+  <line x1="550" y1="270" x2="550" y2="425" stroke="#000000" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="475" y="325" width="150" height="22" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+  <text x="550" y="340" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">Petición de Reserva</text>
+
+  <!-- GESTOR DAO -->
+  <rect x="420" y="430" width="260" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="550" y="458" text-anchor="middle" font-size="15" font-weight="bold" fill="#000000">GestorDAO / ReservaDAO</text>
+  <text x="550" y="478" text-anchor="middle" font-size="12" fill="#333333">Orquestador de Negocio y Datos</text>
+
+  <!-- MODELOS DOMINIO (Izquierda) -->
+  <rect x="60" y="495" width="270" height="85" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="1.8"/>
+  <text x="195" y="522" text-anchor="middle" font-size="14" font-weight="bold" fill="#000000">Modelos POO del Dominio</text>
+  <text x="195" y="542" text-anchor="middle" font-size="11" fill="#333333">Recurso (Sala, Oficina, Puesto)</text>
+  <text x="195" y="560" text-anchor="middle" font-size="11" font-style="italic" fill="#000000">Polimorfismo: CalcularCosto()</text>
+
+  <path d="M 420 465 L 195 465 L 195 490" fill="none" stroke="#000000" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="285" y="457" text-anchor="middle" font-size="10" font-style="italic" fill="#000000">Calcula Tarifa</text>
+
+  <!-- CONEXION CENTRALIZADA (Derecha) -->
+  <rect x="680" y="495" width="260" height="75" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="1.8"/>
+  <text x="810" y="525" text-anchor="middle" font-size="14" font-weight="bold" fill="#000000">Conexión Centralizada</text>
+  <text x="810" y="547" text-anchor="middle" font-size="11" fill="#333333">Conexion.cs (Bloque using)</text>
+
+  <path d="M 680 465 L 810 465 L 810 490" fill="none" stroke="#000000" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="745" y="457" text-anchor="middle" font-size="10" font-style="italic" fill="#000000">Solicita Conexión</text>
+
+  <!-- CONTENEDOR 3: BASE DE DATOS / PERSISTENCIA (MySQL) -->
+  <rect x="20" y="630" width="960" height="330" rx="8" fill="#FAFAFA" stroke="#666666" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="35" y="655" font-size="13" font-weight="bold" fill="#000000" letter-spacing="1">3. PERSISTENCIA Y REGLAS TRANSACCIONALES (MySQL XAMPP)</text>
+
+  <!-- Flecha Conexion -> Stored Procedure -->
+  <path d="M 810 570 L 810 615 L 550 615 L 550 670" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="620" y="605" width="160" height="20" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+  <text x="700" y="619" text-anchor="middle" font-size="11" font-style="italic" fill="#000000">Invoca sp_alta_reserva</text>
+
+  <!-- Stored Procedure -->
+  <rect x="400" y="675" width="300" height="60" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="550" y="700" text-anchor="middle" font-size="14" font-weight="bold" fill="#000000">sp_alta_reserva</text>
+  <text x="550" y="720" text-anchor="middle" font-size="11" fill="#333333">Valida Cliente y Recurso</text>
+
+  <!-- Flecha SP -> Rombo -->
+  <line x1="550" y1="735" x2="550" y2="765" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Rombo fn_verificar_disponibilidad -->
+  <polygon points="550,770 730,825 550,880 370,825" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+  <text x="550" y="820" text-anchor="middle" font-size="13" font-weight="bold" fill="#000000">fn_verificar_disponibilidad</text>
+  <text x="550" y="838" text-anchor="middle" font-size="11" fill="#444444">¿Horario Solapado?</text>
+
+  <!-- Rama LIBRE -->
+  <path d="M 430 845 L 360 870 L 260 870 L 260 895" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="250" y="860" width="80" height="18" fill="#FFFFFF"/>
+  <text x="290" y="873" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">Libre (= 1)</text>
+
+  <!-- INSERT -->
+  <rect x="130" y="900" width="260" height="50" rx="5" fill="#FFFFFF" stroke="#000000" stroke-width="1.8"/>
+  <text x="260" y="922" text-anchor="middle" font-size="13" font-weight="bold" fill="#000000">INSERT INTO reservas</text>
+  <text x="260" y="938" text-anchor="middle" font-size="10" fill="#333333">Estado = 'Confirmada'</text>
+
+  <!-- Rama OCUPADO -->
+  <path d="M 670 845 L 740 870 L 820 870 L 820 895" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="750" y="860" width="90" height="18" fill="#FFFFFF"/>
+  <text x="795" y="873" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">Ocupado (= 0)</text>
+
+  <!-- SIGNAL 45000 -->
+  <rect x="690" y="900" width="260" height="50" rx="5" fill="#FFFFFF" stroke="#000000" stroke-width="1.8"/>
+  <text x="820" y="922" text-anchor="middle" font-size="13" font-weight="bold" fill="#000000">SIGNAL SQLSTATE '45000'</text>
+  <text x="820" y="938" text-anchor="middle" font-size="10" fill="#333333">Error 1644: Recurso Ocupado</text>
+
+  <!-- RETORNOS A LA PANTALLA DE RESERVAS -->
+  <!-- Éxito -->
+  <path d="M 130 925 L 35 925 L 35 240 L 445 240" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow)"/>
+  <rect x="40" y="270" width="130" height="30" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+  <text x="105" y="285" text-anchor="middle" font-size="10" font-weight="bold" fill="#000000">Actualiza Grilla</text>
+  <text x="105" y="295" text-anchor="middle" font-size="9" fill="#444444">vw_detalle_reservas</text>
+
+  <!-- Falla -->
+  <path d="M 950 925 L 970 925 L 970 240 L 655 240" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow)"/>
+  <rect x="850" y="270" width="115" height="30" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+  <text x="907" y="285" text-anchor="middle" font-size="10" font-weight="bold" fill="#000000">Atrapa MySqlException</text>
+  <text x="907" y="295" text-anchor="middle" font-size="9" fill="#444444">MessageBox Alerta</text>
+
+</svg>
+

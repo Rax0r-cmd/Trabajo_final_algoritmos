@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 820" width="100%" height="100%" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#000000" />
+    </marker>
+  </defs>
+
+  <!-- INTERFAZ DE USUARIO -->
+  <rect x="300" y="30" width="350" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+  <text x="475" y="58" text-anchor="middle" font-size="16" font-weight="bold" fill="#000000">Interfaz de Usuario</text>
+  <text x="475" y="78" text-anchor="middle" font-size="13" fill="#333333">(Windows Forms - FrmPrincipal)</text>
+
+  <!-- FLECHA: UI -> GESTOR -->
+  <line x1="475" y1="95" x2="475" y2="155" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="405" y="115" width="140" height="22" fill="#FFFFFF"/>
+  <text x="475" y="130" text-anchor="middle" font-size="12" font-style="italic" fill="#000000">Petición de Acción</text>
+
+  <!-- CAPA GESTORA -->
+  <rect x="325" y="160" width="300" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+  <text x="475" y="188" text-anchor="middle" font-size="16" font-weight="bold" fill="#000000">Capa Gestora</text>
+  <text x="475" y="208" text-anchor="middle" font-size="13" fill="#333333">(GestorDAO / GestoraCoworking)</text>
+
+  <!-- FLECHA GESTOR -> MODELOS -->
+  <path d="M 360 225 L 360 255 L 210 255 L 210 280" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="195" y="244" width="125" height="20" fill="#FFFFFF"/>
+  <text x="257" y="258" text-anchor="middle" font-size="11" font-style="italic" fill="#000000">Manipula Objetos</text>
+
+  <!-- MODELOS DEL DOMINIO -->
+  <rect x="70" y="285" width="280" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="210" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#000000">Modelos del Dominio</text>
+  <text x="210" y="332" text-anchor="middle" font-size="12" fill="#444444">(Recurso, Cliente, Reserva)</text>
+
+  <!-- FLECHA GESTOR -> CONEXION -->
+  <path d="M 590 225 L 590 255 L 740 255 L 740 280" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="625" y="244" width="120" height="20" fill="#FFFFFF"/>
+  <text x="685" y="258" text-anchor="middle" font-size="11" font-style="italic" fill="#000000">Solicita Conexión</text>
+
+  <!-- CONEXION CENTRALIZADA -->
+  <rect x="600" y="285" width="280" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="740" y="312" text-anchor="middle" font-size="15" font-weight="bold" fill="#000000">Conexión Centralizada</text>
+  <text x="740" y="332" text-anchor="middle" font-size="12" fill="#444444">(Conexion.cs - ADO.NET)</text>
+
+  <!-- FLECHA CONEXION -> BASE DE DATOS -->
+  <path d="M 740 350 L 740 405 L 475 405 L 475 425" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="520" y="395" width="170" height="20" fill="#FFFFFF"/>
+  <text x="605" y="409" text-anchor="middle" font-size="12" font-style="italic" fill="#000000">Ejecuta SPs y Vistas</text>
+
+  <!-- BASE DE DATOS MYSQL -->
+  <rect x="315" y="430" width="320" height="70" rx="20" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+  <text x="475" y="458" text-anchor="middle" font-size="16" font-weight="bold" fill="#000000">Base de Datos MySQL (XAMPP)</text>
+  <text x="475" y="478" text-anchor="middle" font-size="13" fill="#333333">tp_final_db</text>
+
+  <!-- FLECHA DB -> ROMBO DISPONIBILIDAD -->
+  <line x1="475" y1="500" x2="475" y2="540" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="385" y="510" width="180" height="20" fill="#FFFFFF"/>
+  <text x="475" y="524" text-anchor="middle" font-size="12" font-style="italic" fill="#000000">Verifica Disponibilidad</text>
+
+  <!-- ROMBO DE DECISION: fn_verificar_disponibilidad -->
+  <polygon points="475,545 660,615 475,685 290,615" fill="#FAFAFA" stroke="#000000" stroke-width="2.5"/>
+  <text x="475" y="610" text-anchor="middle" font-size="14" font-weight="bold" fill="#000000">fn_verificar_disponibilidad</text>
+  <text x="475" y="628" text-anchor="middle" font-size="12" fill="#444444">¿Rango horario superpuesto?</text>
+
+  <!-- RAMA LIBRE (IZQUIERDA / ABAJO) -->
+  <path d="M 382 650 L 320 680 L 250 680 L 250 710" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="235" y="668" width="80" height="20" fill="#FFFFFF"/>
+  <text x="275" y="682" text-anchor="middle" font-size="12" font-weight="bold" fill="#000000">Libre (= 1)</text>
+
+  <!-- NODO: GUARDA RESERVA -->
+  <rect x="100" y="715" width="300" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="250" y="742" text-anchor="middle" font-size="15" font-weight="bold" fill="#000000">Guarda Reserva (INSERT)</text>
+  <text x="250" y="762" text-anchor="middle" font-size="12" fill="#444444">sp_alta_reserva (Transacción OK)</text>
+
+  <!-- RETORNO ÉXITO: GUARDA RESERVA -> UI -->
+  <path d="M 100 750 L 30 750 L 30 65 L 295 65" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+  <rect x="35" y="415" width="105" height="35" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+  <text x="87" y="430" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">Actualiza Grilla</text>
+  <text x="87" y="443" text-anchor="middle" font-size="10" fill="#444444">vw_detalle_reservas</text>
+
+  <!-- RAMA OCUPADO (DERECHA / ABAJO) -->
+  <path d="M 567 650 L 630 680 L 700 680 L 700 710" fill="none" stroke="#000000" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="635" y="668" width="95" height="20" fill="#FFFFFF"/>
+  <text x="682" y="682" text-anchor="middle" font-size="12" font-weight="bold" fill="#000000">Ocupado (= 0)</text>
+
+  <!-- NODO: SIGNAL 45000 -->
+  <rect x="550" y="715" width="300" height="65" rx="6" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+  <text x="700" y="742" text-anchor="middle" font-size="15" font-weight="bold" fill="#000000">SIGNAL SQLSTATE '45000'</text>
+  <text x="700" y="762" text-anchor="middle" font-size="12" fill="#444444">Aborto por solapamiento horario</text>
+
+  <!-- RETORNO ERROR: SIGNAL -> UI -->
+  <path d="M 850 750 L 920 750 L 920 65 L 655 65" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+  <rect x="805" y="415" width="110" height="35" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+  <text x="860" y="430" text-anchor="middle" font-size="11" font-weight="bold" fill="#000000">Captura Excepción</text>
+  <text x="860" y="443" text-anchor="middle" font-size="10" fill="#444444">MySqlException C#</text>
+</svg>
+

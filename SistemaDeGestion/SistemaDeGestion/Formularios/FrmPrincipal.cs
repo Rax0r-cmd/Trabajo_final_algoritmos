@@ -259,30 +259,62 @@ namespace SistemaDeGestion.Formularios
             try
             {
                 string archivoPdf = _esAdmin ? "Manual_Administrador.pdf" : "Manual_Usuario_Cliente.pdf";
-
-                // Busqueda generica y relativa del PDF para que funcione en cualquier computadora instalada
-                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                string[] rutasCandidatas = new string[]
-                {
-                    Path.Combine(baseDir, "Manuales_Sistema", archivoPdf),
-                    Path.Combine(baseDir, archivoPdf),
-                    Path.Combine(baseDir, "..", "Manuales_Sistema", archivoPdf),
-                    Path.Combine(baseDir, "..", "..", "Manuales_Sistema", archivoPdf),
-                    Path.Combine(baseDir, "..", "..", "..", "Manuales_Sistema", archivoPdf)
-                };
+                string archivoAlternativo = _esAdmin ? "Manual_Administrador.docx" : "Manual_de_Usuario.pdf";
 
                 string rutaEncontrada = null;
-                foreach (string candidate in rutasCandidatas)
+
+                // 1. Búsqueda exhaustiva hacia arriba desde el directorio de ejecución hasta la raíz del disco
+                DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+                while (dir != null && string.IsNullOrEmpty(rutaEncontrada))
                 {
-                    try
+                    string[] posiblesRutas = new string[]
                     {
-                        if (File.Exists(candidate))
+                        Path.Combine(dir.FullName, "Manuales_Sistema", archivoPdf),
+                        Path.Combine(dir.FullName, "Documentacion", archivoPdf),
+                        Path.Combine(dir.FullName, archivoPdf),
+                        Path.Combine(dir.FullName, "Manuales_Sistema", archivoAlternativo),
+                        Path.Combine(dir.FullName, "Documentacion", archivoAlternativo),
+                        Path.Combine(dir.FullName, archivoAlternativo)
+                    };
+
+                    foreach (string testPath in posiblesRutas)
+                    {
+                        try
                         {
-                            rutaEncontrada = Path.GetFullPath(candidate);
-                            break;
+                            if (File.Exists(testPath))
+                            {
+                                rutaEncontrada = Path.GetFullPath(testPath);
+                                break;
+                            }
                         }
+                        catch { }
                     }
-                    catch { }
+
+                    dir = dir.Parent;
+                }
+
+                // 2. Si no se encontró, buscar en rutas estándar del repositorio
+                if (string.IsNullOrEmpty(rutaEncontrada))
+                {
+                    string[] rutasFijas = new string[]
+                    {
+                        @"c:\xampp\htdocs\ALGORITMOS2\Trabajo_final_algoritmos\Manuales_Sistema\" + archivoPdf,
+                        @"c:\xampp\htdocs\ALGORITMOS2\Trabajo_final_algoritmos\Documentacion\" + archivoAlternativo,
+                        @"c:\xampp\htdocs\ALGORITMOS2\Manuales_Sistema\" + archivoPdf
+                    };
+
+                    foreach (string testPath in rutasFijas)
+                    {
+                        try
+                        {
+                            if (File.Exists(testPath))
+                            {
+                                rutaEncontrada = Path.GetFullPath(testPath);
+                                break;
+                            }
+                        }
+                        catch { }
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(rutaEncontrada))
