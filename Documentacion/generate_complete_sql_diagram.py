@@ -108,9 +108,14 @@ h_login = draw_auto_box(1420, 130, 620, "Acceso Administrador (FrmLogin)", [
     "• Al ingresar: desbloquea solapas de gestión administrativa."
 ])
 
-# Flecha desde Login hacia solapas admin
-draw.line([1730, 130 + h_login, 1730, 275], fill="#000000", width=2)
-draw_arrow_down(1730, 275, 320, "Desbloquea solapas")
+# Flechas desde Login que bifurcan a AMBAS solapas de administracion (Clientes y Recursos)
+y_branch_admin = 280
+draw.line([1730, 130 + h_login, 1730, y_branch_admin], fill="#000000", width=2)
+# Linea horizontal conectando el centro de CLIENTES (x=1340) y RECURSOS (x=1815)
+draw.line([1340, y_branch_admin, 1815, y_branch_admin], fill="#000000", width=2)
+
+draw_arrow_down(1340, y_branch_admin, 320, "Desbloquea solapa")
+draw_arrow_down(1815, y_branch_admin, 320, "Desbloquea solapa")
 
 # Flecha desde FrmPrincipal hacia las 2 solapas iniciales
 draw.line([300, 130 + h_main, 300, 280], fill="#000000", width=2)
