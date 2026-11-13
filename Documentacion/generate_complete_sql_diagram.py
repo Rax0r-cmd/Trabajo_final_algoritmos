@@ -333,6 +333,6 @@ h_map = draw_auto_box(60, y_map_box, 1980, "MAPA DE OBJETOS FUNCIONALES DEL ARCH
 final_h = y_map_box + h_map + 60
 img_clean = img.crop((0, 0, W, final_h))
 
-output_png = r"c:\xampp\htdocs\ALGORITMOS2\Trabajo_final_algoritmos\Documentacion\diagrama_imprimible.png"
+output_png = r"c:\xampp\htdocs\ALGORITMOS2\Trabajo_final_algoritmos\Documentacion\Diagrama_de_Flujo_Funcional.png"
 img_clean.save(output_png, "PNG", dpi=(300, 300))
 print("Diagrama 100% corregido y con alturas dinamicas guardado en:", output_png)
