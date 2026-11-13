@@ -517,12 +517,8 @@ namespace SistemaDeGestion.Formularios
             }
 
             // Configuramos el selector de horas: no permitimos superar las 24 horas por dia
-            nudHoras.Minimum = 0;
-            nudHoras.Maximum = 24;
+            ConfigurarValidacionHoras(nudHoras, () => ActualizarTotalReserva(), false);
 
-            // Recalculo el total en pantalla en tiempo real cuando cambian las horas o el recurso
-            nudHoras.ValueChanged += new EventHandler(nudHoras_ValueChanged);
-            nudHoras.KeyUp += (s, ev) => ActualizarTotalReserva();
             CmbTipoRecurso.SelectedIndexChanged += new EventHandler(CmbTipoRecurso_SelectedIndexChanged);
             dtpFechaReserva.ValueChanged += new EventHandler(dtpFechaReserva_ValueChanged);
 
@@ -647,12 +643,80 @@ namespace SistemaDeGestion.Formularios
         // PANEL DE CONTROL: CREAR RESERVAS Y CÁLCULO EN TIEMPO REAL
         //=============================================================
 
+        // Configura validación estricta de teclado en tiempo real para NumericUpDown:
+        // Bloquea letras, símbolos y espacios, limita el valor a 24 hs y actualiza cálculos en tiempo real
+        private void ConfigurarValidacionHoras(NumericUpDown nud, Action alCambiar, bool minUno)
+        {
+            nud.Minimum = minUno ? 1 : 0;
+            nud.Maximum = 24;
+
+            TextBox txtInterno = null;
+            foreach (Control c in nud.Controls)
+            {
+                if (c is TextBox tb)
+                {
+                    txtInterno = tb;
+                    break;
+                }
+            }
+
+            if (txtInterno != null)
+            {
+                txtInterno.KeyPress += (s, e) =>
+                {
+                    if (char.IsControl(e.KeyChar)) return;
+
+                    // Solo permitir números del 0 al 9; bloquea letras, símbolos, signos y espacios
+                    if (!char.IsDigit(e.KeyChar))
+                    {
+                        e.Handled = true;
+                    }
+                };
+
+                txtInterno.TextChanged += (s, e) =>
+                {
+                    if (int.TryParse(txtInterno.Text, out int valor))
+                    {
+                        if (valor > 24)
+                        {
+                            txtInterno.Text = "24";
+                            txtInterno.SelectionStart = txtInterno.Text.Length;
+                            nud.Value = 24;
+                        }
+                        else if (valor < (minUno ? 1 : 0))
+                        {
+                            txtInterno.Text = minUno ? "1" : "0";
+                            txtInterno.SelectionStart = txtInterno.Text.Length;
+                            nud.Value = minUno ? 1 : 0;
+                        }
+                        else
+                        {
+                            nud.Value = valor;
+                        }
+                    }
+                    alCambiar?.Invoke();
+                };
+            }
+
+            nud.ValueChanged += (s, e) => alCambiar?.Invoke();
+            nud.KeyUp += (s, e) => alCambiar?.Invoke();
+        }
+
         // Calcula el costo total en vivo segun el recurso seleccionado y las horas
         private void ActualizarTotalReserva()
         {
             try
             {
-                int horas = Convert.ToInt32(nudHoras.Value);
+                int horas = (int)nudHoras.Value;
+                foreach (Control c in nudHoras.Controls)
+                {
+                    if (c is TextBox tb && int.TryParse(tb.Text, out int hParsed))
+                    {
+                        horas = Math.Min(Math.Max(hParsed, 0), 24);
+                        break;
+                    }
+                }
+
                 if (horas <= 0 || CmbTipoRecurso.SelectedValue == null)
                 {
                     lblTotal.Text = "$ 0,00";
@@ -1170,33 +1234,176 @@ namespace SistemaDeGestion.Formularios
 
             using (Form frmModificar = new Form())
             {
-                frmModificar.Text = $"Modificar Reserva #{idReserva}";
-                frmModificar.Size = new Size(420, 380);
+                frmModificar.Text = "Modificar Reserva";
+                frmModificar.Size = new Size(769, 482);
                 frmModificar.StartPosition = FormStartPosition.CenterParent;
                 frmModificar.FormBorderStyle = FormBorderStyle.FixedDialog;
                 frmModificar.MaximizeBox = false;
                 frmModificar.MinimizeBox = false;
-                frmModificar.BackColor = Color.FromArgb(24, 30, 40);
-                frmModificar.ForeColor = Color.White;
 
-                Label lblInfo = new Label { Text = $"Cliente: {cliente}\nRecurso: {recurso}", Location = new Point(25, 20), Size = new Size(350, 45), Font = new Font("Segoe UI", 9.5f, FontStyle.Bold) };
-                Label lblFecha = new Label { Text = "Nueva Fecha y Hora:", Location = new Point(25, 75), Size = new Size(350, 20), Font = new Font("Segoe UI", 9) };
-                DateTimePicker dtpNuevaFecha = new DateTimePicker { Location = new Point(25, 100), Size = new Size(350, 26), Format = DateTimePickerFormat.Custom, CustomFormat = "dd/MM/yyyy HH:mm", MinDate = DateTime.Today };
+                // Mismo fondo geométrico que FrmEditorClientes
+                if (this.tabPageClientes?.BackgroundImage != null)
+                {
+                    frmModificar.BackgroundImage = this.tabPageClientes.BackgroundImage;
+                    frmModificar.BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                else
+                {
+                    frmModificar.BackColor = Color.FromArgb(17, 43, 44);
+                }
+
+                if (this.Icon != null)
+                {
+                    frmModificar.Icon = this.Icon;
+                }
+
+                // Título central idéntico a FrmEditorClientes
+                Label lblTitulo = new Label
+                {
+                    Text = "Modificar Reserva",
+                    Font = new Font("Tahoma", 12F, FontStyle.Bold),
+                    ForeColor = SystemColors.ControlLightLight,
+                    BackColor = Color.Transparent,
+                    Location = new Point(0, 44),
+                    Size = new Size(769, 30),
+                    TextAlign = ContentAlignment.MiddleCenter
+                };
+
+                // Fila 1: Cliente (izq) y Recurso (der)
+                Label lblCliente = new Label
+                {
+                    Text = "Cliente",
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    ForeColor = SystemColors.ControlLightLight,
+                    BackColor = Color.Transparent,
+                    Location = new Point(42, 128),
+                    AutoSize = true
+                };
+
+                TextBox txtCliente = new TextBox
+                {
+                    Text = cliente,
+                    ReadOnly = true,
+                    BackColor = Color.White,
+                    ForeColor = Color.Black,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    Location = new Point(134, 126),
+                    Size = new Size(229, 26)
+                };
+
+                Label lblRecurso = new Label
+                {
+                    Text = "Recurso",
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    ForeColor = SystemColors.ControlLightLight,
+                    BackColor = Color.Transparent,
+                    Location = new Point(416, 128),
+                    AutoSize = true
+                };
+
+                TextBox txtRecurso = new TextBox
+                {
+                    Text = recurso,
+                    ReadOnly = true,
+                    BackColor = Color.White,
+                    ForeColor = Color.Black,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    Location = new Point(492, 126),
+                    Size = new Size(229, 26)
+                };
+
+                // Fila 2: Fecha y Hora (izq) y Horas de uso (der)
+                Label lblFecha = new Label
+                {
+                    Text = "Fecha y Hora",
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    ForeColor = SystemColors.ControlLightLight,
+                    BackColor = Color.Transparent,
+                    Location = new Point(42, 206),
+                    AutoSize = true
+                };
+
+                DateTimePicker dtpNuevaFecha = new DateTimePicker
+                {
+                    Location = new Point(134, 204),
+                    Size = new Size(229, 26),
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    Format = DateTimePickerFormat.Custom,
+                    CustomFormat = "dd/MM/yyyy HH:mm",
+                    MinDate = DateTime.Today
+                };
                 if (fechaActual >= DateTime.Today) dtpNuevaFecha.Value = fechaActual;
 
-                Label lblHoras = new Label { Text = "Horas de uso (1 a 24 hs):", Location = new Point(25, 135), Size = new Size(350, 20), Font = new Font("Segoe UI", 9) };
-                NumericUpDown nudNuevasHoras = new NumericUpDown { Location = new Point(25, 160), Size = new Size(120, 26), Minimum = 1, Maximum = 24, Value = Math.Min(Math.Max(horasActuales, 1), 24) };
-
-                Label lblNuevoTotal = new Label { Text = $"Nuevo Total: $ {totalActual:N2}", Location = new Point(25, 200), Size = new Size(350, 30), Font = new Font("Segoe UI", 11, FontStyle.Bold), ForeColor = Color.LightGreen };
-
-                nudNuevasHoras.ValueChanged += (s, ev) =>
+                Label lblHoras = new Label
                 {
-                    decimal nuevoTotal = precioPorHora * nudNuevasHoras.Value;
+                    Text = "Horas (1-24)",
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    ForeColor = SystemColors.ControlLightLight,
+                    BackColor = Color.Transparent,
+                    Location = new Point(416, 206),
+                    AutoSize = true
+                };
+
+                NumericUpDown nudNuevasHoras = new NumericUpDown
+                {
+                    Location = new Point(492, 204),
+                    Size = new Size(229, 26),
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    Minimum = 1,
+                    Maximum = 24,
+                    Value = Math.Min(Math.Max(horasActuales, 1), 24)
+                };
+
+                // Fila 3: Total destacado en el centro
+                Label lblNuevoTotal = new Label
+                {
+                    Text = $"Nuevo Total: $ {totalActual:N2}",
+                    Font = new Font("Tahoma", 12F, FontStyle.Bold),
+                    ForeColor = SystemColors.ControlLightLight,
+                    BackColor = Color.Transparent,
+                    Location = new Point(0, 286),
+                    Size = new Size(769, 35),
+                    TextAlign = ContentAlignment.MiddleCenter
+                };
+
+                // Recalcular total en tiempo real para el modal
+                Action recalcularModal = () =>
+                {
+                    int h = (int)nudNuevasHoras.Value;
+                    foreach (Control c in nudNuevasHoras.Controls)
+                    {
+                        if (c is TextBox tb && int.TryParse(tb.Text, out int hp))
+                        {
+                            h = Math.Min(Math.Max(hp, 1), 24);
+                            break;
+                        }
+                    }
+                    decimal nuevoTotal = precioPorHora * h;
                     lblNuevoTotal.Text = $"Nuevo Total: $ {nuevoTotal:N2}";
                 };
 
-                Button btnGuardar = new Button { Text = "Guardar Cambios", Location = new Point(45, 260), Size = new Size(145, 38), BackColor = Color.FromArgb(40, 167, 69), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
-                Button btnCancelar = new Button { Text = "Cancelar", Location = new Point(210, 260), Size = new Size(145, 38), BackColor = Color.FromArgb(108, 117, 125), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+                ConfigurarValidacionHoras(nudNuevasHoras, recalcularModal, true);
+
+                // Botones idénticos a FrmEditorClientes
+                Button btnGuardar = new Button
+                {
+                    Text = "Guardar cambios",
+                    Location = new Point(47, 408),
+                    Size = new Size(173, 44),
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    UseVisualStyleBackColor = true
+                };
+
+                Button btnCancelar = new Button
+                {
+                    Text = "Cancelar",
+                    Location = new Point(548, 408),
+                    Size = new Size(173, 44),
+                    Font = new Font("Tahoma", 9F, FontStyle.Regular),
+                    UseVisualStyleBackColor = true
+                };
 
                 btnGuardar.Click += (s, ev) =>
                 {
@@ -1206,10 +1413,20 @@ namespace SistemaDeGestion.Formularios
                         return;
                     }
 
+                    int hFinal = (int)nudNuevasHoras.Value;
+                    foreach (Control c in nudNuevasHoras.Controls)
+                    {
+                        if (c is TextBox tb && int.TryParse(tb.Text, out int hp))
+                        {
+                            hFinal = Math.Min(Math.Max(hp, 1), 24);
+                            break;
+                        }
+                    }
+
                     try
                     {
-                        decimal nuevoTotal = precioPorHora * nudNuevasHoras.Value;
-                        bool modificado = _gestorDAO.ModificarReserva(idReserva, dtpNuevaFecha.Value, Convert.ToInt32(nudNuevasHoras.Value), nuevoTotal);
+                        decimal nuevoTotal = precioPorHora * hFinal;
+                        bool modificado = _gestorDAO.ModificarReserva(idReserva, dtpNuevaFecha.Value, hFinal, nuevoTotal);
                         if (modificado)
                         {
                             MessageBox.Show("Reserva modificada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1233,7 +1450,11 @@ namespace SistemaDeGestion.Formularios
 
                 btnCancelar.Click += (s, ev) => { frmModificar.Close(); };
 
-                frmModificar.Controls.Add(lblInfo);
+                frmModificar.Controls.Add(lblTitulo);
+                frmModificar.Controls.Add(lblCliente);
+                frmModificar.Controls.Add(txtCliente);
+                frmModificar.Controls.Add(lblRecurso);
+                frmModificar.Controls.Add(txtRecurso);
                 frmModificar.Controls.Add(lblFecha);
                 frmModificar.Controls.Add(dtpNuevaFecha);
                 frmModificar.Controls.Add(lblHoras);
