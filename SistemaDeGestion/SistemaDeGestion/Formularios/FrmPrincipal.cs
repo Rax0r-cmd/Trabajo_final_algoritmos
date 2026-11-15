@@ -1235,7 +1235,7 @@ namespace SistemaDeGestion.Formularios
             using (Form frmModificar = new Form())
             {
                 frmModificar.Text = "Modificar Reserva";
-                frmModificar.Size = new Size(769, 482);
+                frmModificar.Size = new Size(787, 529);
                 frmModificar.StartPosition = FormStartPosition.CenterParent;
                 frmModificar.FormBorderStyle = FormBorderStyle.FixedDialog;
                 frmModificar.MaximizeBox = false;
@@ -1484,6 +1484,11 @@ namespace SistemaDeGestion.Formularios
         }
 
         private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnModificarReserva_Click_1(object sender, EventArgs e)
         {
 
         }

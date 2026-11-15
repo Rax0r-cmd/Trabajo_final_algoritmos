@@ -169,6 +169,7 @@ namespace SistemaDeGestion.Formularios
             this.dgvClientes.MultiSelect = false;
             this.dgvClientes.Name = "dgvClientes";
             this.dgvClientes.ReadOnly = true;
+            this.dgvClientes.RowHeadersVisible = false;
             this.dgvClientes.RowHeadersWidth = 51;
             this.dgvClientes.RowTemplate.Height = 24;
             this.dgvClientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -447,7 +448,7 @@ namespace SistemaDeGestion.Formularios
             this.btnEliminarReserva.Name = "btnEliminarReserva";
             this.btnEliminarReserva.Size = new System.Drawing.Size(173, 44);
             this.btnEliminarReserva.TabIndex = 14;
-            this.btnEliminarReserva.Text = "Eliminar Reserva";
+            this.btnEliminarReserva.Text = "Cancelar Reserva";
             this.btnEliminarReserva.UseVisualStyleBackColor = true;
             // 
             // btnModificarReserva
@@ -458,6 +459,7 @@ namespace SistemaDeGestion.Formularios
             this.btnModificarReserva.TabIndex = 13;
             this.btnModificarReserva.Text = "Modificar Reserva";
             this.btnModificarReserva.UseVisualStyleBackColor = true;
+            this.btnModificarReserva.Click += new System.EventHandler(this.btnModificarReserva_Click_1);
             // 
             // pictureBox3
             // 
@@ -571,6 +573,7 @@ namespace SistemaDeGestion.Formularios
             this.dgvRecursos.MultiSelect = false;
             this.dgvRecursos.Name = "dgvRecursos";
             this.dgvRecursos.ReadOnly = true;
+            this.dgvRecursos.RowHeadersVisible = false;
             this.dgvRecursos.RowHeadersWidth = 51;
             this.dgvRecursos.RowTemplate.Height = 24;
             this.dgvRecursos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
